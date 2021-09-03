@@ -1,0 +1,58 @@
+﻿@model SOMSight.Models.Plans.CreateSOMSightOfferedModuleVM
+
+@using (Ajax.BeginForm("AddOfferedModule", "AdminPlansModularity", null,
+                                            new AjaxOptions
+                                            {
+                                                HttpMethod = "POST",
+                                                InsertionMode = InsertionMode.Replace,
+                                                OnSuccess = "OnSuccess",
+                                                OnFailure = "OnFailure",
+                                                OnBegin = "On_Begin",
+                                                UpdateTargetId = "CreateOfferedModule"
+                                            },
+                                            new
+                                            {
+                                                @id = "FormAddOfferedModule"
+                                            }
+                                        ))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-header">
+
+        <h4 class="modal-title">Create</h4>
+
+    </div>
+    <div class="modal-body">
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="row">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ModuleName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.ModuleName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ModuleName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <input type="submit" value="Create" id="btnSave" name="cmd" class="btn btn-success" />
+        </div>
+    </div>
+
+}
+
+
+

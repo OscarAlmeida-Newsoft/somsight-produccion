@@ -1,0 +1,314 @@
+﻿
+@model SOMSight.Models.PromotionalCode.FilterPromoCodesVM
+
+<div class="modal-header">
+
+    <h4 class="modal-title">Filter Promotional Codes</h4>
+
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Code)
+                        @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @id = "filterCode" })
+                        @Html.ValidationMessageFor(m => m.Code, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.PlanId)
+                        @Html.DropDownListFor(m => m.PlanId, Model.PlanSelectListItem, "Select", new { @class = "form-control", @id = "filterPlan" })
+                        @Html.ValidationMessageFor(m => m.PlanId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.AssignedTo)
+                        @Html.TextBoxFor(m => m.AssignedTo, new { @class = "form-control", @id = "filterAssignedTo" })
+                        @Html.ValidationMessageFor(m => m.AssignedTo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.AssignedToMail)
+                        @Html.TextBoxFor(m => m.AssignedToMail, new { @class = "form-control", @id = "filterAssignedToMail" })
+                        @Html.ValidationMessageFor(m => m.AssignedToMail, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ActivatedDateInit)
+                        @Html.TextBoxFor(m => m.ActivatedDateInit, new { @class = "form-control", @id = "filterActivatedtedDateInit", @readonly = "true" })
+                        @Html.ValidationMessageFor(m => m.ActivatedDateInit, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ActivatedDateEnd)
+                        @Html.TextBoxFor(m => m.ActivatedDateEnd, new { @class = "form-control", @id = "filterActivatedtedDateEnd", @readonly = "true" })
+                        @Html.ValidationMessageFor(m => m.ActivatedDateEnd, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.EndPromoDateInit)
+                        @Html.TextBoxFor(m => m.EndPromoDateInit, new { @class = "form-control", @id = "filterEndPromoDateInit", @readonly = "true" })
+                        @Html.ValidationMessageFor(m => m.EndPromoDateInit, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.EndPromoDateEnd)
+                        @Html.TextBoxFor(m => m.EndPromoDateEnd, new { @class = "form-control", @id = "filterEndPromoDateEnd", @readonly = "true" })
+                        @Html.ValidationMessageFor(m => m.EndPromoDateEnd, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*@Html.LabelFor(m => m.RemainingDays)
+                        @Html.TextBoxFor(m => m.RemainingDays, new { @class = "form-control", @id = "filterRemainingDays" })
+                        @Html.ValidationMessageFor(m => m.RemainingDays, "", new { @class = "text-danger" })*@
+                        @Html.LabelFor(m => m.AllTenant, new { @style= "display: block;" })
+                        @Html.CheckBoxFor(m => m.AllTenant, new { @class = "", @readonly = "true", @id = "filterAllTenant" })
+                        @Html.ValidationMessageFor(m => m.AllTenant, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                            @*@Html.LabelFor(m => m.UpdatedBy)
+                            @Html.TextBoxFor(m => m.UpdatedBy, new { @class = "form-control", @id = "filterUpdatedBy" })
+                            @Html.ValidationMessageFor(m => m.UpdatedBy, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <input type="button" value="Clear Filter" id="btnClearFilter" name="cmd" class="btn btn-primary" data-dismiss="modal" />
+        <input type="button" value="Filter" id="btnFilter" name="cmd" class="btn btn-success" data-dismiss="modal" />
+    </div>
+</div>
+
+
+
+
+<script>
+  $( function() {
+    var dateFormat = "mm/dd/yy",
+      from = $("#filterActivatedtedDateInit")
+        .datepicker({
+          changeMonth: true,
+          changeYear: true,
+          numberOfMonths: 1,
+          showButtonPanel: true,
+          beforeShow: function (input) {
+              setTimeout(function () {
+                  var buttonPane = $(input)
+                      .datepicker("widget")
+                      .find(".ui-datepicker-buttonpane");
+
+                  $("<button>", {
+                      text: "Clear",
+                      click: function () {
+                          //Code to clear your date field (text box, read only field etc.) I had to remove the line below and add custom code here
+                          $.datepicker._clearDate(input);
+                      }
+                  }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+              }, 1);
+          },
+          onChangeMonthYear: function (year, month, instance) {
+              setTimeout(function () {
+                  var buttonPane = $(instance)
+                      .datepicker("widget")
+                      .find(".ui-datepicker-buttonpane");
+
+                  $("<button>", {
+                      text: "Clear",
+                      click: function () {
+                          //Code to clear your date field (text box, read only field etc.) I had to remove the line below and add custom code here
+                          $.datepicker._clearDate(instance.input);
+                      }
+                  }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+              }, 1);
+          }
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $("#filterActivatedtedDateEnd").datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        changeYear: true,
+        numberOfMonths: 1,
+        showButtonPanel: true,
+        beforeShow: function (input) {
+            setTimeout(function () {
+                var buttonPane = $(input)
+                    .datepicker("widget")
+                    .find(".ui-datepicker-buttonpane");
+
+                $("<button>", {
+                    text: "Clear",
+                    click: function () {
+                        //Code to clear your date field (text box, read only field etc.) I had to remove the line below and add custom code here
+                        $.datepicker._clearDate(input);
+                    }
+                }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+            }, 1);
+        },
+        onChangeMonthYear: function (year, month, instance) {
+            setTimeout(function () {
+                var buttonPane = $(instance)
+                    .datepicker("widget")
+                    .find(".ui-datepicker-buttonpane");
+
+                $("<button>", {
+                    text: "Clear",
+                    click: function () {
+                        //Code to clear your date field (text box, read only field etc.) I had to remove the line below and add custom code here
+                        $.datepicker._clearDate(instance.input);
+                    }
+                }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+            }, 1);
+        }
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+
+
+
+
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+
+      return date;
+    }
+  });
+
+
+  $(function () {
+      var dateFormatEndPromoDate = "mm/dd/yy",
+        from = $("#filterEndPromoDateInit")
+          .datepicker({
+              changeMonth: true,
+              changeYear: true,
+              numberOfMonths: 1,
+              showButtonPanel: true,
+              beforeShow: function (input) {
+                  setTimeout(function () {
+                      var buttonPane = $(input)
+                          .datepicker("widget")
+                          .find(".ui-datepicker-buttonpane");
+
+                      $("<button>", {
+                          text: "Clear",
+                          click: function () {
+                              //Code to clear your date field (text box, read only field etc.) I had to remove the line below and add custom code here
+                              $.datepicker._clearDate(input);
+                          }
+                      }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+                  }, 1);
+              },
+              onChangeMonthYear: function (year, month, instance) {
+                  setTimeout(function () {
+                      var buttonPane = $(instance)
+                          .datepicker("widget")
+                          .find(".ui-datepicker-buttonpane");
+
+                      $("<button>", {
+                          text: "Clear",
+                          click: function () {
+                              //Code to clear your date field (text box, read only field etc.) I had to remove the line below and add custom code here
+                              $.datepicker._clearDate(instance.input);
+                          }
+                      }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+                  }, 1);
+              }
+          })
+          .on("change", function () {
+              to.datepicker("option", "minDate", getDatePromo(this));
+          }),
+        to = $("#filterEndPromoDateEnd").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            numberOfMonths: 1,
+            showButtonPanel: true,
+            beforeShow: function (input) {
+                setTimeout(function () {
+                    var buttonPane = $(input)
+                        .datepicker("widget")
+                        .find(".ui-datepicker-buttonpane");
+
+                    $("<button>", {
+                        text: "Clear",
+                        click: function () {
+                            //Code to clear your date field (text box, read only field etc.) I had to remove the line below and add custom code here
+                            $.datepicker._clearDate(input);
+                        }
+                    }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+                }, 1);
+            },
+            onChangeMonthYear: function (year, month, instance) {
+                setTimeout(function () {
+                    var buttonPane = $(instance)
+                        .datepicker("widget")
+                        .find(".ui-datepicker-buttonpane");
+
+                    $("<button>", {
+                        text: "Clear",
+                        click: function () {
+                            //Code to clear your date field (text box, read only field etc.) I had to remove the line below and add custom code here
+                            $.datepicker._clearDate(instance.input);
+                        }
+                    }).appendTo(buttonPane).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+                }, 1);
+            }
+        })
+        .on("change", function () {
+            from.datepicker("option", "maxDate", getDatePromo(this));
+        });
+
+
+
+
+      function getDatePromo(element) {
+          var date;
+          try {
+              date = $.datepicker.parseDate(dateFormatEndPromoDate, element.value);
+          } catch (error) {
+              date = null;
+          }
+
+          return date;
+      }
+  });
+
+
+</script>
+
+
+

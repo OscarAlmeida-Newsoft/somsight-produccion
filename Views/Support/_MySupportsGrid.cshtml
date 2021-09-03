@@ -1,0 +1,70 @@
+﻿@using SOMSight.Models
+@using SOMSight.Utils
+@model IEnumerable<SupportTicketsGridVM>
+
+
+<div class="tabla">
+    <p class="deslizar">
+        <img src="images/tablas-rspnsv.png" width="36" height="35" alt="deslizar">
+        <span>@TranslatorHelper.TranslateTextByIdentifier("slide_table_text")</span>
+    </p>
+    <table width="600" border="0" cellspacing="0" cellpadding="0" class="incidents">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>@TranslatorHelper.TranslateTextByIdentifier("comment_text")</td>
+                <td>@TranslatorHelper.TranslateTextByIdentifier("date_text")</td>
+                @*<td>Status</td>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (SupportTicketsGridVM support in Model)
+            {
+                <tr>
+                    <td>@support.TickedId</td>
+                    <td>@support.TicketMessage</td>
+                    <td>@support.CreatedDate.ToString("MM/dd/yyyy")</td>
+                    @*<td>@support.Status.ToString()</td>*@
+                </tr>
+            }
+
+
+            @*<tr>
+                <td>K23456789</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                <td>2018/01/24</td>
+                <td>Pending</td>
+            </tr>
+            <tr>
+                <td>K23456789</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                <td>2018/01/24</td>
+                <td><img src="images/icon_incident_check.png" width="15" height="12" alt="check"> Closed</td>
+            </tr>
+            <tr>
+                <td>K23456789</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                <td>2018/01/24</td>
+                <td>Pending</td>
+            </tr>
+            <tr>
+                <td>K23456789</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                <td>2018/01/24</td>
+                <td><img src="images/icon_incident_check.png" width="15" height="12" alt="check"> Closed</td>
+            </tr>
+            <tr>
+                <td>K23456789</td>
+                <td>Aenean et augue commodo, sodales nisi nec, congue lectus. Nullam sit amet sollicitudin urna. Sed ac nulla enim. Etiam varius turpis quis eleifend dapibus. Morbi iaculis nunc in ipsum scelerisque, ac hendrerit odio vulputate.</td>
+                <td>2018/01/24</td>
+                <td>Pending</td>
+            </tr>
+            <tr>
+                <td>K23456789</td>
+                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
+                <td>2018/01/24</td>
+                <td><img src="images/icon_incident_check.png" width="15" height="12" alt="check"> Closed</td>
+            </tr>*@
+        </tbody>
+    </table>
+</div>

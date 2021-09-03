@@ -1,0 +1,137 @@
+﻿@model SOMSight.Models.Company.AdminCompanyGridVM
+@using SOMSight.Utils.Helpers
+
+
+<table id="gridTable" class="hover table-bordered stripe" cellspacing="0" width="100%">
+    <thead class="cell-border" id="TH">
+        <tr class="table-header">
+            <th class="text-center text-uppercase">
+                <label>Tenant</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Company Name</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>E-mail</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Country</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>My Platform</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Assesment</label>
+            </th>
+            @*<th  class="text-center text-uppercase">
+                    <label>View Info</label>
+                </th>*@
+        </tr>
+
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model.Details)
+            {
+                string _measure = (item.SAMLive || item.SAM360) ? "true" : "false";
+
+                <tr data-itemid="@item.UserId" data-measure="@_measure" class="table-item">
+                    <td class="text-center">
+                        @item.TenantName
+                    </td>
+                    <td class="text-center">
+                        @item.CompanyName
+                    </td>
+                    <td class="text-center">
+                        @item.Email
+                    </td>
+                    <td class="text-center">
+                        @if (string.IsNullOrEmpty(item.Country))
+                        {
+                            <text>-</text>
+                        }
+                        else
+                        {
+                            <text>@item.Country</text>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @if (@item.SAMLive || @item.SAM360)
+                        {
+                            <i class="glyphicon glyphicon-ok-sign"></i>
+                        }
+                        else
+                        {
+                            <i class="glyphicon glyphicon-minus-sign"></i>
+                        }
+                        @*@if (@item.SAMLive)
+                            {
+                                <a target="_blank" href="@Url.Action("AdminBoard","MyPlatform",new { @pUserId=@item.UserId, @pMyPlatformSubmoduleId=(int)MeasureMyPlatformClients.SAMLive})" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-eye-open"></i> SAMLive</a>
+                            }
+                            @if (@item.SAM360)
+                            {
+                                <a target="_blank" href="@Url.Action("AdminBoard","MyPlatform",new { @pUserId=@item.UserId, @pMyPlatformSubmoduleId=(int)MeasureMyPlatformClients.SAM360})" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-eye-open"></i> SAM360</a>
+                            }*@
+                    </td>
+                    <td class="text-center">
+                        @if (@item.Assessment)
+                        {
+                            <i class="glyphicon glyphicon-ok-sign"></i>
+                        }
+                        else
+                        {
+                            <i class="glyphicon glyphicon-minus-sign"></i>
+                        }
+                    </td>
+                    @*<td class="text-center">
+                            <span>
+                                @if (@item.Assessment)
+                                {
+                                    <a href="#" id='@item.CompanyName' onclick="GridListAssessmentsCallBack('@item.UserId')" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-eye-open"></i> View Info</a>
+                                }
+                            </span>
+                        </td>*@
+                </tr>
+            }
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5" class="text-center text-nowrap" style="text-align:center;">
+                @Html.NSPagination(Model.PageSettings)
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+
+    $(document).ready(function () {
+        var ventana_alto = $(window).innerHeight();
+        ventana_alto = (ventana_alto > 900) ? (ventana_alto / 1.8) : (ventana_alto / 3);
+        var table = $('#gridTable').DataTable({
+            "columnDefs": [
+            { "width": "15%", "targets": 0 },
+            { "width": "25%", "targets": 1 },
+            { "width": "25%", "targets": 2 }
+            ],
+            "scrollY": ventana_alto,
+            "scrollX": true,
+            "info": false,
+            "paging": false,
+            "ordering": false,
+            "filter": false
+        });
+
+        $('#TH').resize(function () {
+
+            table.columns.adjust();
+        })
+
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    });
+</script>

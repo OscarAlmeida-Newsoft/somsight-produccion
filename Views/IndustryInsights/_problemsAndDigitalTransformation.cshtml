@@ -1,0 +1,170 @@
+﻿@using SOMSight.Models
+@model ProblemsAndDigitalTransformationVM
+
+<div class="contiene problems">
+    <h4>PROBLEMS / OPPORTUNITIES</h4>
+    @if (!Model.IsAssessmentFinished || Model.IsAdminUser)
+    {
+        
+        @Html.ActionLink("Add", "Create", "Problem", new { Id = Model.IdProcess }, new { @class = "add" });
+    }
+
+    
+    <table border="0" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <td>Prior.</td>
+                <td>Problem</td>
+                <td>Opportunity</td>
+                <td>Technology</td>
+                <td>Exist</td>
+                <td>Inventory</td>
+                <td>Solution</td>
+                <td>Microsoft</td>
+                <td>Solved</td>
+                @if (!Model.IsAssessmentFinished || Model.IsAdminUser)
+                {
+                    <td></td>
+                    <td></td>
+                }
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Problems)
+            {
+                <tr>
+                    <td>@item.Priority</td>
+                    <td>@item.ProblemDescription</td>
+                    <td>@item.Opportunity</td>
+                    <td>@item.Technology</td>
+                    <td class="center">
+                        @if (item.Exist)
+                        {
+                            <p><img src="@Url.Content("~/images/define_value_tabla_chulo.png")" width="17" height="14"></p>
+                        }else
+                        {
+                            <p></p>
+                        }
+                    </td>
+                    <td>@item.Inventory</td>
+                    <td>@item.Solution</td>
+                    <td class="center">
+                        @if (item.Microsoft)
+                        {
+                            <p><img src="@Url.Content("~/images/define_value_tabla_chulo.png")" width="17" height="14"></p>
+                        }
+                        else
+                        {
+                            <p></p>
+                        }
+                    </td>
+                    <td class="center">
+                        @if (item.Solved)
+                        {
+                            <p><img src="@Url.Content("~/images/define_value_tabla_chulo.png")" width="17" height="14"></p>
+                        }
+                        else
+                        {
+                            <p></p>
+                        }
+                    </td>
+                    @if (!Model.IsAssessmentFinished || Model.IsAdminUser)
+                    {
+                        <td class="icon">
+
+                            <a href="@Url.Action("Edit","Problem",new { Id = item.Id})" target="_self" class="edit_problem"><img src="@Url.Content("~/images/define_value_tabla_lapiz.png")" width="21" height="21"></a>
+                        </td>
+                        <td class="icon">
+                            <a data-problemid="@item.Id" href="#" target="_self" class="delete">
+                                <img src="@Url.Content("~/images/define_value_trash.png")" width="17" height="21">
+                            </a>
+                        </td>
+                    }
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+</div>
+<div class="contiene digitaltrans">
+    <h4>DIGITAL TRANSFORMATIONS</h4>
+    @if (!Model.IsAssessmentFinished || Model.IsAdminUser)
+    {
+        @Html.ActionLink("Add", "Create", "DigitalTransformation", new { Id = Model.IdProcess }, new { @class = "add" });
+    }
+    
+    <table border="0" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <td>Prior.</td>
+                <td>Pillar</td>
+                <td>Technology</td>
+                <td>Exist</td>
+                <td>Brand</td>
+                <td>Comment</td>
+                <td>Solution</td>
+                <td>Solved</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.DigitalTransformations)
+            {
+                <tr>
+                    <td>@item.Priority</td>
+                    <td>@item.Pillar</td>
+                    <td>@item.Technology</td>
+                    <td class="center">
+                        @if (item.Exist)
+                        {
+                            <p><img src="@Url.Content("~/images/define_value_tabla_chulo.png")" width="17" height="14"></p>
+                        }
+                        else
+                        {
+                            <p></p>
+                        }
+                    </td>
+                    <td>@item.Brand</td>
+                    <td>@item.Comment</td>
+                    <td>@item.Solution</td>
+                    <td class="center">
+                        @if (item.Solved)
+                        {
+                            <p><img src="@Url.Content("~/images/define_value_tabla_chulo.png")" width="17" height="14"></p>
+                        }
+                        else
+                        {
+                            <p></p>
+                        }
+                    </td>
+                    <td class="icon">
+                        @if (!Model.IsAssessmentFinished || Model.IsAdminUser)
+                        {
+                            <a href="@Url.Action("Edit","DigitalTransformation",new { Id = item.Id})" target="_self" class="edit_digitaltrans">
+                                <img src="@Url.Content("~/images/define_value_tabla_lapiz.png")" width="21" height="21">
+                            </a>
+                        }
+                        
+                    </td>
+                    <td class="icon">
+                        @if (!Model.IsAssessmentFinished || Model.IsAdminUser)
+                        {
+                            <a data-digitaltransformationid="@item.Id" href="#" target="_self" class="delete">
+                                <img src="@Url.Content("~/images/define_value_trash.png")" width="17" height="21">
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+

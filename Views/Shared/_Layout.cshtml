@@ -1,0 +1,174 @@
+﻿@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+<!--Esta version fue generada en la fecha, 03/09/2021, para el servidor de produccion-->
+<!DOCTYPE html>
+<html>
+<head>
+    @{
+        var _logoUrl = @Url.Action(Url.Content("/")) != "/Error/" ? Url.Action(Url.Content("/")) : "/Home/Index";
+
+        var _user = @Session.GetDataWithOutLogin(); ;
+
+        if (ViewBag.LogoUrl != null)
+            _logoUrl = ViewBag.LogoUrl;
+    }
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+
+
+    @Html.Partial("_GAnalyticsPartial")
+    <script>
+        gAnalytics.addGoogleAnalytics();
+    </script>
+
+
+
+    <link rel="icon" href="@_user.TenantSkin.TenantFaviconUrl">
+
+    <!-- Start of  Zendesk Widget script -->
+    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=b2a53c26-0233-4d53-abe2-067b1f20976b"></script>
+    <!-- End of  Zendesk Widget script -->
+</head>
+
+
+
+<body class="landing">
+
+
+
+    <label id="InputCaptchaPlaceholder" hidden>@TranslatorHelper.TranslateTextByIdentifier("type_code_here_text")</label>
+
+    <label id="CookieBarMessage" hidden>@TranslatorHelper.TranslateTextByIdentifier("cookiebarmessage")</label>
+    <label id="CookieBarAccept" hidden>@TranslatorHelper.TranslateTextByIdentifier("cookiebaraccept")</label>
+    <label id="CookieBarMoreInfo" hidden>@TranslatorHelper.TranslateTextByIdentifier("cookiebarmoreinfo")</label>
+    <label id="CookieBarInfoLink" hidden>@Url.Action("DataProtection", "Home")</label>
+
+    <div id="proceso_en_ejecucion">
+        <div>
+            <img src='@Url.Content("~/images/processing.gif")' width="58" height="58">
+        </div>
+    </div>
+    <!--================================= HEADER ======================================-->
+    @*<div id="header" class="landing">*@
+    <div id="header" class="container landing">
+        <div class="container superior">
+            <div class="content">
+                <!--================================================-->
+                @*<a class="logo" href="@Url.Action("Index","Home")"><img src="@Url.Content("~/images/logo.png")" width="300" height="84"></a>*@
+                <a class="logo" href="@_logoUrl"><img src="@_user.TenantSkin.TenantMainLogoUrl" width="300" height="84"></a>
+                <!--<h1>Software Update General Form</h1>-->
+
+
+                <a id="icono_menu_rspnsv" class="rspnsv" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor !important">Menu</a>
+
+                @Html.Action("Menu", "Home")
+
+                <div class="inicio_idiomas">
+                    @Html.Partial("_Languages")
+                </div>
+            </div>
+        </div>
+        <div class="container inferior" style="border-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor !important;">
+            @*<ul class="content">
+                    @if (HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString() == "Home")
+                    {
+                        <li><a href="" target="_self" id="btn_cyber"><span>CYBERSECURITY</span></a></li>
+                        <li><a href="" target="_self" id="btn_productivi"><span>PRODUCTIVITY</span></a></li>
+                        <li><a href="" target="_self" id="btn_cloud_ready"><span>CLOUD READINESS</span></a></li>
+                        <li><a href="" target="_self" id="btn_industry_insi"><span>INDUSTRY INSIGHTS</span></a></li>
+                        <li><a href="" target="_self" id="btn_measure"><span>MEASURE YOUR PLATFORM</span></a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("Index","Home")#cyber" target="_self" id="btn_cyber"><span>CYBERSECURITY</span></a></li>
+                        <li><a href="@Url.Action("Index","Home")#productivi" target="_self" id="btn_productivi"><span>PRODUCTIVITY</span></a></li>
+                        <li><a href="@Url.Action("Index","Home")#cloud_ready" target="_self" id="btn_cloud_ready"><span>CLOUD READINESS</span></a></li>
+                        <li><a href="@Url.Action("Index","Home")#industry_insi" target="_self" id="btn_industry_insi"><span>INDUSTRY INSIGHTS</span></a></li>
+                        <li><a href="@Url.Action("Index","Home")#measure" target="_self" id="btn_measure"><span>MEASURE YOUR PLATFORM</span></a></li>
+
+
+                    }
+                </ul>*@
+        </div>
+    </div>
+    <!--================================= HEADER ======================================-->
+    <!--================================= CONTENT ======================================-->
+
+    @RenderBody()
+    <!--================================= CONTENT ======================================-->
+    <!--================================= FOOTER ======================================-->
+    @*@if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            <div id="footer">
+                <div class="centro">
+                    <ul>
+                        <li><a href="#">Terms of use</a></li>
+                        <li><a href="#">Privacy and Cookies</a></li>
+                    </ul>
+
+                    <p>© 2010-2016 Echez Inc. All Rights Reserved</p>
+                </div>
+            </div>
+        }
+        else
+        {*@
+    <div id="footer" class="landing" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor">
+        <div class="centro">
+            @Html.Action("ContactUs", "Home")
+            @*<hr />
+                <ul class="redes">
+                    <li><a href="https://www.linkedin.com/company/somsight/" target="_blank"><img src="@Url.Content("~/images/icon-linkedin.png")" alt="Linkedin"></a></li>
+                    <li><a href="https://twitter.com/SomSight" target="_blank"><img src="@Url.Content("~/images/icon-twitter.png")" alt="Twitter"></a></li>
+                    <li><a href="https://www.facebook.com/somsight1/" target="_blank"><img src="@Url.Content("~/images/icon-facebook.png")" alt="Facebook"></a></li>
+                    <li><a href="#" target="_blank"><img src="@Url.Content("~/images/icon-youtube.png")" alt="Youtube"></a></li>
+                </ul>*@
+            <hr style="border-color: @_user.TenantSkin.TenantStylePrimaryFontColor" />
+            <p style="color: @_user.TenantSkin.TenantStylePrimaryFontColor">
+                © 2010-@DateTime.Now.Year @TranslatorHelper.TranslateTextByIdentifier("powered_by_text"),
+                <a style="color: @_user.TenantSkin.TenantStylePrimaryFontColor" href="@Url.Action("TermsAndConditions","Home")" target="_blank">@TranslatorHelper.TranslateTextByIdentifier("terms_and_conditions_text")</a>,
+                <a style="color: @_user.TenantSkin.TenantStylePrimaryFontColor" href="@Url.Action("DataProtection","Home")" target="_blank">@TranslatorHelper.TranslateTextByIdentifier("privacy_and_cookies_text")</a>
+            </p>
+        </div>
+    </div>
+
+    @*<a href="#" target="_self" id="subir" style="display: inline;">subir</a>*@
+    @*}*@
+    <!--================================= FOOTER ======================================-->
+    <!--================================= FOOTER ======================================-->
+    <div id="footer" class="landing contact-us-pop-up" style="display:none;border-radius: 9px;position: fixed;z-index: 100000;width: 40%;left: 30%; top: 130px;">
+        <div id="close-pop-up" style="position: absolute;right: 10px;top: 10px;">
+            <a style="color: white;cursor:pointer; font-size:15px;" onclick="closeModal()" target="_self" class="ayuda">X</a>
+        </div>
+        <div class="centro">
+            <h2>Contact us</h2>
+            <hr />
+            <ul>
+                <li>
+                    <a href="mailto:contact@somsight.com" target="_self" class="email">contact@somsight.com</a>
+                    -
+                    <a href="mailto:contact@somsight.com" target="_self" class="email">support@somsight.com</a>
+                </li>
+                @*<li><a href="tel:+18002170287" target="_self" class="tel">+1 800-217-0287</a></li>*@
+            </ul>
+
+        </div>
+    </div>
+    <!--================================= FOOTER ======================================-->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/customjs")
+    @Scripts.Render("~/bundles/sobrescrituras")
+
+    @RenderSection("scripts", required: false)
+
+
+    <!-- Cookie Bar -->
+    <div class="notice-cookies">
+        <div class="container-ck"></div>
+    </div>
+    <!-- END Cookie Bar -->
+
+</body>
+</html>

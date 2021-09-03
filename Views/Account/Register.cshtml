@@ -1,0 +1,406 @@
+﻿@using CaptchaMvc.HtmlHelpers
+@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+
+@model SOMSight.Models.Account.RegisterVM
+
+@{
+    var _user = @Session.GetDataWithOutLogin();
+
+    ViewBag.Title = @TranslatorHelper.TranslateTextByIdentifier("user_registration_text").ToString().Substring(0, 1).ToUpper() + @TranslatorHelper.TranslateTextByIdentifier("user_registration_text").ToString().Substring(1, @TranslatorHelper.TranslateTextByIdentifier("user_registration_text").ToString().Length - 1).ToLower(); ;
+    ViewBag.LogoUrl = Url.Action("Index", "Home");
+
+    var captcha = @Html.Captcha(TranslatorHelper.TranslateTextByIdentifier("refresh_text"), "", 5);
+}
+
+<style>
+    .the_captcha>a{
+        color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor !important;
+    }
+
+    
+
+</style>
+
+<!--================================= HEADER ======================================-->
+<!--================================= TITULO ======================================-->
+<div class="titulo azuloscuro small" style="background-color: @_user.TenantSkin.TenantStyleSecondaryBackgroundColor !important;">
+    <div class="centro">
+        <h1 class="mayusculainicial" style="color: @_user.TenantSkin.TenantStyleSecondaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("user_registration_text")</h1>
+    </div>
+</div>
+<!--================================= TITULO ======================================-->
+<!--================================= PAGINA ======================================-->
+<div id="pagina" class="formulario registration">
+    <div class="seccion">
+        <div class="centro">
+            @*<h3 class="to_left">
+            When creating an account you  agree with the <a href="@Url.Action("TermsAndConditions","Home")" target="_blank" style="font-size:  17px;">terms and conditions</a> and will adhere to them unconditionally.
+        </h3>*@
+
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "formulario" })) {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "lista-texto-validacion" })
+                @Html.HiddenFor(x => x.SOMSightPlanId);
+                @Html.HiddenFor(x => x.PaymentTimeCycle);
+                @Html.HiddenFor(x => x.PlanRange);
+
+                @*<hr />*@
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.IsCorporate)
+                        <div class="controls">
+                            <label class="radio">
+                                @Html.RadioButtonFor(m => m.IsCorporate, true)
+                                @TranslatorHelper.TranslateTextByIdentifier("register_radio_corporate")
+                            </label>
+
+                            <label class="radio">
+                                @Html.RadioButtonFor(m => m.IsCorporate, false)
+                                @TranslatorHelper.TranslateTextByIdentifier("register_radio_personal")
+                            </label>
+
+
+
+                        </div>
+
+
+
+                        @Html.ValidationMessageFor(m => m.IsCorporate, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_iscorporate"))) {
+                            <span class="tooltiptext tooltiptext-special">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_iscorporate")</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.CompanyName)
+                        @Html.TextBoxFor(m => m.CompanyName)
+                        @Html.ValidationMessageFor(m => m.CompanyName, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_companyname"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_companyname")</span>
+                        }
+
+                    </div>
+
+                    <div class="der tooltip">
+                        @Html.LabelFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email)
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_email"))) {
+                            <span class="tooltiptext tooltiptext-right">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_email")</span>
+                        }
+
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.ContactName)
+                        @Html.TextBoxFor(m => m.ContactName)
+                        @Html.ValidationMessageFor(m => m.ContactName, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_contactname"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_contactname")</span>
+                        }
+                    </div>
+                    <div class="der tooltip">
+                        @Html.LabelFor(m => m.ContactLastName)
+                        @Html.TextBoxFor(m => m.ContactLastName)
+                        @Html.ValidationMessageFor(m => m.ContactLastName, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_contactlastname"))) {
+                            <span class="tooltiptext tooltiptext-right">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_contactlastname")</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.JobPosition)
+                        @Html.TextBoxFor(m => m.JobPosition)
+                        @Html.ValidationMessageFor(m => m.JobPosition, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_jobposition"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_jobposition")</span>
+                        }
+                    </div>
+                    <div class="der tooltip">
+                        @Html.LabelFor(m => m.Phone)
+                        @Html.TextBoxFor(m => m.Phone)
+                        @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_phone"))) {
+                            <span class="tooltiptext tooltiptext-right">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_phone")</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.CountryId)
+                        @Html.DropDownListFor(m => m.CountryId, Model.CountryList, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_country"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_country")</span>
+                        }
+                    </div>
+                    <div class="der tooltip">
+                        @Html.LabelFor(m => m.StateId)
+                        @Html.DropDownListFor(m => m.StateId, new SelectList(string.Empty, "Value", "Text"), "--" + TranslatorHelper.TranslateTextByIdentifier("select_text") + "--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.StateId, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_state"))) {
+                            <span class="tooltiptext tooltiptext-right">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_state")</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.City)
+                        @Html.TextBoxFor(m => m.City)
+                        @Html.ValidationMessageFor(m => m.City, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_city"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_city")</span>
+                        }
+                    </div>
+                    <div class="der tooltip">
+                        @Html.LabelFor(m => m.NumberOfEmployees)
+                        @Html.TextBoxFor(m => m.NumberOfEmployees)
+                        @Html.ValidationMessageFor(m => m.NumberOfEmployees, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_nroofemployees"))) {
+                            <span class="tooltiptext tooltiptext-right">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_nroofemployees")</span>
+                        }
+                    </div>
+                </div>
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.NumberOfDevices)
+                        @Html.TextBoxFor(m => m.NumberOfDevices)
+                        @Html.ValidationMessageFor(m => m.NumberOfDevices, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_numberofdevices"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_numberofdevices")</span>
+                        }
+                    </div>
+                    <div class="der">
+
+                    </div>
+                </div>
+
+                @*<hr class="normal" />*@
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.Password)
+                        @Html.PasswordFor(m => m.Password)
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_password"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_password")</span>
+                        }
+                    </div>
+
+                    <div class="der tooltip">
+                        @Html.LabelFor(m => m.PasswordConfirm)
+                        @Html.PasswordFor(m => m.PasswordConfirm)
+                        @Html.ValidationMessageFor(m => m.PasswordConfirm, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_passwordconfirm"))) {
+                            <span class="tooltiptext tooltiptext-right">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_passwordconfirm")</span>
+                        }
+                    </div>
+                </div>
+                <hr class="normal" />
+
+
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.Linkedin)
+                        @Html.TextBoxFor(m => m.Linkedin)
+                        @Html.ValidationMessageFor(m => m.Linkedin, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_linkedin"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_linkedin")</span>
+                        }
+                    </div>
+
+                    <div class="der tooltip">
+                        @Html.LabelFor(m => m.Facebook)
+                        @Html.TextBoxFor(m => m.Facebook)
+                        @Html.ValidationMessageFor(m => m.Facebook, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_facebook"))) {
+                            <span class="tooltiptext tooltiptext-right">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_facebook")</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.Instagram)
+                        @Html.TextBoxFor(m => m.Instagram)
+                        @Html.ValidationMessageFor(m => m.Instagram, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_instagram"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_instagram")</span>
+                        }
+                    </div>
+
+                    <div class="der tooltip">
+                        @Html.LabelFor(m => m.Youtube)
+                        @Html.TextBoxFor(m => m.Youtube)
+                        @Html.ValidationMessageFor(m => m.Youtube, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_youtube"))) {
+                            <span class="tooltiptext tooltiptext-right">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_youtube")</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.Twitter)
+                        @Html.TextBoxFor(m => m.Twitter)
+                        @Html.ValidationMessageFor(m => m.Twitter, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_twitter"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_twitter")</span>
+                        }
+                    </div>
+
+                    <div class="der">
+                        @*@Html.LabelFor(m => m.Google)
+                    @Html.TextBoxFor(m => m.Google)
+                    @Html.ValidationMessageFor(m => m.Google, "", new { @class = "texto-validacion" })*@
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.PersonalMail1)
+                        @Html.TextBoxFor(m => m.PersonalMail1)
+                        @Html.ValidationMessageFor(m => m.PersonalMail1, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_personalemail1"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_personalemail1")</span>
+                        }
+                    </div>
+
+                    <div class="der tooltip">
+                        @Html.LabelFor(m => m.PersonalMail2)
+                        @Html.TextBoxFor(m => m.PersonalMail2)
+                        @Html.ValidationMessageFor(m => m.PersonalMail2, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_personalemail2"))) {
+                            <span class="tooltiptext tooltiptext-right">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_personalemail2")</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.PersonalMail3)
+                        @Html.TextBoxFor(m => m.PersonalMail3)
+                        @Html.ValidationMessageFor(m => m.PersonalMail3, "", new { @class = "texto-validacion" })
+
+                        @if (!string.IsNullOrEmpty(TranslatorHelper.TranslateTextByIdentifier("tooltip_register_personalemail3"))) {
+                            <span class="tooltiptext tooltiptext-left">@TranslatorHelper.TranslateTextByIdentifier("tooltip_register_personalemail3")</span>
+                        }
+                    </div>
+
+                    <div class="der">
+                    </div>
+                </div>
+                <hr class="normal" />
+                <div class="the_captcha">
+                    @captcha.RenderMarkup()
+
+                    @if (@TempData["ErrorMessage"] != null && !@TempData["ErrorMessage"].ToString().Equals("")) {
+                        <p style="font-weight:bold;color:red;">@TempData["ErrorMessage"]</p>
+                    }
+
+                    @*<p><img src="images/captcha_ejemplo.png" width="221" height="98"></p>
+                <input id="code" type="text" name="code" placeholder="Type code here">*@
+
+
+                </div>
+                <div class="aviso_privacidad">
+                    <input id="privacidad_check" name="privacidad_check" type="checkbox" value="1" />
+                    <p class="etiqueta">@TranslatorHelper.TranslateTextByIdentifier("accept_text") <a style="color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor" href="@Url.Action("TermsAndConditions","Home")" target="_blank" id="politica">@TranslatorHelper.TranslateTextByIdentifier("terms_and_conditions_text")</a></p>
+                </div>
+                <div class="fila centrada">
+                    <input name="boton" type="submit" class="boton" value="@TranslatorHelper.TranslateTextByIdentifier("register_text")" disabled="disabled" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!--================================= PAGINA ======================================-->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @captcha.RenderScript()
+<script>
+$(document).ready(function () {
+    $("#CaptchaInputText").attr("placeholder", $("#InputCaptchaPlaceholder").text());
+    //$(".the_captcha").find("br").remove()
+
+    $("#CountryId").change(function () {
+        $("#StateId").empty();
+        var selectText = "--@TranslatorHelper.TranslateTextByIdentifier("select_text")--";
+        $("#StateId").append('<option value>' + selectText + '</option>');
+
+        if ($(this).val() != "")
+        {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetStatesById", "AdminCountries")' + '?pCountryId=' + $("#CountryId").val(),
+                //dataType: 'json',
+                //data: { pCountryId: $("#CountryId").val() },
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $('#StateId').append($('<option>', { value: state.Id, text: state.Name }));
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed.' + ex);
+                }
+            });
+        }
+        return false;
+    });
+
+    loadStates();
+});
+
+    function loadStates() {
+        var StateId = '@Html.Raw(Model.StateId)';
+        if ($("#CountryId").val() != "") {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetStatesById", "AdminCountries")' + '?pCountryId=' + $("#CountryId").val(),
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        $('#StateId').append($('<option>', { value: state.Id, text: state.Name }));
+                    });
+                    if(StateId)
+                        $("#StateId").val(StateId);
+                },
+                error: function (ex) {
+                    alert('Failed.' + ex);
+                }
+            });
+        }
+    }
+</script>
+}

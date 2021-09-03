@@ -1,0 +1,131 @@
+﻿@using SOMSight.Utils
+@using SOMSight.Models
+@model IEnumerable<AssessmentGridViewModel>
+
+@{
+    int i = 0;
+    int mod = 0;
+    var classcss = "";
+}
+<input id="MiInput" type="hidden" value="Holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"/>
+
+<ul class="assignments">
+    @foreach (var item in Model)
+    {
+        mod = (i + 1) % 2;
+        if (mod == 0)
+        {
+            classcss = "acier";
+        }else
+        {
+            classcss = "cyan";
+        }
+        i++;
+        <li class="@classcss">
+            <div class="icono"><img src="@Url.Content("~/images/"+item.IconName)" width="56" height="57"></div>
+            <h3>@TranslatorHelper.TranslateTextById(item.AssessmentTypeTraslatorId)</h3>
+
+            <div class="process">
+                @if (item.DownloadPDF)
+                {
+                    <span class="icon"><img src="@Url.Content("~/images/process_3.png")" width="19" height="14"></span>
+                }else if(item.IsInProgress)
+                {
+                    <span class="icon"><img src="@Url.Content("~/images/process_2.png")" width="19" height="14"></span>
+                }
+                else
+                {
+                    <span class="icon"><img src="@Url.Content("~/images/process_1.png")" width="19" height="14"></span>
+                }
+
+
+                <h4><span>@item.AssessmentStatus</span> - Level: @TranslatorHelper.TranslateTextById(item.GlobalMaturityLevelTranslatorId??0) </h4>
+            </div>
+            @if (item.DownloadPDF)
+            {
+                <a onclick="gAnalytics.throwRedirectEvent('Click Download', 'Assestments', '@TranslatorHelper.TranslateTextById(item.AssessmentTypeTraslatorId,2)','@Url.Action("GetAssessmentRecommendations","Assessment", new { pAssessmentSummaryId  = item.AssessmentSummaryId})')" href="#" class="btn_assignments download">Download</a>
+                @*<a onclick="gtag('event','Click Download',{'event_category':'Assestments','event_label':'@TranslatorHelper.TranslateTextById(item.AssessmentTypeTraslatorId,2)'})" href="@Url.Action("GetAssessmentRecommendations","Assessment", new { pAssessmentSummaryId  = item.AssessmentSummaryId})" target="_self" class="btn_assignments download">Download</a>*@
+                @*<a onclick="gtag('event','Click Download',{'event_category':'Assestments','event_label':'@TranslatorHelper.TranslateTextById(item.AssessmentTypeTraslatorId,2)'})" href="#" target="_self" class="btn_assignments completed">Completed</a>*@
+            }else if(item.IsInProgress)
+            {
+                @*<a onclick="gtag('event','Click Continue',{'event_category':'Assestments','event_label':'@TranslatorHelper.TranslateTextById(item.AssessmentTypeTraslatorId,2)'})" href="@Url.Action("Index","AssessmentQuestions", new { pAssessmentSummaryId = item.AssessmentSummaryId })" target="_self" class="btn_assignments go">Continue</a>*@
+                <a onclick="gAnalytics.throwRedirectEvent('Click Continue', 'Assestments', '@TranslatorHelper.TranslateTextById(item.AssessmentTypeTraslatorId,2)',''@Url.Action("Index","AssessmentQuestions", new { pAssessmentSummaryId = item.AssessmentSummaryId })')" href="#" class="btn_assignments go">Continue</a>
+
+            }
+            else
+            {
+                @*<a onclick="gtag('event','Click Start',{'event_category':'Assestments','event_label':'@TranslatorHelper.TranslateTextById(item.AssessmentTypeTraslatorId,2)'})" href="@Url.Action("Index","AssessmentQuestions", new { pAssessmentSummaryId = item.AssessmentSummaryId })" target="_self" class="btn_assignments go">Start</a>*@
+                <a onclick="gAnalytics.throwRedirectEvent('Click Start', 'Assestments', '@TranslatorHelper.TranslateTextById(item.AssessmentTypeTraslatorId,2)','@Url.Action("Index","AssessmentQuestions", new { pAssessmentSummaryId = item.AssessmentSummaryId })')" href="#" class="btn_assignments go">Start</a>
+            }
+
+            <p class="assessmentdescr">@TranslatorHelper.TranslateTextById(item.AssessmentDescriptionTranslatorId)</p>
+        </li>
+    }
+ </ul>
+
+
+</div>
+    </div>
+
+
+</div>
+
+    @*<table>
+        <thead>
+            <tr>
+                <th>
+                    id
+                </th>
+                <th>
+                    Assessment Name
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Maturity Level
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AssessmentGridViewModel item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.AssessmentSummaryId
+                    </td>
+                    <td>
+                        @TranslatorHelper.TranslateTextById(item.AssessmentTypeTraslatorId)
+                    </td>
+                    <td>
+                        @item.AssessmentStatus
+                    </td>
+                    <td>
+                        @item.EvaluationLevelDescription
+                    </td>
+                    <td>
+                        @if (item.DownloadPDF)
+                        {
+                            <a href="@Url.Action("GetAssessmentRecommendations","Assessment", new { pAssessmentSummaryId  = item.AssessmentSummaryId})">
+                                <img src="@Url.Content("~/Content/images/accion_grafica.png")" />
+                            </a>
+
+                        }
+                        else if (item.IsMDSAssessment)
+                        {
+                            ViewContext.Writer.Write("Link a MDS");
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Index","AssessmentQuestions", new { pAssessmentSummaryId = item.AssessmentSummaryId })">
+                                <img src="@Url.Content("~/Content/images/icon_play.png")" />
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@

@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/Custom/uploadFile.js")"></script>
+}
+
+<label id="NS_UrlActionSubmitFile" class="hidden">@Url.Action("SubmitFile", "AdminUsers")</label>
+
+
+<h1>Subir archivos</h1>
+<input id="images-productid" type="file" name="browse" accept=".pdf" style="margin-bottom: 3px;">
+<input id="updload-files-btn" type="submit" name="browse" value="Upload">
+
+<input id="download-assessment-btn" type="submit" name="browse" value="Download assessment">
+@Html.ActionLink("Download Recommendation", "DownloadAdvancedRecommendation", new { @pUserId = "946DAC69-2796-452B-A7A0-23B5B98F70B5", @pAssessmentTypeId ="1", pAssessmentVersion = "2"})
+<input id="confirm-assessment-btn" type="submit" name="browse" value="Confirm assessment">
+

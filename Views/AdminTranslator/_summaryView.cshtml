@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Admin Translator";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/Custom/translator/translatorSummaryView.js")"></script>
+}
+
+@model IEnumerable<SOMSightModels.Translator.TranslatorExcelDTO>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4>Summary</h4>
+        </div>
+       
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row summarySuccessfully">
+                        <div class="col-md-6">
+                            <label>Confirm Import Translations:</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row summaryAlert">
+                        <div class="col-md-6">
+                            <label> Language Code: </label>
+                        </div>
+                        <div class="col-md-6 sizeSummaryCount">
+                            <label>@Model.FirstOrDefault().LanguageCode</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <label>Records with error will not be imported</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                
+                    <table id="gridTable" class="hover table-bordered stripe" cellspacing="0" width="100%">
+                        <thead class="cell-border" id="TH">
+                            <tr class="table-header">
+                                <th class="text-center text-uppercase">
+                                    <label>Row</label>
+                                </th>
+                                <th class="text-center text-uppercase">
+                                    <label>TextIndentifier</label>
+                                </th>
+                                <th class="text-center text-uppercase">
+                                    <label>Default Text</label>
+                                </th>
+                                <th class="text-center text-uppercase">
+                                    <label>Description</label>
+                                </th>
+                                <th class="text-center text-uppercase">
+                                    <label>Classification</label>
+                                </th>
+                                <th class="text-center text-uppercase">
+                                    <label>Translation</label>
+                                </th>
+                                <th class="text-center text-uppercase">
+                                    <label>Action T. Admin</label>
+                                </th>
+                                <th class="text-center text-uppercase">
+                                    <label>Action Translation Lang</label>
+                                </th>
+                                <th class="text-center text-uppercase">
+                                    <label>Error</label>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr data-textidentifier="@item.TextIdentifier" data-defaulttext="@item.DefaultText" data-description="@item.Description" data-classification="@item.Classification" data-translation="@item.Translation" data-error="@item.ErrorDescription" data-languagecode="@item.LanguageCode" class="table-item">
+                                <td>
+                                    @item.Fila
+                                </td>
+
+                                <td>
+                                    @item.TextIdentifier
+                                </td>
+                                <td>
+                                    @item.DefaultText
+                                </td>
+                                <td>
+                                    @item.Description
+                                </td>
+                                <td>
+                                    @item.Classification
+                                </td>
+                                <td>
+                                    @item.Translation
+                                </td>
+
+                                <td>
+                                    @item.ActionTranslatorAdministrator
+                                </td>
+                                <td>
+                                    @item.ActionTranlationByLanguage
+                                </td>
+                                <td class="text-danger">
+                                    @item.ErrorDescription
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            
+            <a href="@Url.Action("Index")" id="BackToIndex" class="btn btn-default">Cancel</a>
+            <a href="@Url.Action("ImportTranslationsConfirmed")" id="ConfirmImport" class="btn btn-success">Confirm</a>
+        </div>
+    </div>
+</div>
+
+<div id="filterModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="Filter" class="modal-content">
+
+        </div>
+    </div>
+</div>

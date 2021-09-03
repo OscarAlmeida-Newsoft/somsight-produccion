@@ -1,0 +1,112 @@
+﻿@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+@{
+    var _user = @Session.GetCurrentUser();
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+
+}
+
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/Custom/support/support.js")"></script>
+}
+
+
+<label id="NS_GridUrlActionGridCallBack" hidden>@Url.Action("GridListMySupportsCallback")</label>
+<label id="NS_SaveSupportTicket" hidden>@Url.Action("SaveSupportTicket")</label>
+<!--================================================-->
+<!--================================================-->
+<!--================================================-->
+<!--================================================-->
+<div class="container" id="titulo_general">
+    <div class="centro">
+
+
+
+        <h1 class="titulo">
+            <span class="texto">@TranslatorHelper.TranslateTextByIdentifier("supporte_text")</span>
+
+        </h1>
+
+
+    </div>
+
+
+</div>
+<!--================================= HEADER ======================================-->
+<!--================================= PAGINA ======================================-->
+<div id="pagina" class="gris support">
+
+    <div class="seccion">
+        <div class="centro">
+
+
+
+
+            <div class="formulario incident">
+
+                <input id="SupportMessage" name="write" type="text" maxlength="100" class="create" placeholder="@TranslatorHelper.TranslateTextByIdentifier("write_your_incident_text")" />
+                <input style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor !important;" id="SaveTicket" name="create" type="submit" value="@TranslatorHelper.TranslateTextByIdentifier("create_incident_text")" class="create" />
+
+            </div>
+
+
+
+            <h2>@TranslatorHelper.TranslateTextByIdentifier("your_incidents_text")</h2>
+
+
+            <div id="grid-div">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!--================================= PAGINA ======================================-->
+
+<!--================================= MODAL (CONFIRMACION OK) ======================================-->
+<div class="opacidad alerta"></div>
+<div class="modal alerta blue">
+    <div class="titulo" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor !important;">
+        <h1 style="color: @_user.TenantSkin.TenantStylePrimaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("message_text")</h1>
+    </div>
+    <div class="contenido">
+        @{
+            ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("create_ticket_confirm_text"));
+        }
+        <a href="#" target="_self" class="button" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")</a>
+    </div>
+</div>
+
+<!--================================= MODAL (CONFIRMACION ERROR) ======================================-->
+<div class="opacidad alerta"></div>
+<div class="modal alerta red">
+    <div class="titulo" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor !important;">
+        <h1 style="color: @_user.TenantSkin.TenantStyleTertiaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("message_text")</h1>
+    </div>
+    <div class="contenido">
+        @{
+            ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("create_ticket_error_text"));
+        }
+        <a href="#" target="_self" class="button" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")</a>
+    </div>
+</div>
+
+
+<!--================================= MODAL (CONFIRMACION ERROR INGRESO TEXTO) ======================================-->
+<div class="opacidad alerta"></div>
+<div class="modal alerta red texto">
+    <div class="titulo" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor !important;">
+        <h1 style="color: @_user.TenantSkin.TenantStyleTertiaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("message_text")</h1>
+    </div>
+    <div class="contenido">
+        @{
+            ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("create_ticket_incomplete_text"));
+        }
+        <a href="#" target="_self" class="button" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")</a>
+    </div>
+</div>

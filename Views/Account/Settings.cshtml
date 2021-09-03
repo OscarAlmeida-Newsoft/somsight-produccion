@@ -1,0 +1,160 @@
+﻿@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+@model SOMSight.Models.Account.SettingsVM
+
+@{ 
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+}
+
+@{ 
+    var _user = Session.GetCurrentUser();
+    var userPlan = Session.GetCurrenUserPlan();
+    string plan = string.Format("{0} Plan", @TranslatorHelper.TranslateTextByIdentifier(userPlan.PlanName));
+
+    string planStatus;
+    if (userPlan.PlanName == "WITHOUT")
+    {
+        planStatus = "";
+    }
+    else
+    {
+        planStatus = Session.GetCurrenUserPlanStatus();
+    }
+
+
+}
+
+
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/Custom/account/settings.js")"></script>
+}
+
+
+@*<div class="titulo rojo">
+    <div class="centro">
+        <h1>Account Settings</h1>
+    </div>
+</div>*@
+
+<!--================================================-->
+<!--================================================-->
+<!--================================================-->
+<!--================================================-->
+<div class="container" id="titulo_general">
+    <div class="centro">
+        <!--================================================-->
+        @*<a class="logo" target="_self"><img src="@Url.Content("~/images/logo.png")" width="300" height="84" alt=""></a>*@
+        <!--<h1>Software Update General Form</h1>-->
+
+
+
+
+
+
+
+        <h1 class="titulo">
+            <span class="texto">@TranslatorHelper.TranslateTextByIdentifier("account_setings_text")</span>
+
+        </h1>
+
+
+    </div>
+
+
+</div>
+<!--================================= HEADER ======================================-->
+
+<div id="pagina" class="gris sorry">
+    <!--===============================================-->
+    <!--===============================================-->
+    <!--===============================================-->
+    <div class="seccion">
+
+        <div class="centro">
+
+            <div class="set">
+                <div class="col_6">
+                    <h1>@TranslatorHelper.TranslateTextByIdentifier("information_text")</h1>
+                    <ul class="settings">
+                        <li><span class="izk">@TranslatorHelper.TranslateTextByIdentifier("company_name_text")</span><span class="der">@Model.CompanyName</span></li>
+                        <li class="alt"><span class="izk">@TranslatorHelper.TranslateTextByIdentifier("contact_name_text")</span><span class="der">@Model.Contact</span></li>
+                    </ul>
+
+                    <h1>@TranslatorHelper.TranslateTextByIdentifier("subscription_information_text")</h1>
+                    <ul class="settings">
+                        <li><span class="izk">@TranslatorHelper.TranslateTextByIdentifier("subscription_date_text")</span><span class="der">@Model.SubscriptionDate.Value.ToString("MM/dd/yyyy")</span></li>
+                        <li class="alt">
+                            <span class="izk">@TranslatorHelper.TranslateTextByIdentifier("subscription_type_text")</span><span class="der">
+                            @plan
+                            @if (userPlan.Id != _user.HighestPlanCode && _user.ShowUpgradeOption)
+                            {
+                                <a style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor;color: @_user.TenantSkin.TenantStyleTertiaryFontColor;" onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade', 'Plan Upgrade','@Url.Action("Upgrade","Plan")');" style="display: inline-block;" href="#" class="btn_upgrade">@TranslatorHelper.TranslateTextByIdentifier("upgrade_text")</a>
+                            }
+                        </span>
+
+                        </li>
+                        <li>
+                            <span class="izk">
+                                @TranslatorHelper.TranslateTextByIdentifier("subscription_status_text")</span><span class="der">@planStatus 
+                                @if (Model.HasPaypalPlan)
+                                {
+                                    ViewContext.Writer.Write("| <a href=\"#\" style=\"font-size:1em;text-transform:lowercase;\" id=\"cancelPlan\"> "+ @TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Cancelar") + " </a>");
+
+
+
+                                }
+                                
+                            </span>
+                        </li>
+
+                        @if (Model.HasPromotionalCode)
+                        {
+                            <li><span class="izk">@TranslatorHelper.TranslateTextByIdentifier("promotional_code_remaining_days_text")</span><span class="der">@Model.PromotionalCodeRemainingDays</span></li>
+                        }
+                        
+                    </ul>
+                </div>
+                <div class="col_6">
+                    <h1>@TranslatorHelper.TranslateTextByIdentifier("contact_text")</h1>
+                    <ul class="settings">
+                        <li><span class="izk">@TranslatorHelper.TranslateTextByIdentifier("assigned_consultant_text")</span><span class="der">@Model.AssignedConsultant</span></li>
+                        <li class="alt"><span class="izk">@TranslatorHelper.TranslateTextByIdentifier("consultant_email_text")</span><span class="der">@Model.ConsultantEmail</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--===============================================-->
+    <!--===============================================-->
+    <!--===============================================-->
+</div>
+
+
+<!--================================= MODALS ======================================-->
+<div class="opacidad"></div>
+
+<div class="contenedor_modal contenedor_cancel_subscription">
+    <div class="modal formulary">
+        <h1 style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor">@TranslatorHelper.TranslateTextByIdentifier("cancel_subscription_text")</h1>
+        <div class="contiene">
+            @using (Html.BeginForm("CancelBillingAgreement", "Paypal", FormMethod.Post))
+                {
+                <div class="row">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(x => x.PaypalBillingAgreementCode)
+                    <label>
+                        @{
+                            ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("cancel_subscription_message_ask_confirmation"));
+                         }
+                    </label>
+                </div>
+                <div class="row last">
+                    <a href="#" target="_self" class="button gris cerrar f_left">@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Cancelar")</a>
+                    <input style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor" type="submit" value="@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")" class="button rojo f_right" />
+                </div> 
+            }
+        </div>
+    </div>
+</div>

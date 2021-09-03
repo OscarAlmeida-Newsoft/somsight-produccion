@@ -1,0 +1,13 @@
+﻿@using SOMSight.Utils
+
+@{
+    ViewBag.Title = "Confirm Email";
+    ViewBag.LogoUrl = Url.Action("Index", "Home");
+}
+
+<h2>@TranslatorHelper.TranslateTextByIdentifier("confirm_email_text").</h2>
+<div>
+    <p>
+        @TranslatorHelper.TranslateTextByIdentifier("refresh_text") @Html.ActionLink(TranslatorHelper.TranslateTextByIdentifier("click_here_to_login_text"), "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+    </p>
+</div>

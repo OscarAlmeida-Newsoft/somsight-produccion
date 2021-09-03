@@ -1,0 +1,510 @@
+﻿@model SOMSight.Models.Users.EditUserVM
+
+@using SOMSight.Utils.Extensions
+@using SOMSightModels.Shared
+
+@{
+    bool isAdministrator = Session.GetCurrentRol().Equals(RolesDef.ADMINISTRATOR_ROLE);
+    int? StateId = Model.StateId;
+}
+
+@using (Ajax.BeginForm("Edit", "AdminUsers", null,
+    new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        OnSuccess = "OnSuccess",
+        OnFailure = "OnFailure",
+        OnBegin = "On_Begin",
+        UpdateTargetId = "EditUser"
+    },
+    new
+    {
+        @id = "FormEditUser"
+    }
+))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-header">
+        <h4 class="modal-title">Edit</h4>
+    </div>
+    <div class="modal-body">
+        <div class="panel-body">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.IsCorporate, htmlAttributes: new { @class = "control-label" })
+                                <div>
+                                    @if (isAdministrator) {
+                                        @Html.RadioButtonFor(model => model.IsCorporate, true, new { htmlAttributes = new { @class = "form-control" } })
+                                        @:Corporate
+                                        @Html.RadioButtonFor(model => model.IsCorporate, false, new {
+                                             htmlAttributes = new { @class = "form-control" } })
+                                        @:Personal
+                                    } else {
+
+                                        @Html.RadioButtonFor(model => model.IsCorporate, true, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                        @:Corporate
+                                        @Html.RadioButtonFor(model => model.IsCorporate, false, new {
+                                             htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                        @:Personal
+
+
+                                    }
+                                </div>
+
+
+                                @Html.ValidationMessageFor(model => model.Linkedin, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            @Html.HiddenFor(model => model.Id)
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+
+                                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ContactLastName, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.ContactLastName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ContactLastName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.JobPosition, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.JobPosition, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.JobPosition, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CountryId, new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.DropDownListFor(m => m.CountryId, Model.CountryList, new { @class = "form-control" })
+                                } else {
+                                    @Html.DropDownListFor(m => m.CountryId, Model.CountryList, new { @class = "form-control", @readonly = true, @disabled = "disabled" })
+                                }
+                                @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.StateId, new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.DropDownListFor(m => m.StateId, new SelectList(string.Empty, "Value", "Text"), "--Select--", new { @class = "form-control" })
+                                } else {
+                                    @Html.DropDownListFor(m => m.StateId, new SelectList(string.Empty, "Value", "Text"), "--Select--", new { @class = "form-control", @readonly = true, @disabled = "disabled" })
+                                }
+                                @Html.ValidationMessageFor(m => m.StateId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.City, new { @class = " control-label" })
+
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NroOfEmployees, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.NroOfEmployees, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.NroOfEmployees, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.NroOfEmployees, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NumberOfDevices, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.NumberOfDevices, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.NumberOfDevices, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.NumberOfDevices, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CampaignId, new { @class = " control-label" })
+                                @if (isAdministrator) {
+                                    @Html.DropDownListFor(m => m.CampaignId, Model.CampaignList, new { @class = "form-control" })
+                                } else {
+                                    @Html.DropDownListFor(m => m.CampaignId, Model.CampaignList, new { @class = "form-control", @readonly = true, @disabled = "disabled" })
+                                }
+                                @Html.ValidationMessageFor(m => m.CampaignId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Linkedin, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.Linkedin, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.Linkedin, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.Linkedin, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Facebook, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.Facebook, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.Facebook, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.Facebook, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Instagram, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.Instagram, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.Instagram, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.Instagram, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Youtube, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.Youtube, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.Youtube, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.Youtube, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Twitter, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.Twitter, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.Twitter, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.Twitter, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @*@Html.LabelFor(model => model.Google, htmlAttributes: new { @class = "control-label" })
+                        @if (isAdministrator)
+                        {
+                            @Html.EditorFor(model => model.Google, new { htmlAttributes = new { @class = "form-control" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => model.Google, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                        }
+                        @Html.ValidationMessageFor(model => model.Google, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PersonalMail1, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.PersonalMail1, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.PersonalMail1, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.PersonalMail1, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PersonalMail2, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.PersonalMail2, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.PersonalMail2, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.PersonalMail2, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PersonalMail3, htmlAttributes: new { @class = "control-label" })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.PersonalMail3, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.PersonalMail3, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+                                @Html.ValidationMessageFor(model => model.PersonalMail3, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ResetPassword, htmlAttributes: new { @class = "control-label " })
+                                @if (isAdministrator) {
+                                    @Html.EditorFor(model => model.ResetPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                } else {
+                                    @Html.EditorFor(model => model.ResetPassword, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                }
+
+                                @Html.ValidationMessageFor(model => model.ResetPassword, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            @Html.Label(" ")
+                            <div class="checkbox">
+                                @Html.CheckBoxFor(x => x.ForcePasswordChange) Force password change
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (isAdministrator) {
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.UserRoleId, new { @class = "control-label" })
+                                    <div class="row">
+                                    </div>
+                                    @Html.DropDownListFor(m => m.UserRoleId, Model.UserRole, "Client", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.UserRoleId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-5 col-md-offset-1">
+                            <div class="row">
+                                <div class="form-group">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row">
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.IsAdministrativeUser, new { @class = "control-label" })
+                        <div class="row">
+                        </div>
+                            @Html.EditorFor(model => model.IsAdministrativeUser, new { htmlAttributes = new { @class = "form-check-input" } })
+
+                        @Html.ValidationMessageFor(m => m.IsAdministrativeUser, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 col-md-offset-1">
+                <div class="row">
+                    <div class="form-group">
+                    </div>
+                </div>
+            </div>
+        </div>*@
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <input type="submit" value="Edit" id="btnSave" name="cmd" class="btn btn-success" />
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+
+            loadStates();
+
+            $("#CountryId").change(function () {
+                //loadingDiv.show();
+                $("#StateId").empty();
+                $("#StateId").append('<option value="">--Select--</option>');
+                if ($(this).val() != "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("GetStatesById", "AdminCountries")' + '?pCountryId=' + $("#CountryId").val(),
+                        //dataType: 'json',
+                        //data: { pCountryId: $("#CountryId").val() },
+                        success: function (states) {
+                            //alert("test");
+                            $.each(states, function (i, state) {
+                                $("#StateId").append('<option value="' + state.Id + '">' + state.Name + '</option>');
+                            });
+                        },
+                        error: function (ex) {
+                            alert('Failed.' + ex);
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+
+        function loadStates() {
+            var StateId = '@Html.Raw(Model.StateId)';
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetStatesById", "AdminCountries")' + '?pCountryId=' + $("#CountryId").val(),
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                        //$("#StateId").append('<option value="' + state.Id + '">' + state.Name + '</option>');
+                        $('#StateId').append($('<option>', { value: state.Id, text: state.Name }));
+                    });
+                    if(StateId)
+                        $("#StateId").val(StateId);
+                },
+                error: function (ex) {
+                    alert('Failed.' + ex);
+                }
+            });
+        }
+    </script>
+}
+
+

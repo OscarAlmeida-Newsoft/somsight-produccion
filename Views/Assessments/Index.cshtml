@@ -1,0 +1,148 @@
+﻿@model SOMSightModels.NS_TblAssessmentTypeDTO
+@using SOMSight.Utils
+
+@{
+    ViewBag.Title = "Assessment";
+    ViewBag.LogoUrl = Url.Action("Index", "Home");
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+
+<!--================================= ROTATOR ======================================-->
+<div class="container" id="rotator" style="background-image:url(@Url.Content("~/images/banner_2018_01.jpg"))">
+    <div class="content">
+        <h1>@TranslatorHelper.TranslateTextByIdentifier("SOMSighMainProductDescription")</h1><ul class="bxslider">
+            @{
+                ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("CyberSecuritytSliderTexts"));
+            }
+        </ul>
+    </div>
+    @*<ul class="bxslider container">
+            <li>
+                <div style="z-index:0;background-image:url(@Url.Content(string.Format("~/images/{0}",Model.BackgroudImage)))" class="imagen">
+                    <div class="opacity" style="height: 84.5vh !important;">
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="tabla">
+                        <div class="izk">
+                            <h2>@TranslatorHelper.TranslateTextById(Model.TranslatorAdministratorLandingText1Id)</h2>
+                            <h1>@TranslatorHelper.TranslateTextById(Model.TranslatorAdministratorLandingText2Id)</h1>
+                            <h3>@TranslatorHelper.TranslateTextById(Model.TranslatorAdministratorLandingText3Id)</h3>
+                        </div>
+                    </div>
+
+                    <div class="flotante" style="z-index:0">
+                        <div class="white">
+                            <img src="@Url.Content(string.Format("~/images/{0}", Model.IconLanding))" width="98" height="98" alt="security somsight" class="icono_seguridad">
+                            <h2>
+                                Free<br />
+                                <span>
+                                    @TranslatorHelper.TranslateTextById(Model.TranslatorAdministratorId)
+                                </span>
+                            </h2>
+                            <a href="@Url.Action("Index","FreeAssessmentQuestions", new {pAssessmentTypeId = Model.Id })" target="_self" class="start">Start Here</a>
+                            <p>@TranslatorHelper.TranslateTextById(Model.TranslatorAdministratorDescriptionId)</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>*@
+</div>
+<!--================================= ROTATOR ======================================-->
+<!--================================= ROTATOR ======================================-->
+<!--================================= OUR SOLUTIONS ======================================-->
+@Html.Partial("_OurSolutions", Model.Id)
+<!--================================= OUR SOLUTIONS ======================================-->
+<!--================================= OUR PRODUCTS ======================================-->
+@*@Html.Partial("_OurProducts")*@
+<!--================================= OUR PRODUCTS ======================================-->
+<!--================================= PLANS ======================================-->
+@*@Html.Partial("_OurPlans")*@
+<!--================================= PLANS ======================================-->
+<!--================================= ABOUT US ======================================-->
+@Html.Partial("_AboutUs")
+<!--================================= ABOUT US ======================================-->
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('.bxslider').bxSlider({
+                auto: true,
+                pause: 10000,
+                speed: 700,
+                autoHover: false,
+                pager: true,
+                controls: false,
+                nextText: 'slidenext',
+                prevText: 'slideprev',
+                adaptiveHeight: true
+            });
+
+        });
+
+
+        var _selectedRange = 1;
+        var _somsightPlanId = undefined;
+        var _paymentTypeCycle = undefined;
+
+        $(document).ready(function () {
+            _somsightPlanId = $('input[name=item]:checked').data("somsightplanid");
+            _paymentTypeCycle = $('input[name=item]:checked').data("paymenttypecycle");
+
+            LoadPrice(_somsightPlanId, _paymentTypeCycle, _selectedRange);
+
+            $(document).on('change', 'input[name=item]', function () {
+                _somsightPlanId = $('input[name=item]:checked').data("somsightplanid");
+                _paymentTypeCycle = $('input[name=item]:checked').data("paymenttypecycle");
+
+                loadingDiv.show();
+                LoadPrice(_somsightPlanId, _paymentTypeCycle, _selectedRange);
+            });
+
+            $(document).on('change', '#PlanRange', function () {
+                _selectedRange = $('option:selected').val();
+                loadingDiv.show();
+                LoadPrice(_somsightPlanId, _paymentTypeCycle, _selectedRange);
+            });
+
+
+            $(document).on('click', '.purchase_now', function () {
+                loadingDiv.show();
+                var redirectUrl = '@Url.Action("Register", "Account")' + "?pSOMSightPlanId=" + _somsightPlanId + "&pPaymentTimeCycle=" + _paymentTypeCycle + "&pPlanRange=" + _selectedRange;
+                gAnalytics.throwRedirectEvent("Click Paypal button home", "Paypal", redirectUrl);
+            });
+        });
+
+        function LoadPrice(pSOMSightPlanId, pPaymentTimeCycle, pPlanRange) {
+
+
+            $.ajax({
+                url: "@Url.Action("GetPlanPrice", "Plan")" + "?pSOMSightPlanId=" + pSOMSightPlanId + "&pPaymentTimeCycle=" + pPaymentTimeCycle + "&pPlanRange=" + pPlanRange,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8'
+            })
+        .done(function (data) {
+            //Si el ciclo del pago es anual
+            if (pPaymentTimeCycle == "Annually") {
+                $('#price_recurrence').text('Annual');
+            } else {
+                $('#price_recurrence').text('Monthly');
+            }
+
+            $('#price_value').text('USD $' + data.price);
+            return false;
+
+        })
+        .fail(function (jqXHR, exception) {
+            console.log(exception);
+        })
+        .always(function () {
+            loadingDiv.hide();
+        });
+        }
+
+
+    </script>
+}

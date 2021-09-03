@@ -1,0 +1,86 @@
+﻿@using SOMSight.Utils
+@using SOMSight.Utils.Extensions
+@using SOMSightModels.Shared
+
+@{
+    ViewBag.Title = "Board";
+    ViewBag.Active = "MeasureMyPlatform_Word";
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+
+    var _user = Session.GetCurrentUser();
+    var SAM360Id = (int)MeasureMyPlatformClients.SAM360;
+    SAM360Provider _sam360Provider = new SAM360Provider();
+}
+
+
+@section Scripts{
+    @*//TODO: Convertir en vista parcial*@
+    <script>
+        var IsSAM360On = false;
+        var SAM360Url = '';
+
+        if ('@ViewBag.MyPlatformSubmodule' == '@SAM360Id')  
+        {
+            IsSAM360On = true;
+            SAM360Url = '@_sam360Provider.GetSAM360Url()';
+        }
+
+
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/my_platform/MyPlatformScript.js")"></script>
+}
+
+
+@{
+    var userPlan = Session.GetCurrenUserPlan();
+
+    string plan = string.Format("{0} Plan", userPlan.PlanName);
+}
+
+<!--================================= AVISO ======================================-->
+@if (userPlan.Id != _user.HighestPlanCode && _user.ShowUpgradeOption)
+{
+    <div id="aviso">
+        <div class="centro">
+            <p><img src="@Url.Content("~/images/icono_aviso_alerta.png")" width="46" height="40"></p>
+            <p>
+                @{
+                    ViewContext.Writer.Write(string.Format(TranslatorHelper.TranslateTextByIdentifier("upgrade_all_functionalities_text"), plan));
+                }
+            </p>
+            <p>
+                <a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade','Plan Upgrade','@Url.Action("Upgrade","Plan")')" href="#" class="btn_buy_now" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;  border: solid 1px @_user.TenantSkin.TenantStyleTertiaryBackgroundColor">@TranslatorHelper.TranslateTextByIdentifier("upgrade_text")</a>
+                @*<a onclick="gtag('event','Click Upgrade',{'event_category':'Plan Upgrade','event_label':'Plan Upgrade'});" href="@Url.Action("Upgrade","Plan")" class="btn_buy_now" target="_self">UPGRADE YOUR PLAN HERE <span></span></a>*@
+            </p>
+            <p class="derecho">
+                @TranslatorHelper.TranslateTextByIdentifier("download_text")
+                <a onclick="gAnalytics.throwRedirectEvent('Click Download Set Up File','SAM Live','@Url.Action("DownloadAgent","MyPlatform",new { @pId=ViewBag.MyPlatformSubmodule})')" href="#" target="_self" class="btn cloud" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("scanner_text")</a>
+                <a onclick="gAnalytics.throwRedirectEvent('Click Download Agent Manual','SAM Live','@Url.Action("DownloadManual","MyPlatform",new { @pId=ViewBag.MyPlatformSubmodule})')" href="#" target="_self" class="btn cloud" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("setup_file_text")</a>
+            </p>
+        </div>
+    </div>
+}
+else
+{
+    <div id="aviso">
+        <div class="centro">
+            <p>&nbsp;</p>
+            <p class="derecho">
+                @TranslatorHelper.TranslateTextByIdentifier("download_text")
+                <a onclick="gAnalytics.throwRedirectEvent('Click Download Set Up File','SAM Live','@Url.Action("DownloadAgent","MyPlatform",new { @pId=ViewBag.MyPlatformSubmodule})')" href="#" target="_self" class="btn cloud" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("scanner_text")</a>
+                <a onclick="gAnalytics.throwRedirectEvent('Click Download Agent Manual','SAM Live','@Url.Action("DownloadManual","MyPlatform",new { @pId=ViewBag.MyPlatformSubmodule})')" href="#" target="_self" class="btn cloud" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("setup_file_text")</a>
+            </p>
+        </div>
+    </div>
+}
+
+
+<!--================================= AVISO ======================================-->
+<!--================================= PAGINA ======================================-->
+<div id="pagina" class="embed_iframe">
+
+
+    <iframe id="miIframe" src="@ViewBag.MeasureMyPlatformUrl" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+</div>
+<!--================================= PAGINA ======================================-->

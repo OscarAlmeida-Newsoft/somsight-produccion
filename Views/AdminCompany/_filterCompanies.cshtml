@@ -1,0 +1,48 @@
+﻿@model SOMSight.Models.FilterCompanyGridVM
+
+<div class="modal-header">
+
+    <h4 class="modal-title">Filter Users</h4>
+
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.NameOrEmail)
+                        @Html.TextBoxFor(m => m.NameOrEmail, new { @class = "form-control", @id = "filterNameOrEmail" })
+                        @Html.ValidationMessageFor(m => m.NameOrEmail, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.AllTenant, new { @style = "display: block;" })
+                        @Html.CheckBoxFor(m => m.AllTenant, new { @class = "", @readonly = "true", @id = "filterAllTenant" })
+                        @Html.ValidationMessageFor(m => m.AllTenant, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <input type="button" value="Clear Filter" id="btnClearFilter" name="cmd" class="btn btn-primary" data-dismiss="modal" />
+        <input type="button" value="Filter" id="btnFilter" name="cmd" class="btn btn-success" data-dismiss="modal" />
+    </div>
+</div>
+

@@ -1,0 +1,42 @@
+﻿@model Guid
+@{Guid userId = Model;}
+
+@using (Ajax.BeginForm("DeleteUser", "AdminUsers", null,
+                            new AjaxOptions
+                            {
+                                HttpMethod = "POST",
+                                InsertionMode = InsertionMode.Replace,
+                                OnSuccess = "OnSuccess",
+                                OnFailure = "OnFailure",
+                                OnBegin = "On_Begin",
+                                UpdateTargetId = "RemoveUser"
+                            },
+                            new
+                            {
+                                @id = "FormDeleteUser",
+                            }
+                            ))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(m => userId)
+    <input type="hidden" name="pUserId" value="@Model"/>
+    <div class="modal-header">
+        <h4 class="modal-title">Message</h4>
+    </div>
+    <div class="modal-body">
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <label>Are you sure to delete the User? </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <input type="submit" value="Delete" id="btnSave" name="cmd" class="btn btn-success" />
+        </div>
+    </div>
+}

@@ -1,0 +1,57 @@
+﻿
+@model SOMSight.Models.Assessments.AssessmentTypeVM
+
+
+
+<div class="modal-header">
+
+    <h4 class="modal-title">Edit Images</h4>
+
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="row">
+
+                <label>Background Image</label>
+                <a href="#" class="btn btn-default upload-image" data-image="images-background"><i class="glyphicon glyphicon-upload"></i> Upload</a>
+
+                <label><i>Size: 1600x560</i></label>
+
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="text-center">
+                    <img src="@Model.BackgroudImage?var=@DateTime.UtcNow.Millisecond" width="300" height="84" />
+                </div>
+                <hr />
+                <label>Icon Landing</label>
+                <a href="#" class="btn btn-default upload-image" data-image="images-iconlanding"><i class="glyphicon glyphicon-upload"></i> Upload</a>
+
+                <label><i>Size: 98x98</i></label>
+                <div class="col-md-12">
+                    &nbsp;
+                </div><div class="text-center">
+                    <img src="@Model.IconLanding?var=@DateTime.UtcNow.Millisecond" width="16" height="16" />
+                </div>
+
+                <hr />
+                <label>Icon Name</label>
+                <a href="#" class="btn btn-default upload-image" data-image="images-iconname"><i class="glyphicon glyphicon-upload"></i> Upload</a>
+
+                <label><i>Size: 56x57</i></label>
+
+                <div class="col-md-12">
+                    &nbsp;
+                </div><div class="text-center">
+                    <img src="@Model.IconName?var=@DateTime.UtcNow.Millisecond" width="16" height="16" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    </div>
+</div>

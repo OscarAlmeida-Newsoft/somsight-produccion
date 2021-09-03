@@ -1,0 +1,42 @@
+﻿@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+@model SOMSight.Models.PromotionalCode.PromoCodeEnterVM
+
+@{
+    var _user = @Session.GetCurrentUser();
+}
+
+@using (Ajax.BeginForm("PromotionalCode", "Plan", null,
+                                                        new AjaxOptions
+                                                        {
+                                                            HttpMethod = "POST",
+                                                            InsertionMode = InsertionMode.Replace,
+                                                            OnSuccess = "OnSuccessPromoCodeForm",
+                                                            OnFailure = "OnFailurePromoCodeForm",
+                                                            OnBegin = "OnBeginPromoCodeForm",
+                                                            UpdateTargetId = "promotional_code_content", 
+                                                            OnComplete = "OnCompletePromoCodeForm"
+                                                        },
+                                                        new
+                                                        {
+                                                            @id = "FromPromoCode"
+                                                        }
+                                                    ))
+{
+    @Html.AntiForgeryToken()
+    
+            <div class="row">
+                @Html.LabelFor(x=>x.PromotionalCode)
+                @Html.TextBoxFor(x=>x.PromotionalCode)
+                <p class="required">
+                    @Html.ValidationMessageFor(x=>x.PromotionalCode)
+                </p>
+            </div>
+            <div class="row last">
+                <a href="#" target="_self" class="button gris cerrar f_left">@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Cancelar")</a>
+                <input style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor;color: @_user.TenantSkin.TenantStyleTertiaryFontColor;" type="submit" value="@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")" class="button rojo f_right" />
+            </div>
+
+
+
+}

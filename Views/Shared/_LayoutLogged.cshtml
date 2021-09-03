@@ -1,0 +1,311 @@
+﻿@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+<!--Esta version fue generada en la fecha, 03/09/2021, para el servidor de produccion-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+
+    @Html.Partial("_GAnalyticsPartial")
+    <script>
+        gAnalytics.addGoogleAnalytics();
+    </script>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/customjs")
+
+    <script src="@Scripts.Url("~/Scripts/sobrescrituas.js")"></script>
+    <script>
+        function showModal() {
+            $('.contact-us-pop-up').fadeTo('slow', 0.7, function () {
+                $(this).css("display", "block");
+            }).fadeTo('slow', 1);
+        }
+
+        function closeModal() {
+            $('.contact-us-pop-up').fadeTo('slow', 0.7, function () {
+                $(this).css("display", "none");
+            }).fadeTo('slow', 1);
+        }
+
+    </script>
+
+
+    @{
+        var _user = Session.GetCurrentUser();
+
+        if (_user == null)
+        {
+            _user = @Session.GetDataWithOutLogin();
+        }
+
+        var userPlan = Session.GetCurrenUserPlan();
+        string plan = string.Empty;
+        if (userPlan != null)
+        {
+            plan = string.Format("{0} Plan", @userPlan.PlanName);
+        }
+
+    }
+    <link rel="icon" href="@_user.TenantSkin.TenantFaviconUrl">
+
+    <!-- Start of  Zendesk Widget script -->
+    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=b2a53c26-0233-4d53-abe2-067b1f20976b"></script>
+    <!-- End of  Zendesk Widget script -->
+
+</head>
+
+<body>
+
+    <label id="InputCaptchaPlaceholder" hidden>@TranslatorHelper.TranslateTextByIdentifier("type_code_here_text")</label>
+
+    <label id="CookieBarMessage" hidden>@TranslatorHelper.TranslateTextByIdentifier("cookiebarmessage")</label>
+    <label id="CookieBarAccept" hidden>@TranslatorHelper.TranslateTextByIdentifier("cookiebaraccept")</label>
+    <label id="CookieBarMoreInfo" hidden>@TranslatorHelper.TranslateTextByIdentifier("cookiebarmoreinfo")</label>
+    <label id="CookieBarInfoLink" hidden>@Url.Action("DataProtection", "Home")</label>
+
+    <div id="proceso_en_ejecucion">
+        <div>
+            <img src='@Url.Content("~/images/processing.gif")' width="58" height="58">
+        </div>
+    </div>
+    <!--================================= HEADER ======================================-->
+    <div id="header" class="interior">
+        @*<div id="menu_superior">
+        *@
+        <div class="centro">
+
+            <a class="logo" target="_self" href="@Url.Action("Index", "MyBoard" )"><img src="@_user.TenantSkin.TenantMainLogoUrl" alt="Logo" width="300" height="84"></a>
+
+
+
+            <a id="icono_menu_rspnsv" class="rspnsv" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor !important;">Menu</a>
+
+
+            @*<a id="icono_menu_rspnsv" class="rspnsv">Menu</a>
+
+
+
+                <ul class="pestanas">
+                    <li><a href="@Url.Action(" Index","MyPlatform")" target="_self" class="@{ if(ViewBag.Active == " 0"){ ViewContext.Writer.Write("active"); } }">Measure My Platform</a></li>
+                    <li><a href="@Url.Action(" Index","AssessmentBoard", new { @id=1})" class="@{ if(ViewBag.Active == " 1"){ ViewContext.Writer.Write("active"); } }" target="_self">Cybersecurity</a></li>
+                    <li><a href="@Url.Action(" Index","AssessmentBoard", new { @id=2})" class="@{ if(ViewBag.Active == " 2"){ ViewContext.Writer.Write("active"); } }" target="_self">Cloud</a></li>
+                    <li><a href="@Url.Action(" Index","AssessmentBoard", new { @id=3})" class="@{ if(ViewBag.Active == " 3"){ ViewContext.Writer.Write("active"); } }" target="_self">Productivity</a></li>
+                    <li><a href="@Url.Action(" Index","AssessmentBoard", new { @id=4})" class="@{ if(ViewBag.Active == " 4"){ ViewContext.Writer.Write("active"); } }" target="_self">Industry Insights</a></li>
+                    <li><a href="@Url.Action(" Index","Support")" class="@{ if(ViewBag.Active == " 5"){ ViewContext.Writer.Write("active"); } }" target="_self">Support</a></li>
+                </ul>*@
+
+            <ul id="menu" class="landing">
+
+
+
+                @*
+                    <li class="item has_btn"><a href="#" target="_self" class="btn red">UPGRADE</a></li>*@
+
+                @if (userPlan.Id != _user.HighestPlanCode && _user.ShowUpgradeOption)
+                {
+                    <li class="item has_btn"><a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade','Plan Upgrade','@Url.Action("Upgrade", "Plan" )')" href="#" class="btn red" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("upgrade_text")</a></li>
+
+                }
+                <li class="item"><a href="@Url.Action("Index", "Support" )" class="@{ if (ViewBag.Active == " 5") { ViewContext.Writer.Write("active"); } }" target="_self">@TranslatorHelper.TranslateTextByIdentifier("supporte_text")</a></li>
+                @*
+                    <li class="item"><a href="#" target="_self">HELP</a></li>*@
+                <!--================================================-->
+                <div id="btn_login_logged">
+
+                    <p id="touch">
+
+                        <span class="palabra_top" style="background-image: url(../../images/icono_login@_user.TenantSkin.TenantStyleLoginIconColor);"></span>
+                        <span class="flecha_top"></span>
+                    </p>
+
+                    <!--================================= LOGIN  ======================================-->
+                    <div id="login" class="logged_in">
+                        <div class="formulario">
+
+                            <h3>@_user.UserEmail</h3>
+
+                            <div class="btn_idiomas">
+                                @Html.Partial("_Languages")
+                            </div>
+
+                            <ul class="opciones">
+                                <li><a href="@Url.Action("EditProfile", "Account" )" target="_self" class="icono profile">@TranslatorHelper.TranslateTextByIdentifier("my_profile_text")</a></li>
+                                <li><a href="@Url.Action("Settings", "Account" )" target="_self" class="icono configuration">@TranslatorHelper.TranslateTextByIdentifier("configuration_text")</a></li>
+                                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", style = "display: none;" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                }
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()" target="_self" class="icono log_out">@TranslatorHelper.TranslateTextByIdentifier("log_out_text")</a></li>
+                            </ul>
+
+                            <hr />
+
+                            @if (userPlan.PlanName != "WITHOUT")
+                            {
+                                <h4>@TranslatorHelper.TranslateTextByIdentifier("you_are_in_the_text") <strong>@plan</strong></h4>
+                            }
+
+                            @if (userPlan.Id != _user.HighestPlanCode && _user.ShowUpgradeOption)
+                            {
+                                <a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade','Plan Upgrade','@Url.Action("Upgrade", "Plan" )')" href="#" class="upgrade" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor; background-image: url('../images/icono_carrito@_user.TenantSkin.TenantStyleTertiaryIconColor');">@TranslatorHelper.TranslateTextByIdentifier("upgrade_your_plan_text")</a>
+
+                            }
+                        </div>
+
+                    </div>
+                    <!--================================= LOGIN  ======================================-->
+                </div>
+
+
+
+
+
+
+            </ul>
+
+
+
+        </div>
+        <div id="menu_superior" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; ">
+            <div class="centro">
+
+
+
+
+
+
+
+
+
+
+                <ul class="pestanas">
+                    <li><a style="color: @_user.TenantSkin.TenantStylePrimaryFontColor;" href="@Url.Action("Index","MyBoard")" target="_self" class="@{ if(ViewBag.Active == "MyBoard"){ ViewContext.Writer.Write("active"); } }">@TranslatorHelper.TranslateTextByIdentifier("home_text")</a></li>
+                    @Html.Action("LoadModularityMenu", "Modularity", new { pActiveModuleName = ViewBag.Active })
+
+                    @*
+                        <li><a href="@Url.Action(" Index","MyBoard")" target="_self" class="@{ if(ViewBag.Active == " 0"){ ViewContext.Writer.Write("active"); } }">Home</a></li>
+                        <li><a href="@Url.Action(" Index","AssessmentBoard", new { @id=1})" class="@{ if(ViewBag.Active == " 1"){ ViewContext.Writer.Write("active"); } }" target="_self">Cybersecurity</a></li>
+                        <li><a href="@Url.Action(" Index","AssessmentBoard", new { @id=2})" class="@{ if(ViewBag.Active == " 2"){ ViewContext.Writer.Write("active"); } }" target="_self">Cloud</a></li>
+                        <li><a href="@Url.Action(" Index","AssessmentBoard", new { @id=3})" class="@{ if(ViewBag.Active == " 3"){ ViewContext.Writer.Write("active"); } }" target="_self">Productivity</a></li>
+                        <li><a href="@Url.Action(" Index","AssessmentBoard", new { @id=4})" class="@{ if(ViewBag.Active == " 4"){ ViewContext.Writer.Write("active"); } }" target="_self">Industry Insights</a></li>
+                        <li><a href="@Url.Action(" Index","MyPlatform")" target="_self" class="@{ if(ViewBag.Active == " 5"){ ViewContext.Writer.Write("active"); } }">Measure My Platform</a></li>
+                        <li><a href="#" target="_self">Software Assets</a></li>*@
+                </ul>
+
+
+            </div>
+        </div>
+
+
+        <!--================================================-->
+        <!--================================================-->
+        <!--================================================-->
+        <!--================================================-->
+
+
+
+    </div>
+    <!--================================= HEADER ======================================-->
+    <!--================================= CONTENT ======================================-->
+    @RenderBody()
+
+    <!--================================= CONTENT ======================================-->
+    <!--================================= FOOTER ======================================-->
+    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+    {
+        <div id="footer">
+            <div class="centro">
+                <ul>
+                    <li><a href="@Url.Action("TermsAndConditions","Home")" target="_blank">@TranslatorHelper.TranslateTextByIdentifier("terms_and_conditions_text")</a></li>
+                    <li><a href="@Url.Action("DataProtection","Home")">@TranslatorHelper.TranslateTextByIdentifier("privacy_and_cookies_text")</a></li>
+                </ul>
+
+
+                <p>© 2010-@DateTime.Now.Year @TranslatorHelper.TranslateTextByIdentifier("powered_by_text")</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div id="footer" class="landing">
+            <div class="centro">
+                <h2>Contact us</h2>
+                <hr />
+                <ul>
+                    <li><a href="mailto:contact@somsight.com" target="_self" class="email">contact@somsight.com</a></li>
+                    <li><a href="tel:+18002170287" target="_self" class="tel">+1 800-217-0287</a></li>
+                </ul>
+                <hr />
+                <p>© 2010-@DateTime.Now.Year Powered by SOMSight - Echez Inc. All Rights Reserved</p>
+            </div>
+        </div>
+
+        @*<a href="#" target="_self" id="subir" style="display: inline;">subir</a>*@
+    }
+    <!--================================= FOOTER ======================================-->
+    @RenderSection("scripts", required: false)
+
+
+    <!--================================= FOOTER ======================================-->
+    <div id="footer" class="landing contact-us-pop-up" style="display:none;border-radius: 9px;position: fixed;z-index: 100000;width: 40%;left: 30%; top: 130px;">
+        <div id="close-pop-up" style="position: absolute;right: 10px;top: 10px;">
+            <a style="color: white;cursor:pointer; font-size:15px;" onclick="closeModal()" target="_self" class="ayuda">X</a>
+        </div>
+        <div class="centro">
+            <h2>Contact us</h2>
+            <hr>
+            <ul>
+                <li><a href="mailto:contact@somsight.com" target="_self" class="email">contact@somsight.com</a></li>
+                <li><a href="tel:+18002170287" target="_self" class="tel">+1 800-217-0287</a></li>
+            </ul>
+        </div>
+    </div>
+    <!--================================= FOOTER ======================================-->
+    @*<div id="modal-trial" class="modal modal-trial">
+        <div class="titulo" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor;">
+            <h1 style="color: @_user.TenantSkin.TenantStylePrimaryFontColor;">
+                Trial Plan
+            </h1>
+        </div>
+        <div class="contenido">
+            <h2>
+                Get Trial Plan
+            </h2>
+
+            <table width="600" border="0" cellspacing="0" cellpadding="0" class="sin_margen_arriba">
+                <thead>
+                    <tr class="to_purchase">
+                        <td>
+                            <div class="purchase_now promotional">*@
+    @*<a href="@Url.Action("Error","Plan")" target="_self" class="purchase_now"><span>Purchase Now</span></a>*@
+
+    @*<a href="@Url.Action("MailTrial","Account")">
+                                        <div class="promotional_check" id="" style="cursor: pointer; background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor !important;">
+                                            <label>
+                                    Are you sure request a promotional code for any of our services
+                                            </label>
+                                        </div>
+
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+                <a href="#" target="_self" class="button closeModalTrial" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">Close</a>
+            </div>
+        </div>*@
+    <!--================================= END MODAL TRIAL ======================================-->
+    <!-- Cookie Bar -->
+    <div class="notice-cookies">
+        <div class="container-ck"></div>
+    </div>
+    <!-- END Cookie Bar -->
+
+</body>
+</html>

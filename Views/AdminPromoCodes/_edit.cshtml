@@ -1,0 +1,57 @@
+﻿
+@model SOMSight.Models.PromotionalCode.EditPromoCodeVM
+
+@using (Ajax.BeginForm("Edit", "AdminPromoCodes", null,
+                                                        new AjaxOptions
+                                                        {
+                                                            HttpMethod = "POST",
+                                                            InsertionMode = InsertionMode.Replace,
+                                                            OnSuccess = "OnSuccessEdit",
+                                                            OnFailure = "OnFailureEdit",
+                                                            OnBegin = "OnBeginEdit",
+                                                            OnComplete = "OnCompleteEdit",
+                                                            UpdateTargetId = "Edit"
+                                                        },
+                                                        new
+                                                        {
+                                                            @id = "FormEdit"
+                                                        }
+                                                    ))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x=>x.Id)
+    <div class="modal-header">
+
+        <h4 class="modal-title">Edit</h4>
+
+    </div>
+    <div class="modal-body">
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3 text-right">
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-check-input" } })
+                            @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Status, new { @class = " control-label" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <input type="submit" value="Edit" id="btnSave" name="cmd" class="btn btn-success" />
+        </div>
+    </div>
+
+}
+
+
+

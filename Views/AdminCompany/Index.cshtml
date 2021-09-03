@@ -1,0 +1,120 @@
+﻿@using SOMSightModels.Translator;
+@model IEnumerable<NS_tblTranslatorLanguageMongoDTO>
+@{
+    ViewBag.Title = "Search a company";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section Scripts{
+    <script>
+
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/company/adminCompany.js")"></script>
+    <link href="@Url.Content("~/Content/toastr.min.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/Plugins/toastr.min.js")"></script>
+
+}
+
+<label id="GridListCompaniesCallBack" class="hidden">@Url.Action("GridListCompaniesCallBack")</label>
+<label id="GridListMyPlatformCallBack" class="hidden">@Url.Action("GridListMyPlatformCallBack")</label>
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","AdminHome")">Home</a></li>
+    <li class="active">Search company</li>
+</ol>
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Options <i class="glyphicon glyphicon-chevron-down"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <span>
+                    <a href="@Url.Action("Filter")" id="filterTable" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-glass"></i> Filter</a>
+                </span>
+                <span>
+                    <a href="#" id="refreshTable" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-refresh"></i> Refresh</a>
+                </span>
+                <span>
+                    <a href="@Url.Action("GridListMyPlatformCallBack")" id="showUserMyPlatform" class="btn btn-sm btn-default">
+                        <i class="glyphicon glyphicon-signal"></i>
+                        My Platform
+                    </a>
+                </span>
+                <span>
+                    <a href="@Url.Action("GridListAssessmentsCallBack")" id="showUserAsssessments" class="btn btn-sm btn-default">
+                        <i class="glyphicon glyphicon-tasks"></i>
+                        Assessments
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="gridCompanies-div">
+</div>
+
+
+<div id="filterModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="Filter" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div id="assessmentsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="Assessments" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div id="measureModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="Measure" class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div id="implementedLanguagesModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div id="Languages" class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Select Language for files translation</h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <select id="selectedLanguageId" class="form-control">
+                                @foreach (var item in Model)
+                                {
+                                    <option value="@item.CodeLanguage">@item.Language</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="button" value="Select" id="btnSelectLanguage" name="cmd" class="btn btn-success" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
