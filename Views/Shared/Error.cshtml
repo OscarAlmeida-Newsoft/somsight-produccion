@@ -1,0 +1,25 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+     
+    Layout = (User.Identity.IsAuthenticated ? "~/Views/Shared/_LayoutLogged.cshtml" : "~/Views/Shared/_LayoutHome.cshtml");
+}
+
+
+<div id="pagina" class="gris sorry">
+
+    <div class="seccion">
+        <div class="centro">
+
+            <p><img src="@Url.Content("~/images/icono_sorry - copia.png")" width="111" height="110" alt="sorry"></p>
+            <h2>Sorry</h2>
+            <h3>
+                <span>
+                    There was a problem
+                </span>
+            </h3>
+            <p>@ViewBag.Description</p>
+
+        </div>
+    </div>
+</div>

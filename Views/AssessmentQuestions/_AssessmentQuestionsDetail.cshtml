@@ -1,0 +1,62 @@
+﻿@using System
+@using SOMSight.Models
+@using SOMSight.Utils
+@model IEnumerable<AssessmentQuestionsViewModel>
+
+@{ 
+    int i = 0;
+    int mod = 0;
+}
+
+@foreach (AssessmentQuestionsViewModel question in Model)
+{
+
+    @Html.Hidden("pQuestionAnswersModel.AnswerDetails[" + i + "].UserId", question.UserId)
+    @Html.Hidden("pQuestionAnswersModel.AnswerDetails[" + i + "].AssessmentId", question.Id)
+
+        mod = (i + 1) % 2;
+     
+                
+        if(mod == 0)
+        {
+            ViewContext.Writer.Write("<div class='gris'>");
+        }
+        <div class="centro">
+            @*<h1>@TranslatorHelper.TranslateTextByIdentifier(question.TranslatorAdministratorText)</h1>*@
+            <hr/>
+
+            <div class="set radios_horizontales">
+                @foreach (AssessmentQuestionsOptionsViewModel options in question.Options)
+                {
+                    <div class="item_lista">
+                        @Html.Hidden("pQuestionAnswersModel.AnswerDetails[" + i + "].UserId", question.UserId)
+                        @Html.Hidden("pQuestionAnswersModel.AnswerDetails[" + i + "].AssessmentId", question.Id)
+                        <label class="automatico">
+                            <script>
+                                alert("Hola")
+                            </script>
+                            @if (ViewBag.AssessmentFree)
+                            {
+                                @Html.RadioButton("pQuestionAnswersModel.AnswerDetails[" + i + "].SelectedOption", options.MaturityLevelId, options.MaturityLevelId == question.SelectedMaturityLevelId, new { @onclick = "gAnalytics.throwNormalEvent('Clicked answer for question " + i + "', 'Free Assestments','" + ViewBag.AssessmentTypeId + "')" })
+                            }
+                            else
+                            {
+                                @Html.RadioButton("pQuestionAnswersModel.AnswerDetails[" + i + "].SelectedOption", options.MaturityLevelId, options.MaturityLevelId == question.SelectedMaturityLevelId, new { @onclick = "gAnalytics.throwNormalEvent('Clicked answer for question " + i + "', 'Assestments','" + ViewBag.AssessmentTypeId + "')" })                                
+                            }
+                            @TranslatorHelper.TranslateTextByIdentifier(options.TranslatorAdministratorText)
+
+                        </label>
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        if(mod == 0)
+        {
+            ViewContext.Writer.Write("</div>");
+        }
+    i++;
+}
+
+        

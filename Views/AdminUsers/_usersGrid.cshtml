@@ -1,0 +1,126 @@
+﻿@model SOMSight.Models.Users.UsersGridVM
+@using SOMSight.Utils.Helpers
+
+<table id="gridTable" class="hover table-bordered stripe" cellspacing="0" width="100%">
+    <thead class="cell-border" id="TH">
+        <tr class="table-header">
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.TenantName)</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x=> x.Columns.Email)</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.CompanyName)</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.ContactName)</label>
+            </th>
+            @*<th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.Telephone)</label>
+            </th>*@
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.NroDevices)</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.CreatedOn)</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.IsAdministrativeUser)</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.LastLoginDate)</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.UserPlan)</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.Campaign)</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Details)
+        {
+            <tr data-itemid="@item.Id" class="table-item">
+                <td>
+                    @item.TenantName
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.CompanyName
+                </td>
+                <td>
+                    @item.ContactName @item.ContactLastName
+                </td>
+                @*<td>
+                    @item.Telephone
+                </td>*@
+                <td>
+                    @item.NroDevices
+                </td>
+                <td>
+                    @item.CreatedOn.Value.ToString("dd/MM/yyyy")
+                </td>
+                <td class="text-center">
+                    @if (!item.IsAdministrativeUser)
+                    {
+                        <i class="glyphicon glyphicon-ok-sign"></i>
+                    }
+                </td>
+                <td>
+                    @if (item.LastLoginDate != null)
+                    {
+
+                        @item.LastLoginDate.Value.ToString("dd/MM/yyyy HH:mm")
+                    }
+                </td>
+                <td>
+                    @(item.UserPlan == null ? "": item.UserPlan.PlanName)
+                </td>
+                <td>
+                    @(item.Campaign == null ? "" : item.Campaign.Name)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="10" class="text-center text-nowrap" style="text-align:center;">
+                @Html.NSPagination(Model.PageSettings)
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+
+    $(document).ready(function () {
+        var ventana_alto = $(window).innerHeight();
+        ventana_alto = (ventana_alto > 900) ? (ventana_alto / 1.8) : (ventana_alto / 3);
+        var table = $('#gridTable').DataTable({
+            "columnDefs": [
+            { "width": "4%", "targets": 0 }
+            ],
+            "scrollY": ventana_alto,
+            "scrollX": true,
+            "info": false,
+            "paging": false,
+            "ordering": false,
+            "filter": false
+        });
+
+        $('#TH').resize(function () {
+
+            table.columns.adjust();
+        })
+
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    });
+</script>

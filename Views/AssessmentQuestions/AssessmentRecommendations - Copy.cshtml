@@ -1,0 +1,359 @@
+﻿@using SOMSight.Utils
+@using SOMSight.Helpers
+@using SOMSight.Utils.Extensions
+@using SOMSight.Models.Assessments
+
+@model SOMSight.Models.AssessmentRecommendationViewModel
+
+@{ 
+    Layout = null;
+    var user = Session.GetCurrentUser();
+}
+
+<style>
+@@font-face {
+    font-family:'segoe_ui';
+    src: url('../fonts/SegoeUI.eot');
+    src: url('../fonts/SegoeUI.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/SegoeUI.woff') format('woff'),
+         url('../fonts/SegoeUI.ttf') format('truetype'),
+         url('../fonts/SegoeUI.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@@font-face {
+    font-family:'segoe_ui_semibold';
+    src: url('../fonts/SegoeUI-Semibold.eot');
+    src: url('../fonts/SegoeUI-Semibold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/SegoeUI-Semibold.woff') format('woff'),
+         url('../fonts/SegoeUI-Semibold.ttf') format('truetype'),
+         url('../fonts/SegoeUI-Semibold.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@@font-face {
+    font-family:'segoe_ui_semilight';
+    src: url('../fonts/SegoeUI-Semilight.eot');
+    src: url('../fonts/SegoeUI-Semilight.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/SegoeUI-Semilight.woff') format('woff'),
+         url('../fonts/SegoeUI-Semilight.ttf') format('truetype'),
+         url('../fonts/SegoeUI-Semilight.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@@font-face {
+    font-family:'segoe_ui_bold';
+    src: url('../fonts/SegoeUI-Bold.eot');
+    src: url('../fonts/SegoeUI-Bold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/SegoeUI-Bold.woff') format('woff'),
+         url('../fonts/SegoeUI-Bold.ttf') format('truetype'),
+         url('../fonts/SegoeUI-Bold.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+  margin: 0px;
+  padding: 0px;
+  line-height:1em;
+  font-size: 10px;
+  border-collapse:collapse;
+  font-family: segoe_ui, Arial, Helvetica, sans-serif;
+}
+
+
+h1, h2, h3, h4, h5, h6, p, ul, li, form, textarea, input, label, legend, fieldset, select, seccionquote{
+  font-weight: normal;
+  float: left;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+div,a,button{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body{
+	text-align: center;
+}
+.summary .header{
+	height: 100px;
+}
+
+.centro{
+	width: 100%;
+	margin: auto;
+	float: none;
+	max-width: 1200px;
+	min-height: 58px;
+	padding-left:10px;
+	padding-right:10px;
+	position: relative;
+}
+
+.pagina{
+	float: left;
+	width: 100%;
+	padding: 40px 0 0px 0;
+	min-height: 400px;
+	position: relative;
+}
+
+.pagina h2{
+	color: #333;
+	font-size: 18px;
+	margin: 0 0 20px 0;
+}
+
+
+.summary .pagina h2{
+	color: #333;
+	font-size: 33px;
+	margin: 0 0 20px 0;
+	border-bottom: solid 1px #ddd;
+	padding: 0 0 12px 0;
+}
+
+.pagina .seccion{
+	float: left;
+	width: 100%;
+	min-height: 400px;
+	position: relative;
+}
+
+
+.summary{
+	max-width: 90%;
+	width:100%;
+	float: left;
+	background-color: #fff;
+	/*margin-bottom: 40px !important;*/
+	padding: 0px;
+	/*height: 1103px;*/
+	box-shadow: 0 3px 10px #999;
+	position: relative;
+	/*border-bottom: solid 7px @user.TenantSkin.TenantStylePrimaryBackgroundColor;*/
+}
+.header .centro .logo{
+	width: auto;
+	margin-top: 1px;
+	float: left;
+	cursor: pointer;
+}
+
+.summary .header .logo{
+	margin: 7px 0 0  12px;
+	float: left;
+	width: auto;
+}
+
+ .summary .header h1{
+	width: auto;
+	height: 48px;
+	float: right;
+	font-size: 17px;
+	color: #666;
+	border-left: solid 1px #ccc;
+	padding: 16px 40px 0 20px;
+	margin: 27px 0 0 20px;
+}
+.summary .pagina{
+	float: left;
+	width: 100%;
+	padding: 27px;
+	min-height: 400px;
+	position: relative;
+}
+.summary .pagina h3{
+	margin-bottom: 5px;
+	font-size: 27px;
+	color: #333;
+	line-height: 20px;
+	font-family: segoe_ui_semibold, Arial, Helvetica, sans-serif;
+}
+.summary .pagina p{
+	margin-bottom: 25px;
+	font-size: 23px;
+	color: #666;
+	line-height: 24px;
+    text-align: justify;
+}
+.summary .pagina p.centro{
+	text-align: center;
+	margin-bottom: 20px !important;
+}
+
+
+.titulo{
+	float: left;
+	width: 100%;
+}
+
+.summary .titulo h2{
+	font-size: 17px;
+	color: #666;
+	background-color: #ddd;
+	padding: 15px 25px 15px 20px;
+}
+
+.titulo.rojo{
+	background-color: @user.TenantSkin.TenantStyleTertiaryBackgroundColor;
+}
+.titulo.azul{
+	background-color: #3A9DD3;
+}
+.titulo h1{
+	color: #fff;
+	font-size: 40px;
+    font-family: segoe_ui_semilight, Arial, Helvetica, sans-serif;
+	padding: 0px 0;
+	line-height: 30px;
+	width: auto;
+	margin: 27px 0 34px 15px;
+}
+
+.summary .titulo h1{
+	margin: 18px 0 14px 15px !Important;
+}
+
+.titulo img{
+	float: left;
+	margin: 20px 0 20px 0;
+}
+.summary .titulo img{
+	float: left;
+	margin: 10px 0 10px 16px;
+}
+
+.hoja{
+    height:1635px;
+    position: relative;
+}
+
+.foot{
+    position: absolute;
+    bottom: 0;
+    font-size: 20px;
+}
+
+.nroPag{
+    position: absolute;
+    bottom: 0;
+    right:20px;
+    font-size: 25px;
+    color: #777;
+}
+
+.powered{
+    position: relative;
+    font-size: 20px;
+    bottom: 10px;
+    color: #777;
+}
+</style>
+
+
+
+
+
+
+
+<body class="summary">
+    @foreach (AssessmentRecommendationPage p in Model.Pages) {
+    <div class="hoja">
+
+        <div class="header">
+
+            <a class="logo" target="_self">
+                <img src="@user.TenantSkin.TenantMainLogoUrl" width="300" height="84">
+            </a>
+        </div>
+
+        <div class="titulo rojo">
+            <h2>@TranslatorHelper.TranslateTextByIdentifier("assessment_summary_text")</h2>
+
+            <img src="@ConfigHelper.GetSiteBasePath(@user.TenantSubdomain)images/@Model.IconName" width="43" height="50">
+            <h1>@TranslatorHelper.TranslateTextByIdentifier(Model.AssessmentTypeTranslationAdministrationTI) @TranslatorHelper.TranslateTextByIdentifier("level_text"): @TranslatorHelper.TranslateTextByIdentifier(Model.GlobalMaturityLevelTranslatorTI ?? "")</h1>
+
+        </div>
+
+        <div class="pagina">
+
+            @if (p.PageNumber == 1) {
+                <p class="centro">
+
+                    <canvas id="foo" style="width:500px;"></canvas>
+                </p>
+
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("TextIDentifierAdvisesTitle")</h2>
+
+                <h3>@TranslatorHelper.TranslateTextByIdentifier(p.Recomendations.TitleTranslationTI)</h3>
+            }
+
+
+            @foreach (var item in p.Recomendations.TextTranslationsIds) {
+
+                <p>@item.TranslatedText</p>
+            }
+
+
+
+
+            @*<h2>@Model.AssessmentTypeDescription</h2>
+
+            @foreach (var item in Model.Recomendations)
+            {
+                <br />
+                <p>
+                    <label class="recommendation-title">@TranslatorHelper.TranslateTextById(item.CapabilityTranslationId)</label>
+                </p>
+                <hr />
+                <p>
+                    <label><strong>@TranslatorHelper.TranslateTextById(item.TitleTranslationId) :</strong></label>
+                    <label>@TranslatorHelper.TranslateTextById(item.TextTranslationId)</label>
+                </p>
+            }*@
+        </div>
+
+        <div class="foot">
+            <img src="@user.TenantSkin.TenantMainLogoUrl" height="40">
+            <span class="powered">| Powered by Echez</span> 
+
+        </div>
+        <span class="nroPag">@p.PageNumber</span>
+
+    </div>
+    }
+    
+
+    
+    
+    <script src="@ConfigHelper.GetSiteBasePath(@user.TenantSubdomain)Scripts/Plugins/gauge/gauge.min.js"></script>
+
+    <script>
+    var opts = {
+      angle: 0, /// The span of the gauge arc
+      lineWidth: 0.44, // The line thickness
+      pointer: {
+        length: 0.7, // Relative to gauge radius
+        strokeWidth: 0.035 // The thickness
+      }
+      ,staticZones: [
+         {strokeStyle: "#FF1E00", min: 0, max: 10},
+         {strokeStyle: "#FF8700", min: 10, max: 20},
+         {strokeStyle: "#FFD100", min: 20, max: 30},
+         {strokeStyle: "#3A9200", min: 30, max: 40}
+      ],
+
+    };
+    var target = document.getElementById('foo'); // your canvas element
+    var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+    gauge.maxValue = 40; // set max gauge value
+    gauge.setMinValue(0);  // set min value
+    gauge.set(@(Model.GlobalMaturityLevelId*10-5)); // set actual value
+    </script> 
+</body>

@@ -1,0 +1,39 @@
+﻿@using SOMSight.Utils.Helpers
+
+@{
+    var _currentCulture = CultureHelper.GetCurrentCulture();
+    var _culCurr = CultureHelper.GetCultureName(_currentCulture);
+}
+
+
+
+    <p class="barra">
+
+        <span class="flag flag-@_currentCulture"></span>
+        <span class="palabra">@_culCurr</span>
+        <span class="flecha"></span>
+    </p>
+    <ul>
+        @foreach (var item in CultureHelper.GetCulturesImplemented())
+        {
+            //var _cul = CultureHelper.GetCultureName(item.CodeLanguage);
+
+            <li>
+                <a href="#" target="_self" onclick="changeLanguage('@item.CodeLanguage')">
+                    @*<span class="flag">
+            <img src="@string.Format(Url.Content("~/images/flag_{0}.{1}"),item.CodeLanguage,"png")" width="16" height="14" />
+            <span class="palabra">@item.Language</span>
+        </span>*@
+                    <span class="flag flag-@item.CodeLanguage" style="width:10px;"></span> @item.Language
+                </a>
+            </li>
+        }
+    </ul>
+
+
+@using (Html.BeginForm("SetCulture", "Home", FormMethod.Post, new { id = "langForm", name = "langForm" }))
+            {
+    <input type="hidden" name="returnUrl" id="returnUrl" value="@Request.Url" />
+                <input type="hidden" name="culture" id="culture" value="" />
+                <input type="hidden" name="languageID" id="languageID" value="" />
+}

@@ -1,0 +1,98 @@
+﻿@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+@using SOMSightModels.Shared
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Active = "MeasureMyPlatform_Word";
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+
+}
+
+
+@{
+    var _user = Session.GetCurrentUser();
+
+    var userPlan = Session.GetCurrenUserPlan();
+
+    string plan = string.Format("{0} PLAN", userPlan.PlanName);
+}
+
+
+<!--================================= AVISO ======================================-->
+
+    <div id="aviso">
+        
+        <div class="centro">
+            @if (userPlan.Id != _user.HighestPlanCode && _user.ShowUpgradeOption)
+            {
+                <p><img src="@Url.Content("~/images/icono_aviso_alerta.png")" width="46" height="40"></p>
+                <p>
+                    @{
+                        ViewContext.Writer.Write(string.Format(TranslatorHelper.TranslateTextByIdentifier("upgrade_all_functionalities_text"), plan));
+                    }
+                </p>
+                <p>
+                
+                    <a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade','Plan Upgrade','@Url.Action("Upgrade", "Plan")')" href="#" class="btn_buy_now" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor; border: solid 1px @_user.TenantSkin.TenantStyleTertiaryBackgroundColor;">@TranslatorHelper.TranslateTextByIdentifier("upgrade_text") </a>
+                </p>
+            }
+            <p class="derecho">
+                @TranslatorHelper.TranslateTextByIdentifier("download_text")
+                <a onclick="gAnalytics.throwRedirectEvent('Click Download Set Up File','SAM Live','@Url.Action("DownloadAgent","MyPlatform",new { @pId=ViewBag.MyPlatformSubmodule})')" href="#" target="_self" class="btn cloud" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("scanner_text")</a>
+                <a onclick="gAnalytics.throwRedirectEvent('Click Download Agent Manual','SAM Live','@Url.Action("DownloadManual","MyPlatform",new { @pId=ViewBag.MyPlatformSubmodule})')" href="#" target="_self" class="btn cloud" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("setup_file_text")</a>
+            </p>
+        </div>
+    </div>
+
+
+<!--================================= AVISO ======================================-->
+<!--================================= VALLA ======================================-->
+<div id="valla" style="background-image:url(@Url.Content("~/images/valla_choose_activity.jpg")">
+    <div class="opacity">
+        <h1>
+            <span>@TranslatorHelper.TranslateTextByIdentifier("measure_my_platform_slide_main_text")</span><br />
+            @TranslatorHelper.TranslateTextByIdentifier("measure_my_platform_slide_secondary_text")
+        </h1>
+    </div>
+</div>
+
+<!--================================= VALLA ======================================-->
+<!--================================= PAGINA ======================================-->
+<div id="pagina" class="gris sin_borde">
+
+    <div class="seccion">
+        <div class="centro">
+
+            <ul class="measures">
+                <li>
+                    <a onclick="gAnalytics.throwRedirectEvent('Click Download Agent Manual','SAM Live','@Url.Action("DownloadManual","MyPlatform",new { @pId=ViewBag.MyPlatformSubmodule})')" href="#" class="red" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor !important;">
+                        <span class="number">1</span>
+                        <span class="word" style="color: @_user.TenantSkin.TenantStyleTertiaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("download_setup_file_text")</span>
+                        <span class="icon"><img src="@Url.Content("~/images/icono_measure_cloud"+@_user.TenantSkin.TenantStyleTertiaryIconColor)" width="43" height="32"></span>
+                    </a>
+                </li>
+
+                <li>
+                    <a onclick="gAnalytics.throwRedirectEvent('Click Download Set Up File','SAM Live','@Url.Action("DownloadAgent","MyPlatform",new { @pId=ViewBag.MyPlatformSubmodule})')" href="#" class="cyan" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor !important;">
+                        <span class="number">2</span>
+                        <span class="word" style="color: @_user.TenantSkin.TenantStylePrimaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("download_scanner_text")</span>
+                        <span class="icon"><img src="@Url.Content("~/images/icono_measure_cloud"+@_user.TenantSkin.TenantStylePrimaryIconColor)" width="43" height="32"></span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a onclick="gAnalytics.throwRedirectEvent('Click Continue','SAM Live','@Url.Action("AgentDownloaded","MyPlatform",new { @pId=ViewBag.MyPlatformSubmodule})')" href="#" class="acier" style="background-color: @_user.TenantSkin.TenantStyleSecondaryBackgroundColor !important;">
+                        <span class="number">3</span>
+                        <span class="word" style="color: @_user.TenantSkin.TenantStyleSecondaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("continue_to_my_platform_text")</span>
+                        <span class="icon"><img src="@Url.Content("~/images/icono_measure_continue"+@_user.TenantSkin.TenantStyleSecondaryIconColor)" width="33" height="36"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+<!--================================= PAGINA ======================================-->

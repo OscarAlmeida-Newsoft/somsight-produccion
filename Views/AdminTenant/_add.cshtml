@@ -1,0 +1,382 @@
+﻿@model SOMSight.Models.Tenant.AddTenantVM
+
+@using (Ajax.BeginForm("Add", "AdminTenant", null,
+                                                                                new AjaxOptions
+                                                                                {
+                                                                                    HttpMethod = "POST",
+                                                                                    InsertionMode = InsertionMode.Replace,
+                                                                                    OnSuccess = "OnSuccessEdit",
+                                                                                    OnFailure = "OnFailureEdit",
+                                                                                    OnBegin = "OnBeginEdit",
+                                                                                    OnComplete = "OnCompleteEdit",
+                                                                                    UpdateTargetId = "Create"
+                                                                                },
+                                                                                new
+                                                                                {
+                                                                                    @id = "FormEdit"
+                                                                                }
+                                                                            ))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-header">
+
+        <h4 class="modal-title">Create</h4>
+
+    </div>
+    <div class="modal-body">
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TenantSubdomain, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.TenantSubdomain, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.TenantSubdomain, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TenantContactName, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.TenantContactName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.TenantContactName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TenantContactEmail1, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.TenantContactEmail1, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.TenantContactEmail1, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TenantContactEmail2, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.TenantContactEmail2, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.TenantContactEmail2, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TenantContactTel1, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.TenantContactTel1, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.TenantContactTel1, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TenantContactTel2, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.TenantContactTel2, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.TenantContactTel2, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TenantContactTel3, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.TenantContactTel3, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.TenantContactTel3, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ShowUpgradeOption, htmlAttributes: new { @class = "control-label" })
+                                @Html.CheckBoxFor(model => model.ShowUpgradeOption, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ShowUpgradeOption, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    &nbsp;
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.LoginIconColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div id="radioBtn" class="btn-group">
+                                    <a class="btn btn-primary btn-sm active" data-toggle="LoginIconColor" data-title="-negro.png">Black</a>
+                                    <a class="btn btn-primary btn-sm notActive" data-toggle="LoginIconColor" data-title="-azul.png">Blue</a>
+                                    <a class="btn btn-primary btn-sm notActive" data-toggle="LoginIconColor" data-title="-rojo.png">Red</a>
+                                </div>
+                                <input type="hidden" name="LoginIconColor" id="LoginIconColor" value="@Model.LoginIconColor">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingIcon">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseIcon" aria-expanded="true" aria-controls="collapseIcon">
+                                        Primary Colors
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseIcon" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingIcon">
+                                <div class="panel-body">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.PrimaryColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input type="color" value="@Model.PrimaryColor" id="color-picker-control-primaryColor" />
+                                            @Html.TextBoxFor(model => model.PrimaryColor, htmlAttributes: new { @class = "form-control", @id = "color-picker-text-primaryColor" })
+                                            @Html.ValidationMessageFor(model => model.PrimaryColor, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.PrimaryIconColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <div class="col-sm-9 col-md-9">
+                                                <div class="input-group">
+                                                    <div id="radioBtn" class="btn-group">
+                                                        <a class="btn btn-primary btn-sm active" data-toggle="PrimaryIconColor" data-title="-negro.png">Black</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="PrimaryIconColor" data-title="-blanco.png">White</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="PrimaryIconColor" data-title="-rojo.png">Red</a>
+                                                    </div>
+                                                    <input type="hidden" name="PrimaryIconColor" id="PrimaryIconColor" value="@Model.PrimaryIconColor">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.PrimaryFontColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <div class="col-sm-9 col-md-9">
+                                                <div class="input-group">
+                                                    <div id="radioBtn" class="btn-group">
+                                                        <a class="btn btn-primary btn-sm active" data-toggle="PrimaryFontColor" data-title="#444444">Black</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="PrimaryFontColor" data-title="#FFFFFF">White</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="PrimaryFontColor" data-title="#DF3925">Red</a>
+                                                    </div>
+                                                    <input type="hidden" name="PrimaryFontColor" id="PrimaryFontColor" value="@Model.PrimaryFontColor">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Secondary Colors
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.SecondaryColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input type="color" value="@Model.SecondaryColor" id="color-picker-control-SecondaryColor" />
+                                            @Html.TextBoxFor(model => model.SecondaryColor, htmlAttributes: new { @class = "form-control", @id = "color-picker-text-SecondaryColor" })
+                                            @Html.ValidationMessageFor(model => model.SecondaryColor, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.SecondaryIconColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <div class="col-sm-9 col-md-9">
+                                                <div class="input-group">
+                                                    <div id="radioBtn" class="btn-group">
+                                                        <a class="btn btn-primary btn-sm active" data-toggle="SecondaryIconColor" data-title="-negro.png">Black</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="SecondaryIconColor" data-title="-blanco.png">White</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="SecondaryIconColor" data-title="-rojo.png">Red</a>
+                                                    </div>
+                                                    <input type="hidden" name="SecondaryIconColor" id="SecondaryIconColor" value="@Model.SecondaryIconColor">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.SecondaryFontColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <div class="col-sm-9 col-md-9">
+                                                <div class="input-group">
+                                                    <div id="radioBtn" class="btn-group">
+                                                        <a class="btn btn-primary btn-sm active" data-toggle="SecondaryFontColor" data-title="#444444">Black</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="SecondaryFontColor" data-title="#FFFFFF">White</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="SecondaryFontColor" data-title="#DF3925">Red</a>
+                                                    </div>
+                                                    <input type="hidden" name="SecondaryFontColor" id="SecondaryFontColor" value="@Model.SecondaryFontColor">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingThree">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        Tertiary Colors
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.TertiaryColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <input type="color" value="@Model.TertiaryColor" id="color-picker-control-TertiaryColor" />
+                                            @Html.TextBoxFor(model => model.TertiaryColor, htmlAttributes: new { @class = "form-control", @id = "color-picker-text-TertiaryColor" })
+                                            @Html.ValidationMessageFor(model => model.TertiaryColor, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.TertiaryIconColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <div class="col-sm-9 col-md-9">
+                                                <div class="input-group">
+                                                    <div id="radioBtn" class="btn-group">
+                                                        <a class="btn btn-primary btn-sm active" data-toggle="TertiaryIconColor" data-title="-negro.png">Black</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="TertiaryIconColor" data-title="-blanco.png">White</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="TertiaryIconColor" data-title="-rojo.png">Red</a>
+                                                    </div>
+                                                    <input type="hidden" name="TertiaryIconColor" id="TertiaryIconColor" value="@Model.TertiaryIconColor">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.TertiaryFontColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <div class="col-sm-9 col-md-9">
+                                                <div class="input-group">
+                                                    <div id="radioBtn" class="btn-group">
+                                                        <a class="btn btn-primary btn-sm active" data-toggle="TertiaryFontColor" data-title="#444444">Black</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="TertiaryFontColor" data-title="#FFFFFF">White</a>
+                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="TertiaryFontColor" data-title="#DF3925">Red</a>
+                                                    </div>
+                                                    <input type="hidden" name="TertiaryFontColor" id="TertiaryFontColor" value="@Model.TertiaryFontColor">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <input type="submit" value="Create" id="btnSave" name="cmd" class="btn btn-success" />
+        </div>
+    </div>
+
+    <script>
+    //Form Edit Radio Butons
+    $(document).ready(function () {
+
+        $('#LoginIconColor').val('-negro.png');
+
+        //Primary
+        $('#color-picker-text-primaryColor').val('#000000');
+        $('#PrimaryIconColor').val('-negro.png');
+        $('#PrimaryFontColor').val('#444444');
+
+        //Secondary
+        $('#color-picker-text-SecondaryColor').val('#000000');
+        $('#SecondaryIconColor').val('-negro.png');
+        $('#SecondaryFontColor').val('#444444');
+
+        //Tertiary
+        $('#color-picker-text-TertiaryColor').val('#000000');
+        $('#TertiaryIconColor').val('-negro.png');
+        $('#TertiaryFontColor').val('#444444');
+
+    });
+    </script>
+
+}
+
+

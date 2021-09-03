@@ -1,0 +1,127 @@
+﻿@using SOMSight.Utils
+<!--================================= Alertas modales (2018-02-08) ======================================-->
+<!-- Success (semáforo verde): Class "success" -->
+<div id="modalSuccess" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <h2></h2>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                   <a href="" id="boton_alerta_modal_success" class="btn btn-success" data-dismiss="modal">
+                        @TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@*<div class="alertas_modales success" style="display: none;">
+    <div class="titulo_alerta_modal">
+        @TranslatorHelper.TranslateTextByIdentifier("Semaforo_Modal_Exito")
+    </div>
+    <div class="mensaje_alerta_modal">
+        <div class="icono_alerta_modal"></div>
+        <div class="textos_alerta_modal">
+            <h2></h2>
+            <p></p>
+            <a href="" id="boton_alerta_modal_success" class="boton_alerta_modal">
+                @TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")
+            </a>
+        </div>
+    </div>
+</div>*@
+<!-- Advertencia (semáforo amarillo): Class "atention" -->
+<div id="modalAttention" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <h2></h2>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <a href="" id="boton_cancel_alerta_modal_atention" class="btn btn-default" data-dismiss="modal">
+                        @TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Cancelar")
+                    </a>
+                    <a href="" id="boton_alerta_modal_atention" class="btn btn-success" >
+                        @TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+
+<!-- Error (semáforo naranja-rojo): Class "error" -->
+<div class="alertas_modales error" style="display: none;">
+    <div class="titulo_alerta_modal">
+        @TranslatorHelper.TranslateTextByIdentifier("Semaforo_Modal_Error")
+    </div>
+    <div class="mensaje_alerta_modal">
+        <div class="icono_alerta_modal"></div>
+        <div class="textos_alerta_modal">
+            <h2></h2>
+            <p></p>
+            <a href="" class="boton_alerta_modal">
+                @TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")
+            </a>
+        </div>
+    </div>
+</div>
+<!-- Capa opacidad fondo -->
+<div class="opacidad_alertas_modales" style="display: none;"></div>
+
+<script>
+    //Codigo por Newsoft 2018/02/12
+    var semaphore = {
+        showSuccess: function (titulo, parrafo, onOk) {
+            $("#modalSuccess .row h2").text(titulo)
+            $("#modalSuccess .row p").text(parrafo)
+            document.getElementById('boton_alerta_modal_success').addEventListener("click", onOk);
+
+            $('#modalSuccess').modal({ backdrop: "static" }, { keyboard: false });
+        },
+        showAtention: function (titulo, parrafo, onOk, onCancel) {
+            $("#modalAttention .row h2").text(titulo)
+            $("#modalAttention .row p").text(parrafo)
+            document.getElementById('boton_alerta_modal_atention').addEventListener("click", onOk);
+            document.getElementById('boton_cancel_alerta_modal_atention').addEventListener("click", onCancel);
+
+            $('#modalAttention').modal({ backdrop: "static" }, { keyboard: false });
+            
+
+
+        },
+        showError: function (titulo, parrafo) {
+            $(".alertas_modales.error .textos_alerta_modal h2").text(titulo)
+            $(".alertas_modales.error .textos_alerta_modal p").text(parrafo)
+            $(".alertas_modales.error").show();
+            $(".opacidad_alertas_modales").show();
+        },
+    };
+
+    /*---Cierra alertas modales (semáforo) (2018-02-08)---*/
+    $(".boton_alerta_modal, .boton_cancel_alerta_modal").click(function () {
+        $(".alertas_modales, .opacidad_alertas_modales").hide();
+        return false;
+    });
+
+</script>

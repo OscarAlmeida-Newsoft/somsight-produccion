@@ -1,0 +1,136 @@
+﻿@using SOMSight.Utils.Extensions
+@using SOMSightModels.Shared
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/Custom/users/users.js")"></script>
+}
+
+<label id="GridListCallBack" class="hidden">@Url.Action("GridListCallBack")</label>
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","AdminHome")">Home</a></li>
+    <li class="active">Users</li>
+</ol>
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Options <i class="glyphicon glyphicon-chevron-down"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <span>
+                    <a href="@Url.Action("Filter")" id="filterTable" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-glass"></i> Filter</a>
+                </span>
+                <span>
+                    <a href="#" id="refreshTable" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-refresh"></i> Refresh</a>
+                </span>
+                @if (Session.GetCurrentRol().Equals(RolesDef.ADMINISTRATOR_ROLE))
+                {
+                    <span>
+                        <a href="@Url.Action("AddUser")" id="addUser" class="btn btn-sm btn-default">
+                            <i class="glyphicon glyphicon-plus-sign"></i>
+                            Create
+                        </a>
+                    </span>
+                }
+
+                <span>
+                    <a href="@Url.Action("Edit")" id="editRecordUser" class="btn btn-sm btn-default">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                        Edit
+                    </a>
+                </span>
+
+                @if (Session.GetCurrentRol().Equals(RolesDef.ADMINISTRATOR_ROLE))
+                {
+                    <span>
+                        <a href="@Url.Action("DeleteUserConfirm")" id="deleteUserConfirm" class="btn btn-sm btn-default">
+                            <i class="glyphicon glyphicon-remove-sign"></i>
+                            Remove
+                        </a>
+                    </span>
+                }
+
+                @if (Session.GetCurrentRol().Equals(RolesDef.ADMINISTRATOR_ROLE))
+                {
+                    <span>
+                        <a href="@Url.Action("CleanUserConfirm")" id="deleteUserConfirm" class="btn btn-sm btn-default">
+                            <i class="glyphicon glyphicon-remove-sign"></i>
+                            Clean Data
+                        </a>
+                    </span>
+                }
+
+                @*<span>
+            <a href="@Url.Action("GridUserAssessmentsListCallBack")" id="showUserAsssessments" class="btn btn-sm btn-default">
+                <i class="glyphicon glyphicon-tasks"></i>
+                Assessments
+            </a>
+        </span>*@
+                @*<span>
+            <a href="@Url.Action("UploadVendorDB","Database")" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-cloud-upload"></i> UploadVendorDB</a>
+        </span>
+        <span>
+            <a id="processFuzzy" href="@Url.Action("ProcessFuzzy","Database")" class="btn btn-sm btn-default disabled"><i class="glyphicon glyphicon-cog"></i> ProcessFuzzy</a>
+        </span>*@
+                @*<span>
+            <a id="deleteProcess" href="@Url.Action("DeleteProcess","Database")" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-remove-sign"></i> Inactivate</a>
+        </span>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="grid-div">
+</div>
+
+<div id="createModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div id="CreateUser" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div id="editModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="EditUser" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div id="filterModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="Filter" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+
+<div id="assessmentsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="Assessments" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div id="removeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="RemoveUser" class="modal-content">
+
+        </div>
+    </div>
+</div>

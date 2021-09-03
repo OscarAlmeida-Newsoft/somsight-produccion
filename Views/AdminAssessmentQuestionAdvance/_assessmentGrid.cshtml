@@ -1,0 +1,85 @@
+﻿@model SOMSight.Models.Assessments.AssessmentGridVM<SOMSightModels.NS_TblAssessmentQuestion>
+@using SOMSight.Utils.Helpers
+
+<table id="gridTable" class="hover table-bordered stripe" cellspacing="0" width="100%">
+    <thead class="cell-border" id="TH">
+        <tr class="table-header">
+            <th class="text-center text-uppercase">
+                <label>Translator Question Advanced</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Question Related Translator</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Option Related</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>@Html.LabelFor(x => x.Columns.Status)</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Details)
+        {
+            <tr data-itemid="@item.Id" class="table-item">
+                <td>
+                    @item.TranslatorAdministratorText
+                </td>
+                <td>
+                    @(item.RelatedQuestion ==null ? "" : item.RelatedQuestion.TranslatorAdministratorText)
+                </td>
+                <td>
+                    @item.RelatedQuestionOption
+                </td>
+                
+                <td class="text-center">
+                    @if (item.Status)
+                    {
+                        <i class="glyphicon glyphicon-ok-sign"></i>
+                    }
+                    else
+                    {
+                        <i class="glyphicon glyphicon-remove-sign"></i>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-center text-nowrap" style="text-align:center;">
+                @Html.NSPagination(Model.PageSettings)
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+
+     $(document).ready(function () {
+        var ventana_alto = $(window).innerHeight();
+        ventana_alto = (ventana_alto > 900) ? (ventana_alto / 1.8) : (ventana_alto / 3);
+        var table = $('#gridTable').DataTable({
+            "columnDefs": [
+            { "width": "4%", "targets": 0 }
+            ],
+            "scrollY": ventana_alto,
+            "scrollX": true,
+            "info": false,
+            "paging": false,
+            "ordering": false,
+            "filter": false
+        });
+
+        $('#TH').resize(function () {
+
+            table.columns.adjust();
+        })
+
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+     });
+
+</script>

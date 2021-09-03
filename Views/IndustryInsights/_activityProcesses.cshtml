@@ -1,0 +1,37 @@
+﻿@using SOMSight.Utils
+
+@model SOMSight.Models.ProcessesVM
+
+<ul class="ii_processes">
+    @foreach (var item in Model.Processes)
+    {
+        <li>
+            <h5 data-processid="@item.Id">@item.Name</h5>
+            <div class="oculto">
+                <hr />
+                <p>@item.Description</p>
+                <div class="options">
+                    @if (!Model.IsAssessmentFinished || Model.IsAdminUser)
+                    {
+                        <a href="#" target="_self" class="edit" data-processid="@item.Id"></a>
+                        <a href="#" target="_self" class="delete" data-processid="@item.Id"></a>
+                    }
+                    
+                </div>
+            </div>
+        </li>
+    }
+
+</ul>
+
+    <div class="contenedor_modal contenedor_add_process">
+        <div class="modal formulary add_process">
+            <!--<p id="close_modal"></p>-->
+            <h1>Add/Edit Process to @TranslatorHelper.TranslateTextById(Model.ActivityTranslatorAdministratorId)</h1>
+            <div class="contiene" id="CreateProcessContent">
+                
+                
+
+            </div>
+        </div>
+    </div>

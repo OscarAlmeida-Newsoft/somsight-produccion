@@ -1,0 +1,124 @@
+﻿@using SOMSight.Utils
+@using SOMSightModels.Payment
+@using SOMSight.Utils.Extensions
+@model SOMSightPlanDefinitionAndRanges
+
+
+@{
+    var _user = @Session.GetDataWithOutLogin();
+    var _loggedUser = @Session.GetCurrentUser();
+    //var _currentPlan = @Session.GetCurrenUserPlan();
+
+    ViewContext.Writer.Write($"<style> .owl-theme .owl-dots .owl-dot.active span {{background:{@_user.TenantSkin.TenantStyleTertiaryBackgroundColor}}} </style>");
+    ViewContext.Writer.Write($"<style> .owl-theme .owl-nav button {{color: white !important}} </style>");
+    ViewContext.Writer.Write($"<style> .owl-theme .owl-nav button {{background: {_user.TenantSkin.TenantStylePrimaryBackgroundColor} !important}} </style>");
+}
+
+
+<div class="container gris" id="plans">
+    <div class="content">
+        <h2 class="m-sm-b-15">@TranslatorHelper.TranslateTextByIdentifier("Plans_Text")</h2>
+
+        <div>
+            <div class="d-inline-block v-align-middel">
+                <fieldset>
+                    <div class="switch-toggle switch-candy">
+                        <input id="month" name="view" type="radio" checked>
+                        <label class="mayusculainicial" for="month" onclick="onChangePlanSelection(1)">@TranslatorHelper.TranslateTextByIdentifier("month_text")</label>
+
+                        <input id="year" name="view" type="radio">
+                        <label class="mayusculainicial" for="year" onclick="onChangePlanSelection(2)">@TranslatorHelper.TranslateTextByIdentifier("year_text")</label>
+
+                        <a style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color:@_user.TenantSkin.TenantStylePrimaryFontColor"></a>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="d-inline-block v-align-middel p-lr-15 m-tb-15 select-01">
+                @TranslatorHelper.TranslateTextByIdentifier("select_devices_range_text")
+                <select name="planRange" id="PlanRange" style="width:auto; float:initial">
+                    @foreach (var r in Model.Ranges)
+                    {
+                        <option value="@r.Id">@(r.MinDevices + "-" + r.MaxDevices)</option>
+                    }                    
+                </select>
+            </div>
+        </div>
+
+        <div class="owl-carousel owl-theme cont-boxplans-01 m-tb-50 m-sm-tb-30 p-lr-50 p-lr-sm-30">
+            @foreach (var plan in Model.Definition)
+            {
+                if (!plan.IsStarred)
+                {
+                    <div class="h-100 p-tb-20 p-tb-sm-0">
+                        <div class="boxplan-01">
+                            <h3 style="color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor">@plan.PlanName</h3>
+                            <h4 class="price-01">USD $@plan.PlanPrice</h4>
+                            <p>@plan.PlanPaymentCycleDescription</p>
+
+
+                            @if (_loggedUser != null && _loggedUser.UserPlan != null && _loggedUser.Status == SOMSightModels.Shared.SOMSightPlanStatus.Activated)
+                            {
+                                if (_loggedUser.UserPlan.Id != plan.PlanId)
+                                {
+                                    <a href="#" class="btn-01 purchase_now" data-plan-id="@plan.PlanId" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor">@TranslatorHelper.TranslateTextByIdentifier("purchase_now_text")</a>
+                                }
+                                else
+                                {
+                                    <a href="#" class="btn-01" data-plan-id="@plan.PlanId" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor">@TranslatorHelper.TranslateTextByIdentifier("current_plan_text")</a>
+                                }
+
+                            }
+                            else
+                            {
+                                <a href="#" class="btn-01 purchase_now" data-plan-id="@plan.PlanId" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor">@TranslatorHelper.TranslateTextByIdentifier("purchase_now_text")</a>
+                            }
+
+                            <p>
+                                @foreach (var item in plan.PlanDefinitionDetails)
+                                {
+
+                                    ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier(item.DetailName.Trim()));
+                                    <br />
+                                }
+                            </p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="h-100">
+                        <div class="boxplan-01" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor">
+                            <h3 style="color: @_user.TenantSkin.TenantStyleTertiaryFontColor">@plan.PlanName</h3>
+                            <h4 class="price-01">USD $@plan.PlanPrice</h4>
+                            <p style="color: @_user.TenantSkin.TenantStyleTertiaryFontColor">@plan.PlanPaymentCycleDescription</p>
+
+                            @if (_loggedUser != null && _loggedUser.UserPlan != null && _loggedUser.Status == SOMSightModels.Shared.SOMSightPlanStatus.Activated)
+                            {
+                                if (_loggedUser.UserPlan.Id != plan.PlanId)
+                                {
+                                    <a href="#" class="btn-01 purchase_now" data-plan-id="@plan.PlanId" style="background-color: @_user.TenantSkin.TenantStyleTertiaryFontColor; color:  @_user.TenantSkin.TenantStyleTertiaryBackgroundColor">@TranslatorHelper.TranslateTextByIdentifier("purchase_now_text")</a>
+                                }
+                                else
+                                {
+                                    <a href="#" class="btn-01" data-plan-id="@plan.PlanId" style="background-color: @_user.TenantSkin.TenantStyleTertiaryFontColor; color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor">@TranslatorHelper.TranslateTextByIdentifier("current_plan_text")</a>
+                                }
+                            }
+                            else
+                            {
+                                <a href="#" class="btn-01 purchase_now" data-plan-id="@plan.PlanId" style="background-color: @_user.TenantSkin.TenantStyleTertiaryFontColor; color:  @_user.TenantSkin.TenantStyleTertiaryBackgroundColor">@TranslatorHelper.TranslateTextByIdentifier("purchase_now_text")</a>
+                            }
+
+                            <p style="color: @_user.TenantSkin.TenantStyleTertiaryFontColor">
+                                @foreach (var item in plan.PlanDefinitionDetails)
+                                {
+                                    ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier(item.DetailName.Trim())); <br />
+                                }
+                            </p>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

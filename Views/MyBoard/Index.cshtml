@@ -1,0 +1,434 @@
+﻿@using SOMSight.Utils
+@using SOMSight.Utils.Extensions
+@using System.Configuration;
+@using SOMSight.Models.Modularity;
+
+@{
+    ViewBag.Title = "My Board";
+    ViewBag.Active = "MyBoard";
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+}
+
+
+
+@{
+    var _user = Session.GetCurrentUser();
+
+    var userPlan = Session.GetCurrenUserPlan();
+
+    ModularityVM _modularityVM = Session.GetCurrentUserModularity();
+    IEnumerable<ModularityDetailVM> _modularity = null;
+    if (_modularityVM != null) {
+        _modularity = _modularityVM.ModulesDetail.OrderBy(x => x.Order);
+    }
+
+    string plan = string.Format("{0} Plan", userPlan.PlanName);
+}
+
+<script>
+    var gGetUrlAction = {
+        urlTrial: "@(Url.Action("MailTrial", "MyBoard"))"
+    };
+
+</script>
+
+<script src="@Url.Content("~/Scripts/Custom/myBoard/index.js")"></script>
+
+
+<!--================================= TITULO ======================================-->
+<div class="container" id="titulo_general">
+    <div class="centro">
+        <h1 class="titulo">
+            <span class="texto">@TranslatorHelper.TranslateTextByIdentifier("welcome_text")</span>
+        </h1>
+        @if (userPlan.Id != _user.HighestPlanCode && _user.ShowUpgradeOption)
+        {
+            <h2>
+                @{ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("welcome_description_text"));}
+                @if (userPlan.Id == 0 && Convert.ToInt32(ConfigurationManager.AppSettings["maxTrialRequerest"]) > _user.NumTrialRequerest)
+                {
+                    <br />
+                    <br />
+                    @:@TranslatorHelper.TranslateTextByIdentifier("request_promo_code_welcome_description_text") <a href="#" class="getTrial"><strong style="font-size:17px!important"> @TranslatorHelper.TranslateTextByIdentifier("click_here_text") </strong></a>
+            }
+            </h2>
+                    }
+
+    </div>
+</div>
+
+<!--================================= PAGINA ======================================-->
+<div class="container gris" id="cards">
+    <div class="content">
+
+        <div class="container" id="titulo_general">
+            <div class="centro">
+                <h1 class="titulo">
+                    <span class="textonegro">
+                        @{
+                            ViewContext.Writer.Write(string.Format(TranslatorHelper.TranslateTextByIdentifier("how_to_take_advantage_of_text"), _user.TenantName));
+                        }
+
+                    </span>
+                </h1>
+                <div class="titulowelcome">
+                    <hr style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor">
+                </div>
+            </div>
+        </div>
+
+        @*<div class="welcome">
+                <img src="@Url.Content("~/images/info-steps-1.jpg")" width="320" height="500">
+            </div>
+
+            <div class="welcome">
+                <img src="@Url.Content("~/images/info-steps-2.jpg")" width="320" height="500">
+            </div>
+
+            <div class="welcome">
+                <img src="@Url.Content("~/images/info-steps-3.jpg")" width="320" height="500">
+            </div>*@
+
+        <div class="clear"></div>
+
+        <div class="mb-50">
+            <div class="flex-jst">
+
+                @{
+
+                    int _modulo = 0;
+                    string _color = "";
+                }
+                @if(_modularity != null) {
+                    foreach (var _item in _modularity)
+                    {
+
+                        switch (_modulo % 3)
+                        {
+                            case 0:
+                                _color = _user.TenantSkin.TenantStylePrimaryBackgroundColor;
+                                break;
+                            case 1:
+                                _color = _user.TenantSkin.TenantStyleSecondaryBackgroundColor;
+                                break;
+                            case 2:
+                                _color = _user.TenantSkin.TenantStyleTertiaryBackgroundColor;
+                                break;
+                        }
+                    
+
+                <!-- MODULO -->
+                    <div class="box-module-01 align-items-center">
+                        <div class="box-01 d-flex align-items-center" style="background-color: @_color">
+                            <div class="w-100">
+                                <div class="icon-01">
+                                    <img src="@_item.ModuleLogoUrl" width="61" height="52">
+                                </div>
+                                <div class="clear"></div>
+                                @*<p>Follow the measure my platform process in order to obtain the HW &amp; SW inventory</p>*@
+                                <p>@TranslatorHelper.TranslateTextByIdentifier(_item.DescriptionTextIdentifier)</p>
+                            </div>
+                        </div>
+                    </div>
+                <!-- END MODULO -->
+                        _modulo++;
+                    }
+                }
+
+                @*<!-- MODULO -->
+                    <div class="box-module-01 align-items-center">
+                        <div class="box-01 d-flex align-items-center" style="background-color: #1f82c0">
+                            <div class="w-100">
+                                <div class="icon-01">
+                                    <img src="@Url.Content("~/images/icons-m/Capa 2.png")" width="61" height="52">
+                                </div>
+                                <div class="clear"></div>
+                                <p>Follow the measure my platform process in order to obtain the HW &amp; SW inventory</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END MODULO -->
+                    <!-- MODULO -->
+                    <div class="box-module-01 align-items-center">
+                        <div class="box-01 d-flex align-items-center" style="background-color: #1f82c0">
+                            <div class="w-100">
+                                <div class="icon-01">
+                                    <img src="@Url.Content("~/images/icons-m/Capa 5.png")" width="55" height="54">
+                                </div>
+                                <div class="clear"></div>
+                                <p>Answer the Cybersecurity Assessment</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END MODULO -->
+                    <!-- MODULO -->
+                    <div class="box-module-01 align-items-center">
+                        <div class="box-01 d-flex align-items-center" style="background-color: #e56222">
+                            <div class="w-100">
+                                <div class="icon-01">
+                                    <img src="@Url.Content("~/images/icons-m/Capa 4.png")" width="60" height="48">
+                                </div>
+                                <div class="clear"></div>
+                                <p>Answer the Cloud Assessment</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END MODULO -->
+                    <!-- MODULO -->
+                    <div class="box-module-01 align-items-center">
+                        <div class="box-01 d-flex align-items-center" style="background-color: #5ca1d3">
+                            <div class="w-100">
+                                <div class="icon-01">
+                                    <img src="@Url.Content("~/images/icons-m/Capa 6.png")" width="59" height="54">
+                                </div>
+                                <div class="clear"></div>
+                                <p>Answer the productivity assessment</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END MODULO -->
+                    <!-- MODULO -->
+                    <div class="box-module-01 align-items-center">
+                        <div class="box-01 d-flex align-items-center" style="background-color: #5ca1d3">
+                            <div class="w-100">
+                                <div class="icon-01">
+                                    <img src="@Url.Content("~/images/icons-m/Capa 7.png")" width="56" height="47">
+                                </div>
+                                <div class="clear"></div>
+                                <p>Schedule a conference call with a consultant to reciew your results</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END MODULO -->*@
+
+            </div>
+        </div>
+
+
+
+        <div class="clear"></div>
+
+        @if (_modularity != null)
+        {
+            if (_modularity.Count() > 0)
+            {
+                <h2 id="additional-text">@TranslatorHelper.TranslateTextByIdentifier("if_any_of_these_steps_are_not_available_text")</h2>
+            }
+        }
+        
+        
+    </div>
+
+
+    <!-- <div class="con_any_of_these_steps_are_not_available_text")</h2>
+    </div>
+
+
+    <!-- <div class="content">
+
+
+       <div class="block">
+           <div class="color">
+               <a href="@Url.Action("Index","AssessmentBoard", new { @id=1})" target="_self">
+                   <div class="foto"><img src="images/our_solution_1.png"></div>
+                   <h2>
+                       @TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity")
+                   </h2>
+
+                   <h3>
+                       Currently you are in
+                       <span>@plan</span>
+                   </h3>
+               </a>
+           </div>
+           <div class="white">
+               @{
+                   ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity_Internal_desc"));
+               }
+               <span>&nbsp;</span>
+               <br />
+               <br />
+               <br />
+               <br />
+               @if (userPlan.Id != 4)
+                {
+                   <a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade', 'Plan Upgrade', '@Url.Action("Upgrade", "Plan")')" class="call_action_go_advanced" href="#" target="_self">Go Advanced</a>
+               }
+           </div>
+       </div>
+
+       @*<div class="block alt">
+           <div class="color">
+               <a href="@Url.Action("Index","AssessmentBoard", new { @id=3})" target="_self">
+                   <div class="foto"><img src="images/our_solution_2.png"></div>
+                   <h2>
+                       @TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity")
+                   </h2>
+
+                   <h3>
+                       Currently you are in
+                       <span>@plan</span>
+                   </h3>
+               </a>
+           </div>
+           <div class="white">
+               @{
+                   ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity_Internal_desc"));
+               }
+
+               @if (_userPlan != SOMSightModels.Shared.SOMSightPlan.CorporateMonthly &&
+                                   _userPlan != SOMSightModels.Shared.SOMSightPlan.CorporateAnnually)
+                {
+                   <a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade', 'Plan Upgrade', '@Url.Action("Upgrade", "Plan")')" class="call_action_go_advanced" href="#" target="_self">Go Advanced</a>
+               }
+           </div>
+       </div>*@
+
+       <div class="block alt">
+           <div class="color">
+               <a href="@Url.Action("Index","AssessmentBoard", new { @id=2})" target="_self">
+                   <div class="foto"><img src="images/our_solution_3.png"></div>
+                   <h2>
+                       @TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud")
+                   </h2>
+
+                   <h3>
+                       Currently you are in
+                       <span>@plan</span>
+                   </h3>
+               </a>
+           </div>
+           <div class="white">
+               @{
+                   ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud_Internal_desc"));
+               }
+               <span>&nbsp;</span>
+               <br />
+               <br />
+               <br />
+               <br />
+               @if (userPlan.Id != 4)
+                {
+                   <a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade', 'Plan Upgrade', '@Url.Action("Upgrade", "Plan")')" class="call_action_go_advanced" href="#" target="_self">Go Advanced</a>
+               }
+           </div>
+       </div>
+
+
+
+       @*<div class="block alt">
+           <div class="color">
+               <a href="@Url.Action("Index","AssessmentBoard", new { @id=4})" target="_self">
+                   <div class="foto"><img src="images/our_solution_4.png"></div>
+                   <h2>
+                       @TranslatorHelper.TranslateTextByIdentifier("Assesment_Industry_Insights")
+                   </h2>
+
+                   <h3>
+                       Currently you are in
+                       <span>@plan</span>
+                   </h3>
+               </a>
+           </div>
+           <div class="white">
+               @{
+                   ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("Assesment_IndustryInsights_Internal_desc"));
+               }
+               <span>&nbsp;</span>
+               <br />
+               <br />
+               <br />
+               <br />
+
+               @if (_userPlan != SOMSightModels.Shared.SOMSightPlan.CorporateMonthly &&
+                                       _userPlan != SOMSightModels.Shared.SOMSightPlan.CorporateAnnually)
+                {
+                   <a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade', 'Plan Upgrade', '@Url.Action("Upgrade", "Plan")')" class="call_action_go_advanced" href="#" target="_self">Go Corporate</a>
+               }
+
+           </div>
+       </div>*@
+
+       @*<div class="block ">
+           <div class="color">
+               <a href="#" target="_self">
+                   <div class="foto"><img src="images/our_solution_5.png"></div>
+                   <h2>Software assets</h2>
+
+                   <h3>
+                       Currently you are in
+                       <span>@plan</span>
+                   </h3>
+               </a>
+           </div>
+           <div class="white">
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+               @if (_userPlan != SOMSightModels.Shared.SOMSightPlan.CorporateMonthly &&
+                                   _userPlan != SOMSightModels.Shared.SOMSightPlan.CorporateAnnually)
+                {
+                   <a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade', 'Plan Upgrade', '@Url.Action("Upgrade", "Plan")')" class="call_action_go_advanced" href="#" target="_self">Go Advanced</a>
+               }
+           </div>
+       </div>*@
+
+       <div class="block">
+           <div class="color">
+               <a href="@Url.Action("Index","MyPlatform", new { @id = 1 })" target="_self">
+                   <div class="foto"><img src="images/our_solution_3.png"></div>
+                   <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Measure_My_Platform")</h2>
+
+                   <h3>
+                       Currently you are in
+                       <span>@plan</span>
+                   </h3>
+               </a>
+           </div>
+           <div class="white">
+               @{
+                   ViewContext.Writer.Write(TranslatorHelper.TranslateTextByIdentifier("Assesment_Measure_My_Platform_Internal_desc"));
+               }
+               <span>&nbsp;</span>
+               <br />
+               <br />
+               <br />
+               <br />
+               @if (userPlan.Id != 4)
+                {
+                   <a onclick="gAnalytics.throwRedirectEvent('Click Upgrade', 'Plan Upgrade', 'Plan Upgrade', '@Url.Action("Upgrade", "Plan")')" class="call_action_go_advanced" href="#" target="_self">Go Advanced</a>
+               }
+           </div>
+       </div>
+       -->
+</div>
+<!--================================= MODAL TRIAL ======================================-->
+
+<div class="opacidadtrial">
+</div>
+
+<div id="modalConfirmTrial" class="NS_modal">
+    <div class="titulo" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor !important;">
+        <h2 style="color: @_user.TenantSkin.TenantStylePrimaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("confirm_text")</h2>
+        <p class="cerrar" style="background-image: url('../../images/icono_cerrar_modal@_user.TenantSkin.TenantStylePrimaryIconColor');">
+        </p>
+    </div>
+    <div class="contenido">
+        <h5>@TranslatorHelper.TranslateTextByIdentifier("request_promotional_code_question_text")</h5>
+    </div>
+    <div class="footer">
+        <button class="ok-button" id="SendGetTrial" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor !important;color: @_user.TenantSkin.TenantStyleTertiaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")</button>
+        <button class="cancel-button closeModalTrial">@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Cancelar")</button>
+    </div>
+</div>
+
+<div class="modal alerta blue">
+    <div class="titulo" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor !important;">
+        <h1 style="color: @_user.TenantSkin.TenantStylePrimaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("message_text")</h1>
+    </div>
+    <div class="contenido">
+        <h2>@TranslatorHelper.TranslateTextByIdentifier("one_of_our_consultants_will_respond_text")</h2>
+        <a href="#" target="_self" class="button" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">OK</a>
+    </div>
+</div>
+<!--================================= PAGINA ======================================-->

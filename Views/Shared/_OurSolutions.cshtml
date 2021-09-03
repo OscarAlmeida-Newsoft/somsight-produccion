@@ -1,0 +1,409 @@
+﻿@using SOMSight.Utils
+@model int
+
+@{ 
+    var _class = "eee";
+}
+@** Check if there is a default assessment selected *@
+
+@if (Model == 1)
+{
+    <div class="container @_class" id="cyber">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_01.jpg"))">
+            <img src="@Url.Content("~/images/home_01.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_1.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Index","FreeAssessmentQuestions", new {pAssessmentTypeId = 1 })" target="_self" class="btn">@TranslatorHelper.TranslateTextByIdentifier("Start_Free_Assessment_Text")</a></p>
+            </div>
+        </div>
+    </div>
+
+    _class = "alt";
+}
+
+
+@if (Model == 3)
+{
+    <div class="container @_class" id="productivi">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_02.jpg"))">
+            <img src="@Url.Content("~/images/home_02.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_2.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Index","FreeAssessmentQuestions", new {pAssessmentTypeId = 3 })" target="_self" class="btn">@TranslatorHelper.TranslateTextByIdentifier("Start_Free_Assessment_Text")</a></p>
+            </div>
+        </div>
+    </div>
+
+    _class = (_class == "eee") ? "alt" : "eee";
+
+}
+
+@if (Model == 2)
+{
+    <div class="container @_class" id="cloud_ready">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_03.jpg"))">
+            <img src="@Url.Content("~/images/home_03.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_6.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Index","FreeAssessmentQuestions", new {pAssessmentTypeId = 2 })" target="_self" class="btn">@TranslatorHelper.TranslateTextByIdentifier("Start_Free_Assessment_Text")</a></p>
+            </div>
+        </div>
+    </div>
+
+    _class = (_class == "eee") ? "alt" : "eee";
+}
+
+@if (Model == 9999)
+{
+    <div class="container @_class" id="measure">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_06.jpg"))">
+            <img src="@Url.Content("~/images/home_06.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_7.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Measure_My_Platform")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Measure_My_Platform_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Measure_My_Platform_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Measure_My_Platform_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Register","Account")" target="_self" class="btn">@TranslatorHelper.TranslateTextByIdentifier("know_more_text")</a></p>
+            </div>
+        </div>
+    </div>
+
+    _class = (_class == "eee") ? "alt" : "eee";
+}
+
+
+@if (Model == 4)
+{
+    @*<div class="container @_class" id="industry_insi">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_04.jpg"))">
+            <img src="@Url.Content("~/images/home_04.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_8.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Industry_Insights")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Industry_Insights_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Industry_Insights_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Industry_Insights_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Register","Account")" target="_self" class="btn">KNOW MORE</a></p>
+            </div>
+        </div>
+    </div>*@
+
+    _class = (_class == "eee") ? "alt" : "eee";
+}
+
+
+@if (Model != 1)
+{
+    <div class="container @_class" id="cyber">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_01.jpg"))">
+            <img src="@Url.Content("~/images/home_01.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_1.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cybersecurity_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Register","Account")" target="_self" class="btn">@TranslatorHelper.TranslateTextByIdentifier("Start_Free_Assessment_Text")</a></p>
+            </div>
+        </div>
+    </div>
+
+    _class = (_class == "eee") ? "alt" : "eee";
+}
+
+@if (Model != 3)
+{
+    <div class="container @_class" id="productivi">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_02.jpg"))">
+            <img src="@Url.Content("~/images/home_02.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_2.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Productivity_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Register","Account")" target="_self" class="btn">@TranslatorHelper.TranslateTextByIdentifier("Start_Free_Assessment_Text")</a></p>
+            </div>
+        </div>
+    </div>
+
+    _class = (_class == "eee") ? "alt" : "eee";
+}
+
+@if (Model != 2)
+{
+    <div class="container @_class" id="cloud_ready">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_03.jpg"))">
+            <img src="@Url.Content("~/images/home_03.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_6.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Cloud_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Register","Account")" target="_self" class="btn">@TranslatorHelper.TranslateTextByIdentifier("Start_Free_Assessment_Text")</a></p>
+            </div>
+        </div>
+    </div>
+
+    _class = (_class == "eee") ? "alt" : "eee";
+}
+
+@if (Model != 9999)
+{
+    <div class="container @_class" id="measure">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_06.jpg"))">
+            <img src="@Url.Content("~/images/home_06.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_7.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Measure_My_Platform")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Measure_My_Platform_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Measure_My_Platform_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Measure_My_Platform_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Register","Account")" target="_self" class="btn">@TranslatorHelper.TranslateTextByIdentifier("know_more_text")</a></p>
+            </div>
+        </div>
+    </div>
+
+    _class = (_class == "eee") ? "alt" : "eee";
+}
+
+@if (Model != 4)
+{
+    @*<div class="container @_class" id="industry_insi">
+        <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_04.jpg"))">
+            <img src="@Url.Content("~/images/home_04.jpg")">
+        </div>
+        <div class="desc_alt texto">
+            <div class="block">
+                <p><img src="@Url.Content("~/images/our_solution_8.png")"></p>
+                <h2>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Industry_Insights")</h2>
+                <hr />
+                <h3>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Industry_Insights_desc")</h3>
+                <ul>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Industry_Insights_advantage_1")</li>
+                    <li>@TranslatorHelper.TranslateTextByIdentifier("Assesment_Industry_Insights_advantage_2")</li>
+                </ul>
+                <p><a href="@Url.Action("Register","Account")" target="_self" class="btn">KNOW MORE</a></p>
+            </div>
+        </div>
+    </div>*@
+
+    _class = (_class == "eee") ? "alt" : "eee";
+}
+
+
+
+@*<div class="container eee" id="cyber">
+    <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_01.jpg"))">
+        <img src="@Url.Content("~/images/home_01.jpg")">
+    </div>
+    <div class="desc_alt texto">
+        <div class="block">
+            <p><img src="@Url.Content("~/images/our_solution_1.png")"></p>
+            <h2>Cybersecurity Assesments</h2>
+            <hr />
+            <h3>Discover if your company is well prepared for a Cyberattack and what are the next steps if you are not ready</h3>
+            <ul>
+                <li>Identifica tus debilidades y resuélvelas para evitar pérdidas de datos y financieras.</li>
+                <li>Evalúa tu plataforma a través de nuestro assesment, deja que nuestros consultores te entreguen las mejores recomendaciones.</li>
+            </ul>
+            <p><a href="@Url.Action("Index","FreeAssessmentQuestions", new {pAssessmentTypeId = 1 })" target="_self" class="btn">START FREE ASSESSMENT</a></p>
+        </div>
+    </div>
+</div>*@
+
+@*<div class="container alt" id="productivi">
+    <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_02.jpg"))">
+        <img src="@Url.Content("~/images/home_02.jpg")">
+    </div>
+    <div class="desc_alt texto">
+        <div class="block">
+            <p><img src="@Url.Content("~/images/our_solution_2.png")"></p>
+            <h2>Productivity Assesments</h2>
+            <hr />
+            <h3>Take advantage of your Software and discover a new level of productivity</h3>
+            <ul>
+                <li>Haga más en menos tiempo descubriendo el potencial de sus herramientas de productividad. </li>
+                <li>Descubra cómo lograrlo a través de nuestras preguntas de productividad y reciba consejos profesionales de nuestros consultores.</li>
+            </ul>
+            <p><a href="@Url.Action("Index","FreeAssessmentQuestions", new {pAssessmentTypeId = 3 })" target="_self" class="btn">START FREE ASSESSMENT</a></p>
+        </div>
+    </div>
+</div>*@
+
+@*<div class="container eee" id="cloud_ready">
+    <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_03.jpg"))">
+        <img src="@Url.Content("~/images/home_03.jpg")">
+    </div>
+    <div class="desc_alt texto">
+        <div class="block">
+            <p><img src="@Url.Content("~/images/our_solution_6.png")"></p>
+            <h2>Cloud Readiness Assesments</h2>
+            <hr />
+            <h3>Understand how to take advantage of the benefit of moving to the cloud</h3>
+            <ul>
+                <li>Conozca la realidad de la nube, en temas de flexibilidad, funcionalidad y seguridad, características propias de la transformación de la industria.</li>
+                <li>Compruebe cómo tener estos beneficios, contestando nuestro assessment y recibiendo nuestra asesoría.</li>
+            </ul>
+            <p><a href="@Url.Action("Index","FreeAssessmentQuestions", new {pAssessmentTypeId = 2 })" target="_self" class="btn">START FREE ASSESSMENT</a></p>
+        </div>
+    </div>
+</div>*@
+
+
+@*<div class="container alt" id="industry_insi">
+    <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_04.jpg"))">
+        <img src="@Url.Content("~/images/home_04.jpg")">
+    </div>
+    <div class="desc_alt texto">
+        <div class="block">
+            <p><img src="@Url.Content("~/images/our_solution_8.png")"></p>
+            <h2>Industry Insights</h2>
+            <hr />
+            <h3>Compare your company with the industry and be ready to deploy your own digital transformation strategy</h3>
+            <ul>
+                <li>Permítenos conocer tus problemas y ayudarte a transformar digitalmente, comparándote con la industria.</li>
+                <li>Ayúdanos a entender tu cadena de valor y te mostraremos cómo la tecnología puede posicionarte mejor en el mercado.</li>
+            </ul>
+            @*<p><a href="#" target="_self" class="btn">START FREE TRIAL</a></p>*@
+        @*</div>
+    </div>
+</div>*@
+
+
+@*<div class="container @_class" id="softwar">
+    <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_05.jpg"))">
+        <img src="@Url.Content("~/images/home_05.jpg")">
+    </div>
+    <div class="desc_alt texto">
+        <div class="block">
+            <p><img src="@Url.Content("~/images/our_solution_7.png")"></p>
+            <h2>Software Assets</h2>
+            <hr />
+            <h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eleifend, felis quis interdum accumsan</h3>
+            <ul>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eleifend, felis quis interdum accumsan</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eleifend, felis quis interdum accumsan</li>
+            </ul>
+            @*<p><a href="#" target="_self" class="btn">START FREE TRIAL</a></p>*@
+        @*</div>
+    </div>
+</div>*@
+
+@{ _class = (_class == "eee") ? "alt" : "eee";}
+
+@*<div class="container @_class" id="measure_my_platform">
+    <div class="desc_alt foto" style="background-image:url(@Url.Content("~/images/home_04.jpg"))">
+        <img src="@Url.Content("~/images/home_04.jpg")">
+    </div>
+    <div class="desc_alt texto">
+        <div class="block">
+            <p><img src="@Url.Content("~/images/our_solution_8.png")"></p>
+            <h2>Measure my platform</h2>
+            <hr />
+            <h3>Compare your company with the industry and be ready to deploy your own digital transformation strategy</h3>
+            <ul>
+                <li>Permítenos conocer tus problemas y ayudarte a transformar digitalmente, comparándote con la industria.</li>
+                <li>Ayúdanos a entender tu cadena de valor y te mostraremos cómo la tecnología puede posicionarte mejor en el mercado.</li>
+            </ul>
+            <p><a href="#" target="_self" class="btn">START FREE TRIAL</a></p>
+        </div>
+    </div>
+</div>*@
+
+@*<div class="container blanco" id="our_solutions">
+
+    <h2>Our Solutions</h2>
+    <ul class="content">
+        <li>
+            <div class="top">
+                <img src="@Url.Content("~/images/our_solution_1.png")" width="98" height="98" alt="Cybersecurity Assessment">
+            </div>
+            <h3>Cybersecurity Assessment</h3>
+            <p>Discover if your company is well prepared for a Cyberattack and what are the next steps if you are not ready</p>
+        </li>
+        <li class="alt">
+            <div class="top">
+                <img src="@Url.Content("~/images/our_solution_4.png")" width="98" height="98" alt="Productivity Assessment">
+            </div>
+            <h3>Productivity Assessment</h3>
+            <p>Take advantage of your Software and discover a new level of productivity</p>
+        </li>
+        <li>
+            <div class="top">
+                <img src="@Url.Content("~/images/our_solution_6.png")" width="98" height="98" alt="Cloud Readiness Assessment">
+            </div>
+            <h3>Cloud Readiness Assessment</h3>
+            <p>Understand how to take advantage of the benefit of moving to the cloud</p>
+        </li>
+        <li class="alt">
+            <div class="top">
+                <img src="@Url.Content("~/images/our_solution_8.png")" width="98" height="98" alt="Industry Insight">
+            </div>
+            <h3>Industry Insights</h3>
+            <p>Compare your company with the industry and be ready to deploy your own digital transformation strategy</p>
+        </li>
+
+    </ul>
+
+
+</div>*@

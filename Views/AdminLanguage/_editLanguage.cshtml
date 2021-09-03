@@ -1,0 +1,87 @@
+﻿@model SOMSight.Models.Languages.EditLanguageVM
+
+@using SOMSight.Utils.Extensions
+@using SOMSightModels.Shared
+
+@{
+    bool isAdministrator = Session.GetCurrentRol().Equals(RolesDef.ADMINISTRATOR_ROLE);
+}
+
+@using (Ajax.BeginForm("Edit", "AdminLanguage", null,
+                                                        new AjaxOptions
+                                                        {
+                                                            HttpMethod = "POST",
+                                                            InsertionMode = InsertionMode.Replace,
+                                                            OnSuccess = "OnSuccess",
+                                                            OnFailure = "OnFailure",
+                                                            OnBegin = "On_Begin",
+                                                            UpdateTargetId = "EditLanguage"
+                                                        },
+                                                        new
+                                                        {
+                                                            @id = "FormEditLanguage"
+                                                        }
+                                                    ))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-header">
+
+        <h4 class="modal-title">Edit</h4>
+
+    </div>
+    <div class="modal-body">
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.CodeLanguage, htmlAttributes: new { @class = "" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.HiddenFor(model => model.Id)
+                        <div class="form-group">
+                            @if (isAdministrator)
+                            {
+                                @Html.EditorFor(model => model.CodeLanguage, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(model => model.CodeLanguage, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                            }
+
+                            @Html.ValidationMessageFor(model => model.CodeLanguage, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Language, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.Language, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Language, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.CheckBoxFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <input type="submit" value="Edit" id="btnSave" name="cmd" class="btn btn-success" />
+        </div>
+    </div>
+
+}
+
+

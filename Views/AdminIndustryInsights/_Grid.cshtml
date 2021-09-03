@@ -1,0 +1,106 @@
+﻿@model SOMSight.Models.AdminIndustryInsightsGridVM
+@using SOMSight.Utils.Helpers
+
+<table id="gridTable" class="hover table-bordered stripe" cellspacing="0" width="100%">
+    <thead class="cell-border" id="TH">
+        <tr class="table-header">
+            <th class="text-center text-uppercase">
+                <label>Email</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Company Name</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Industry</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Contact Name</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Status</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>Start Date</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label>End Date</label>
+            </th>
+            <th class="text-center text-uppercase">
+                <label></label>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Details)
+        {
+            <tr class="table-item">
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.CompanyName
+                </td>
+                <td>
+                    @item.IndustryName
+                </td>
+                <td>
+                    @item.ContactName
+                </td>
+                <td>
+                    @item.Status
+                </td>
+                <td>
+                    @item.StartDate.Value.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    
+                    @(item.EndDate == null ? "" : item.EndDate.Value.ToString("dd/MM/yyyy") )
+                </td>
+                <td class="text-center">
+                    <a href="@Url.Action("ViewDetail",new { Id = item.IdAssessmentSummary})" target="_blank">View</a>
+                 
+                </td>
+
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="7" class="text-center text-nowrap" style="text-align:center;">
+                @Html.NSPagination(Model.PageSettings)
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+
+    $(document).ready(function () {
+        var ventana_alto = $(window).innerHeight();
+        ventana_alto = (ventana_alto > 900) ? (ventana_alto / 1.8) : (ventana_alto / 3);
+        var table = $('#gridTable').DataTable({
+            "columnDefs": [
+            { "width": "4%", "targets": 0 }
+            ],
+            "scrollY": ventana_alto,
+            "scrollX": true,
+            "info": false,
+            "paging": false,
+            "ordering": false,
+            "filter": false
+        });
+
+        $('#TH').resize(function () {
+
+            table.columns.adjust();
+        })
+
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    });
+</script>
+
+
+

@@ -1,0 +1,84 @@
+﻿@using SOMSight.Utils.Extensions
+
+@model SOMSight.Models.LoginVM
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+    var _user = @Session.GetDataWithOutLogin();
+    Layout = null;
+}
+
+@Html.Partial("_HeaderLogin");
+
+<div class="container">
+    <div class="signin-form-container">
+        @using (Html.BeginForm("Login", "AdminHome", FormMethod.Post, new { @class = "form-signin", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+
+            <h2 class="form-signin-heading">@_user.TenantName <br /><sup style="font-size:14px;">Powered by SOMSight</sup> <br /> Admin Console</h2>
+            <div class="form-controls">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @autofocus = "", @placeholder = "email" } })
+                @Html.ValidationMessageFor(model => model.Email, null, new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "password" } })
+                @Html.ValidationMessageFor(model => model.Password, null, new { @class = "text-danger" })
+                @*<div class="checkbox">
+                        @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe)
+                    </div>*@
+            </div>
+            <br />
+            <button class="btn btn-primary btn-block" id="ButtonLogin" type="submit">Login</button>
+
+        }
+    </div>
+
+</div>
+<style>
+    .container {
+        margin-top: 10vh;
+        /*margin-bottom: 10vh;*/
+    }
+
+    input {
+        margin-bottom: 12px;
+    }
+
+    h2.form-signin-heading {
+        text-align: center;
+        color: #044789;
+    }
+
+    /*
+        Login Page
+    */
+    .signin-form-container {
+        border-radius: 4px;
+        background: #ffffff;
+        border-top: 4px solid;
+        margin: 4% auto;
+        max-width: 500px;
+        border-top-color: #1F82C0;
+        box-shadow: 3px 3px 5px 3px rgba(0, 0, 0, 0.1);
+    }
+    #ButtonLogin {
+      background-image: linear-gradient(#1F82C0, #1574d0 60%, #03386b);
+          border-color: #1F82C0;
+              transition: all 1s;
+    }
+    .form-signin {
+        max-width: 320px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+    #ButtonLogin:hover {
+        color: #fff;
+        background-color: #1F82C0;
+        background-image: linear-gradient(#499dd2, #04498c 60%, #0b58a2);
+    }
+
+</style>
+
+@Html.Partial("_FooterLogin")

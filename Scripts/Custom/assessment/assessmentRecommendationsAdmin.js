@@ -1,0 +1,763 @@
+﻿/*******************************************
+                statements
+*******************************************/
+var pageNumber = 1;
+var pageSize = 50;
+var selectedItem = {};
+var CargarProductosGrid = true;
+var selectedItemTextIdentifier = {};
+var txtTextIdentifierTag = "";
+var editMainImagesUrl = '';
+var pFilterModel = {
+    TextIdentifier: '',
+    DefaultText: '',
+    Classification: ''
+};
+
+
+
+var ObjRecommendation = {
+    Id: null,
+    MaturityLevelId: null,
+    AssessmentTypeId: null,
+    AssessmentMode: null,
+    TranslatorAdministratorTextT: null,
+    TranslatorAdministratorNameT: null,
+    RecommendationOrder: null
+    
+}
+
+question = 0;
+var ListObjOptions = [];
+
+var ListObjAdvance = [];
+/*******************************************
+                Events
+*******************************************/
+
+$(document).on('click', '#SendAssessmentDraft', function () {
+    loadingDiv.show();
+    $('#pQuestionAnswersModelIsFinal').val(false);
+    //$('#AssessmentQuestionsForm').submit();
+    gAnalytics.throwFormEvent('Click Save Draft', 'Assestments', $(this).data().eventLabel, $('#AssessmentQuestionsForm'));
+
+    return false;
+
+});
+
+$(document).on('click', '#SendAssessmentFinal', function () {
+    //var answerQuestions = $('input[type=radio]:checked').length;
+    var answerQuestions = $('input[type=radio]:checked:not(input[disabled=disabled])').length
+
+    if (answerQuestions != totalQuestions) {
+        $("#opacidad").show();
+        $("#modalNotCompleted").show();
+
+
+    } else {
+        $("#opacidad").show();
+        $("#modalConfirm").show();
+    }
+});
+
+
+$(document).on('click', '#SendAssessmentFinalOk', function () {
+    loadingDiv.show();
+    $('#pQuestionAnswersModelIsFinal').val(true);
+    //$('#AssessmentQuestionsForm').submit();
+    gAnalytics.throwFormEvent('Click End', 'Assestments', $(this).data().eventLabel, $('#AssessmentQuestionsForm'));
+});
+
+$(document).on('click', '#FreeSendAssessmentFinalOk', function () {
+    loadingDiv.show();
+    $('#pQuestionAnswersModelIsFinal').val(true);
+    //$('#AssessmentQuestionsForm').submit();
+    gAnalytics.throwFormEvent('Click End', 'Free Assestments', $(this).data().eventLabel, $('#AssessmentQuestionsForm'));
+});
+
+$(document).on('click', '#modalConfirm .cerrar', function () {
+    $("#opacidad").hide();
+    $("#modalConfirm").hide();
+});
+
+
+//Cancel Modal
+$(document).on('click', '#modalConfirm .cancel-button', function () {
+    $("#opacidad").hide();
+    $("#modalConfirm").hide();
+});
+
+$(document).on('click', '#modalNotCompleted', function () {
+    $("#opacidad").hide();
+    $("#modalNotCompleted").hide();
+});
+
+$(document).on('change', 'input[type=radio]', function () {
+    //answeredQuestions = $('input[type=radio]:checked').length
+    answeredQuestions = $('input[type=radio]:checked:not(input[disabled=disabled])').length
+    $('#answeredQuestions').text(answeredQuestions);
+});
+
+$(document).ready(function ()
+{
+    debugger;
+    
+    GridCallback();
+    CargarProductos();
+});
+
+$(document).on('change', '.items-per-page-select', function () {
+    pageSize = $(this).val();
+    pageNumber = 1;
+    GridCallback();
+
+});
+
+$(document).on('click', '.table-item', function () {
+    selectedItem = {};
+    if ($(this).hasClass('item-selected')) {
+        $(this).find('.check-item').prop('checked', false);
+        $(this).removeClass('item-selected');
+
+    } else {
+
+        $(this).parent().find('.check-item').prop('checked', false);
+        $(this).parent().find('tr').removeClass('item-selected');
+
+        $(this).find('.check-item').prop('checked', true);
+        $(this).addClass('item-selected');
+        selectedItem.id = $(this).data('itemid');
+    }
+
+});
+
+$(document).on('click', '.table-item-search', function () {
+    selectedItemTextIdentifier = {};
+    if ($(this).hasClass('item-selected')) {
+        $(this).find('.check-item').prop('checked', false);
+        $(this).removeClass('item-selected');
+    } else {
+
+        $(this).parent().find('.check-item').prop('checked', false);
+        $(this).parent().find('tr').removeClass('item-selected');
+        $(this).find('.check-item').prop('checked', true);
+        $(this).addClass('item-selected');
+        selectedItemTextIdentifier.id = $(this).data('itemtext');
+    }
+
+});
+
+//Pagination
+$(document).on('click', '.NS-paginator li', function () {
+    var clickedPage = $(this).data('page');
+    if (clickedPage !== undefined) {
+        pageNumber = clickedPage
+
+        GridCallback();
+    }
+});
+
+$(document).on('click', '.ClearModalTextIdentifier', function () {
+    txtTextIdentifierTag = $(this).data("textidentifier");
+    $("#" + txtTextIdentifierTag).val("");
+    question = 0;
+});
+
+$(document).on('keyup', '.searchBox', function () {
+    if ($("#txtTextIdentifier").val().length >= 3 || $("#txtDefaultText").val().length >= 3 || $("#txtDescripcion").val().length >= 3)
+        CargarProductos();
+});
+
+$(document).on('click', '#btnSave', function () {
+    if (txtTextIdentifierTag != null && txtTextIdentifierTag != undefined && txtTextIdentifierTag != "") {
+        $("#" + txtTextIdentifierTag).val(selectedItemTextIdentifier.id);
+        $("#btnclose").click();
+    }
+});
+
+$(document).on('click', '#btnDelete', function () {
+    $('#removeModal').modal('toggle');    
+});
+
+$(document).on('click', '#btnSaveRecommendation', function ()
+{
+    ObjRecommendation.Id = 0;
+    ObjRecommendation.MaturityLevelId = $("#txtAddNewOptionMaturity").val();
+    ObjRecommendation.AssessmentTypeId = $("#txtAssessmentTypeId").val();
+    ObjRecommendation.TranslatorAdministratorNameT = $("#txtTextIdentifierName").val();
+    ObjRecommendation.TranslatorAdministratorTextT = $("#txtTextIdentifierText").val();
+    ObjRecommendation.RecommendationOrder = $("#txtDisplayOrder").val();
+    ObjRecommendation.AssessmentMode = 0;
+   
+
+    messageError = "";
+    errors = false;
+    //Display Order Required
+    if ($("#txtAddNewOptionMaturity").val() == null || $("#txtAddNewOptionMaturity").val() == "")
+    {
+        message = $("#txtAddNewOptionMaturity").data('menssagerequired');
+        messageError += `${message} </br>`;
+        errors = true;
+    }
+    //TextIdentifier Required
+    if ($("#txtTextIdentifierName").val() == null || $("#txtTextIdentifierName").val() == "")
+    {
+        message = $("#txtTextIdentifierName").data('menssagerequired');
+        messageError += `${message} </br>`;
+        errors = true;
+    }
+
+    if ($("#txtTextIdentifierText").val() == null || $("#txtTextIdentifierText").val() == "")
+    {
+        message = $("#txtTextIdentifierText").data('menssagerequired');
+        messageError += `${message} </br>`;
+        errors = true;
+    }
+
+    if ($("#txtDisplayOrder").val() == null || $("#txtDisplayOrder").val() == "")
+    {
+        message = $("#txtDisplayOrder").data('menssagerequired');
+        messageError += `${message} </br>`;
+        errors = true;
+    }
+   
+
+    if (!errors) {
+        saveRecommendation();
+        $('.divmessageerror').parent().addClass('hide');
+    }
+    else {
+        $('.divmessageerror').empty();
+        $('.divmessageerror').append(messageError);
+        $('.divmessageerror').parent().removeClass('hide');
+    }
+});
+
+$(document).on("click", "#btnEditRecommendation", function () {
+    
+    ObjRecommendation.Id = $("#txtRecommmendationId").val();
+    ObjRecommendation.MaturityLevelId = $("#txtEditNewOptionMaturity").val();
+    ObjRecommendation.AssessmentTypeId = $("#txtAssessmentTypeId").val();
+    ObjRecommendation.TranslatorAdministratorNameT = $("#txtTextIdentifierName").val();
+    ObjRecommendation.TranslatorAdministratorTextT = $("#txtTextIdentifierText").val();
+    ObjRecommendation.RecommendationOrder = $("#txtDisplayOrder").val();
+    ObjRecommendation.AssessmentMode = 0;
+
+    messageError = "";
+    errors = false;
+    
+    //Display Order Required
+    if ($("#txtEditNewOptionMaturity").val() == null || $("#txtEditNewOptionMaturity").val() == "")
+    {
+        message = $("#txtEditNewOptionMaturity").data('menssagerequired');
+        messageError += `${message} </br>`;
+        errors = true;
+    }
+    //TextIdentifier Required
+    if ($("#txtTextIdentifierName").val() == null || $("#txtTextIdentifierName").val() == "")
+    {
+        message = $("#txtTextIdentifierName").data('menssagerequired');
+        messageError += `${message} </br>`;
+        errors = true;
+    }
+
+    if ($("#txtTextIdentifierText").val() == null || $("#txtTextIdentifierText").val() == "")
+    {
+        message = $("#txtTextIdentifierText").data('menssagerequired');
+        messageError += `${message} </br>`;
+        errors = true;
+    }
+
+    if ($("#txtDisplayOrder").val() == null || $("#txtDisplayOrder").val() == "")
+    {
+        message = $("#txtDisplayOrder").data('menssagerequired');
+        messageError += `${message} </br>`;
+        errors = true;
+    }
+
+    
+    if (!errors) {
+        editRecommendation();
+        $('.divmessageerror').parent().addClass('hide');
+    }
+    else {
+        $('.divmessageerror').empty();
+        $('.divmessageerror').append(messageError);
+        $('.divmessageerror').parent().removeClass('hide');
+    }
+
+
+
+});
+
+//Pagination
+$(document).on('click', '.ModalTextIdentifier', function () {
+    txtTextIdentifierTag = $(this).data("textidentifier");
+    $('#searchTextIdentifierModal').show();
+    $('#searchTextIdentifierModal').modal({ backdrop: "static" }, { keyboard: false });
+    $("#txtTextIdentifier").val('');
+    $.validator.unobtrusive.parse('#FormCreateEdit');
+    CargarProductos();
+});
+
+$(document).on('keyup', '.searchBox', function () {
+    if ($("#txtTextIdentifier").val().length >= 3 || $("#txtDefaultText").val().length >= 3 || $("#txtDescripcion").val().length >= 3)
+        CargarProductos();
+});
+
+$(document).on('click', '#btnSave', function () {
+    if (txtTextIdentifierTag != null && txtTextIdentifierTag != undefined && txtTextIdentifierTag != "") {
+        $("#" + txtTextIdentifierTag).val(selectedItemTextIdentifier.id).change();
+        $("#btnclose").click();
+    }
+});
+
+//Add new record
+$(document).on('click', '#addAssessmentRecommendation', function () {
+    loadingDiv.show();
+    $.ajax({
+        url: $(this).attr('href') + "?pidAssessmentTypeId=" + $("#idAssessmentType").text(),
+        type: 'GET'
+    })
+        .done(function (data) {
+            $('#CreateAssessmentRecommendation').html(data);
+            $('#createModal').modal({ backdrop: "static" }, { keyboard: false });
+            $.validator.unobtrusive.parse('#FormCreateEdit');
+            FillSelectMaturity("/AdminAssessmentQuestion/GetAssessmentMaturity", "txtAddNewOptionMaturity");
+        })
+        .fail(function (jqXHR, exception) {
+            $('#vermasdiv').text(TextError(jqXHR, exception));
+            $('#FailModal').modal({ backdrop: "static" }, { keyboard: false });
+        })
+        .always(function () {
+            loadingDiv.hide();
+        });
+    return false;
+});
+
+$(document).on('click', '#addNewOption', function () {
+    $("#messageMadurity").empty();
+    $('#addNewOptionModal').modal({ backdrop: "static" }, { keyboard: false });
+    $.validator.unobtrusive.parse('#FormCreateEdit');
+});
+
+
+$(document).on('click', "#btnSaveNewOption ", function ()
+{
+    pass = true;
+    messageError = "";
+    if ($("#txtAddNewOptionTextIdentifier").val() == null || $("#txtAddNewOptionTextIdentifier").val() == "")
+    {
+        message = $("#txtAddNewOptionTextIdentifier").data('menssagerequired');
+        messageError += `${message} </br>`;
+        pass = false;
+        errors = true;
+    }
+
+    debugger;
+    for (var i = 0; i < ListObjOptions.length; i++)
+    {
+        if (ListObjOptions[i].MaturityLevelId == $("#txtAddNewOptionMaturity").val())
+        {
+            message = $("#txtAddNewOptionMaturity").data('menssagerequired');
+            messageError += `${message} </br>`;
+            errors = true;
+            pass = false;
+            break;
+        }
+    }
+
+    if (($("#txtAddNewOptionTextIdentifier").val() != null || $("#txtAddNewOptionTextIdentifier").val() != "" || $("#txtAddNewOptionMaturity").val() != null || $("#txtAddNewOptionMaturity").val() != "") && pass)
+    {
+        objOptions = new Object();
+        objOptions.TranslatorAdministratorText = $("#txtAddNewOptionTextIdentifier").val();
+        objOptions.Description = $("#txtAddNewOptionDescription").val();
+        objOptions.MaturityLevelId = $("#txtAddNewOptionMaturity").val();
+        objOptions.Status = 1;
+        
+        objAdvanceOption = new Object();
+        var AdvancedTextIdentifier = $("#txtTextIdentifierQuestionAdvance").val();
+        
+        htmlAppend =`
+        <tr>
+            <td>${objOptions.MaturityLevelId}</td>
+            <td>${objOptions.TranslatorAdministratorText}</td>
+            <td>${objOptions.Description}</td>
+            <td>${AdvancedTextIdentifier}</td>
+            <td>
+            <a href="#" data-textidentifier="${objOptions.MaturityLevelId}" onclick="deleteOption(this)" class="btn btn-sm btn-default delete"><i class="glyphicon glyphicon-remove"></i></a>
+            </td>
+        </tr>      
+        `;
+        $("#optionsTable").find("tbody").append(htmlAppend);
+        ListObjOptions.push(objOptions);
+        $("#btncloseNewOption").click();
+        $(".newoption").val("");
+
+        if (question != 0) {
+            objOptions = new Object();
+
+            objOptions.MaturityLevelId = $("#txtAddNewOptionMaturity").val();
+            objOptions.AssessmentQuestionId = question;
+            ListObjAdvance.push(objOptions);
+            $("#clearQuestionAdvance").click();
+        }
+        
+    }
+    else if (!pass)
+    {
+        $("#messageMadurity").empty();
+        $('#messageMadurity').append(messageError);
+    }
+});
+
+$(document).on("change", "#addQuestionToAdvance", function () {
+    if ($(this).prop('checked')) {
+        $("#addToAdvanceQuestionDiv").show(200);
+    }
+    else {
+        $("#addToAdvanceQuestionDiv").hide(200);
+    }
+
+});
+
+$(document).on("click", "#btncloseNewOptionAdvance", function () {
+    $("#addToAdvanceQuestionDiv").hide(200);
+    $("#addnewoptiondiv").show();
+    $("#addQuestionToAdvance").parent().removeClass("toggle");
+    $("#addQuestionToAdvance").parent().removeClass("btn");
+    $("#addQuestionToAdvance").parent().removeClass("btn-primary");
+    $("#addQuestionToAdvance").parent().addClass("toggle");
+    $("#addQuestionToAdvance").parent().addClass("btn");
+    $("#addQuestionToAdvance").parent().addClass("btn-default");
+    $("#addQuestionToAdvance").parent().addClass("off");
+    $("#addQuestionToAdvance").prop("checked",false);
+});
+
+
+$(document).on("click", "#btnSaveNewOptionAdvance", function () {
+
+    pass = true;
+    messageError = "";
+    if ($("#txtTextIdentifierQuestionAdvance").val() == null || $("#txtTextIdentifierQuestionAdvance").val() == "") {
+        message = $("#txtTextIdentifierQuestionAdvance").data('menssagerequired');
+        messageError += `${message} </br>`;
+        pass = false;
+        errors = true;
+    }
+
+    if (pass)
+    {
+        
+    }
+    else {
+        $("#messageErrorsAdvance").empty();
+        $('#messageErrorsAdvance').append(messageError);
+    }
+});
+$(document).on("click", "#removeQuestionAdvance", function () {
+
+    $("#addQuestionToAdvance").parent().removeClass("hide");
+    $("#removeQuestionAdvance").addClass("hide");
+});
+
+$(document).on("change", "#txtTextIdentifierQuestionAdvance", function () {
+    question = 0;
+    if ($(this).val() != "" || $(this).val() != "")
+    {
+        $.ajax({
+            url: "/AdminAssessmentQuestion/SearchAdvanceQuestion",
+            type: 'POST',
+            data: JSON.stringify({
+                TextIdentifier: $(this).val(),
+                AssessmentTypeId: $("#idAssessmentType").text()
+            }),
+            async: false,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8'
+        })
+        .done(function (data) {
+            if (data.Resultado)
+            {
+                if (data.Data.length == 0) {
+                    $("#txtTextIdentifierQuestionAdvance").val("");
+                    $("#cantfingmessagediv").removeClass("hide");
+                }
+                else {
+                    question = data.Data[0].Id;
+                    $("#cantfingmessagediv").addClass("hide");
+                }
+            }
+        })
+    }
+});
+
+
+//Add new record
+$(document).on('click', '#editRecordAssessmentRecommendation', function () {
+    if (selectedItem.id === undefined) {
+        toastMessage.show('Please select a record', 'alert-warning')
+        return false;
+    }
+
+    $.ajax({
+        url: $(this).attr('href') + "?AssessmentRecommendation=" + selectedItem.id,
+        type: 'GET'
+    })
+        .done(function (data) {
+            $('#EditAssessmentRecommendation').html(data);
+            $('#editModal').modal({ backdrop: "static" }, { keyboard: false });
+            debugger;
+            var SelectedOption= $('#MaturityLeveHidden').val();
+            FillSelectMaturity("/AdminAssessmentQuestion/GetAssessmentMaturity", "txtEditNewOptionMaturity",SelectedOption);
+            
+           
+        })
+        .fail(function (jqXHR, exception) {
+            $('#vermasdiv').text(TextError(jqXHR, exception));
+            $('#FailModal').modal({ backdrop: "static" }, { keyboard: false });
+        })
+        .always(function () {
+            loadingDiv.hide();
+        });
+    return false;
+});
+
+$(document).on('click', '#deleteAssessmentRecommendationConfirm', function (e) {
+    if (selectedItem.id === undefined) {
+        toastMessage.show('Please select a record', 'alert-warning')
+        return false;
+    }
+    loadingDiv.show();
+    $.ajax({
+        url: $(this).attr('href') + '?pId=' + selectedItem.id,
+        type: 'GET'
+    })
+        .done(function (data) {
+            $('#RemoveAssessmentRecommendation').html(data);
+            $('#removeModal').modal({ backdrop: "static" }, { keyboard: false });
+        })
+        .fail(function (jqXHR, exception) {
+            $('#vermasdiv').text(TextError(jqXHR, exception));
+            $('#FailModal').modal({ backdrop: "static" }, { keyboard: false });
+        })
+        .always(function () {
+            loadingDiv.hide();
+        });
+    return false;
+});
+
+
+/*******************************************
+                Functions
+*******************************************/
+//Perform the callback to reload all data in the datagrid
+function GridCallback() {
+    loadingDiv.show();
+    $.ajax({
+        url: $('#GridListCallBack').text() + "?pPage=" + pageNumber + "&pPageSize=" + pageSize + "&pidAssessmentTypeId=" + $("#idAssessmentType").text(),
+        data: JSON.stringify(pFilterModel),
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8'
+    })
+        .done(function (data) {
+            $('#grid-div').html(data);
+        })
+        .fail(function (jqXHR, exception) {
+            $('#vermasdiv').text(TextError(jqXHR, exception));
+            $('#FailModal').modal({ backdrop: "static" }, { keyboard: false });
+        })
+        .always(function () {
+            loadingDiv.hide();
+        });
+}
+
+function On_Begin() {
+    loadingDiv.show();
+}
+
+function OnSuccess() {
+    selectedItem = {};
+    loadingDiv.hide();
+    GridCallback();
+}
+
+function OnFailure() {
+}
+
+function TextError(jq, exc) {
+    var msg = '';
+    if (jq.status === 0) {
+        msg = 'Not connect.\n Verify Network.';
+    } else if (jq.status == 404) {
+        msg = 'Requested page not found. [404]';
+    } else if (jq.status == 500) {
+        msg = 'Internal Server Error [500].';
+    } else if (exc === 'parsererror') {
+        msg = 'Requested JSON parse failed.';
+    } else if (exc === 'timeout') {
+        msg = 'Time out error.';
+    } else if (exc === 'abort') {
+        msg = 'Ajax request aborted.';
+    } else {
+        msg = 'Uncaught Error.\n';
+    }
+    msg = msg + jq.responseText;
+    return msg;
+}
+//*************************************************************
+//Carga la grid de text identifier con la información.
+//**************************************************************
+function CargarProductos() {
+    $.ajax({
+        url: $('#TextIdenfitiferAction').text(),
+        type: 'POST',
+        dataType: "json",
+        data: {
+            textIdentifier: $("#txtTextIdentifier").val(),
+            DefaultText: $("#txtDefaultText").val(),
+            Description: $("#txtDescripcion").val()
+        }
+    })
+    .done(function (data) {
+        if (data.Resultado)
+            CrearGridTextIdentifier(data.Data);
+    })
+    .fail(function (jqXHR, exception) {
+        $('#vermasdiv').text(TextError(jqXHR, exception));
+        $('#FailModal').modal({ backdrop: "static" }, { keyboard: false });
+    });
+    return false;
+};
+
+function CrearGridTextIdentifier(data) {
+    $("#tbadytextidentifier").remove();
+
+    var appendHTML = "<tbody id='tbadytextidentifier'>";
+    for (var i = 0; i < data.length; i++) {
+        appendHTML += `
+        <tr data-itemtext="${data[i].TextIdentifier}" class="table-item-search">
+            <td>
+                ${data[i].TextIdentifier}
+            </td>
+            <td>
+                ${data[i].DefaultText}
+            </td>
+            <td>
+                ${data[i].Description}
+            </td>
+            <td>
+                ${data[i].Classification}
+            </td>
+        </tr>
+        `
+    }
+    appendHTML += "</tbody>"
+    $("#griTextIdentifier").append(appendHTML);
+    return true;
+};
+
+
+
+function FillSelectMaturity(Url, Select, OptionSelected, Required = false) {
+    $.ajax({
+        url: Url,
+        type: 'POST',
+        dataType: "json"
+    })
+        .done(function (data) {
+            appendHTML = "";
+            for (var i = 0; i < data.Data.length; i++) {
+
+                appendHTML +=
+                    `<option value="${data.Data[i].MaturityLevelId}">
+                    ${data.Data[i].MaturityLevelId}
+            </option>`
+            }
+            $("#" + Select).append(appendHTML);
+            $('#' + Select).val(OptionSelected);
+        })
+        .fail(function (jqXHR, exception) {
+            $('#vermasdiv').text(TextError(jqXHR, exception));
+            $('#FailModal').modal({ backdrop: "static" }, { keyboard: false });
+        });
+    return false;
+};
+
+function deleteOption(tag)
+{
+    textidentifierToRemove = $(tag).data("textidentifier");
+    debugger;
+    
+   /* for (var i = 0; i < ListObjOptions.length; i++)
+    {
+        if (ListObjOptions[i].MaturityLevelId = textidentifierToRemove && ListObjOptions[i].MaturityLevelId != 1) {
+            ListObjOptions.splice(i, 1);
+            break;
+        }
+    }
+    for (var i = 0; i < ListObjOptions.length; i++) {
+        if (ListObjOptions[i].MaturityLevelId = textidentifierToRemove && ListObjOptions[i].MaturityLevelId == 1 ) {
+            ListObjOptions.splice(i, 1);
+            break;
+        }
+
+    }*/
+    for (var i = 0; i < ListObjOptions.length; i++) {
+        if (ListObjOptions[i].MaturityLevelId == textidentifierToRemove) {
+            ListObjOptions.splice(i, 1);
+            break;
+        }
+    }
+
+    $(tag).parent().parent().remove();
+}
+
+function saveRecommendation() {
+
+    loadingDiv.show();
+    $.ajax({
+        url: "/AdminAssessmentRecommendation/AddRecommendation",
+        data: JSON.stringify(ObjRecommendation),
+        type: 'POST',
+        async: false,
+        contentType: 'application/json; charset=utf-8'
+    })
+        .done(function (data) {
+            $('#messageAssessmentModal').html(data);
+            $('#messageModal').modal({ backdrop: "static" }, { keyboard: false });
+            $('#closemodaladd').click();
+            OnSuccess()
+        })
+        .fail(function (jqXHR, exception) {
+            $('#vermasdiv').text(TextError(jqXHR, exception));
+            $('#FailModal').modal({ backdrop: "static" }, { keyboard: false });
+        })
+        .always(function () {
+            loadingDiv.hide();
+        });
+}
+
+function editRecommendation() {
+
+    loadingDiv.show();
+    $.ajax({
+        url: "/AdminAssessmentRecommendation/UpdateRecommendation",
+        data: JSON.stringify(ObjRecommendation),
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8'
+    })
+        .done(function (data) {
+            $('#messageAssessmentModal').html(data);
+            $('#messageModal').modal({ backdrop: "static" }, { keyboard: false });
+            $('#closemodaledit').click();
+            OnSuccess()
+        })
+        .fail(function (jqXHR, exception) {
+            $('#vermasdiv').text(TextError(jqXHR, exception));
+            $('#FailModal').modal({ backdrop: "static" }, { keyboard: false });
+        })
+        .always(function () {
+            loadingDiv.hide();
+        });
+}

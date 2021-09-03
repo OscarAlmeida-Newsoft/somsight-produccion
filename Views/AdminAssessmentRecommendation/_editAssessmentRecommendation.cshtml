@@ -1,0 +1,96 @@
+﻿@model SOMSightModels.NS_TblRecommendation
+<div class="modal-header">
+
+    <h4 class="modal-title">Edit</h4>
+
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="row">
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <input type="hidden" id="txtRecommmendationId" readonly name="name" value="@Model.Id" />
+                <input type="hidden" id="txtAssessmentTypeId" readonly name="name" value="@Model.AssessmentTypeId" />
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Maturity level*</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <input type="hidden" id="MaturityLeveHidden" value="@Model.MaturityLevelId" />
+                    <div class="form-group">
+                        <select class="form-control" data-menssagerequired="Cannot add this option, because the Madurity level its was registered" id="txtEditNewOptionMaturity"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Translator Admin Name*</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" value="@Model.TranslatorAdministratorNameT" data-menssagerequired="The Translator Admin Name field is required" id="txtTextIdentifierName" class="form-control required" readonly />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <a href="#" data-textidentifier="txtTextIdentifierName" class="btn btn-sm btn-default ModalTextIdentifier"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <a title="View Translations" href="#" data-textidentifier="txtTextIdentifierName" class="btn btn-sm btn-default ViewTextIdentifier"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        <a href="#" data-textidentifier="txtTextIdentifierName" class="btn btn-sm btn-default ClearModalTextIdentifier"><i class="glyphicon glyphicon-erase"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Translator Admin Text*</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" value="@Model.TranslatorAdministratorTextT" data-menssagerequired="The Translator Admin Text is required" id="txtTextIdentifierText" class="form-control required" readonly />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <a href="#" data-textidentifier="txtTextIdentifierText" class="btn btn-sm btn-default ModalTextIdentifier"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <a title="View Translations" href="#" data-textidentifier="txtTextIdentifierText" class="btn btn-sm btn-default ViewTextIdentifier"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        <a href="#" data-textidentifier="txtTextIdentifierText" class="btn btn-sm btn-default ClearModalTextIdentifier"><i class="glyphicon glyphicon-erase"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Display Order</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="number" value="@Model.RecommendationOrder" data-menssagerequired="The Display order field is required" maxlength="3" class="form-control required" id="txtDisplayOrder" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 divmessageerror alert-danger">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="button" id="closemodaledit" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <input type="button" value="Edit" id="btnEditRecommendation" name="cmd" class="btn btn-success" />
+    </div>
+</div>

@@ -1,0 +1,32 @@
+﻿@model SOMSight.Models.Tenant.EditModuleImages
+<div class="modal-header">
+    <h4 class="modal-title">Edit</h4>
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="row">
+                @foreach (var item in Model.ModuleImageList)
+                {
+                    <label>@item.TraslatorAdministrator_NameTextIdent</label>
+                    <a href="#" class="btn btn-default upload-module-image" id="@item.Id"><i class="glyphicon glyphicon-upload"></i> Upload</a>
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                    <div class="text-center">
+                        @if (item.ImageName != null)
+                        {
+                            <img src="@item.ImageName?var=@DateTime.UtcNow.Millisecond" width="61" height="52" />
+                        }
+                    </div>
+                    <hr />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    </div>
+</div>
