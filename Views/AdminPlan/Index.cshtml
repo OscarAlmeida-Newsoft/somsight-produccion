@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "Admin Plans";
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/Custom/plans/somsightplans.js")"></script>
+}
+
+@Html.Partial("_Semaphore")
+
+<label id="GridListCallBack" class="hidden">@Url.Action("GridListCallBack")</label>
+<label id="NS_SortModuleURL" hidden>@Url.Action("SortPlan", "AdminPlan")</label>
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","AdminHome")">Home</a></li>
+    <li class="active">Admin Plans</li>
+</ol>
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Options <i class="glyphicon glyphicon-chevron-down"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <span>
+                    <a id="modyfy-button" class="btn btn-sm btn-default" onclick="toggleOrder()">Turn on modify order <i class="glyphicon glyphicon-sort"></i></a>
+                </span>
+                @*<span>
+                    <a href="@Url.Action("Filter")" id="filterTable" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-glass"></i> Filter</a>
+                </span>*@
+                <span class="botonesGestion">
+                    <a href="#" id="refreshTable" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-refresh"></i> Refresh</a>
+                </span>
+                <span class="botonesGestion">
+                    <a href="@Url.Action("Add")" id="add" class="btn btn-sm btn-default">
+                        <i class="glyphicon glyphicon-plus-sign"></i>
+                        Create
+                    </a>
+                </span>
+                <span class="botonesGestion">
+                    <a href="@Url.Action("Edit")" id="editRecord" class="btn btn-sm btn-default">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                        Edit
+                    </a>
+                </span>
+                <span class="botonesGestion">
+                    <a href="@Url.Action("GridPricesByRangeCallBack")" id="pricesByRange" class="btn btn-sm btn-default">
+                        <i class="glyphicon glyphicon-usd"></i>
+                        Prices By Range
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="grid-div">
+</div>
+
+<div id="button-div" style="display:none;margin-top:10px;">
+
+    <a class="btn btn-primary" onclick="saveOrder()">Save order</a>
+    <a class="btn btn-danger" onclick="cancelOption()">Cancel</a>
+</div>
+
+<div id="createModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div id="Create" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div id="editModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div id="Edit" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+
+
+<div id="filterModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="Filter" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+<div id="PricesModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div id="Prices" class="modal-content">
+
+        </div>
+    </div>
+</div>
+

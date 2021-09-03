@@ -1,0 +1,252 @@
+﻿@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+@model SOMSight.Models.Account.EditProfileVM
+
+@{
+    var _user = @Session.GetCurrentUser();
+
+    ViewBag.Title = "Edit Profile";
+    Layout = "~/Views/Shared/_LayoutLogged.cshtml";
+}
+
+
+<!--================================= HEADER ======================================-->
+<!--================================= TITULO ======================================-->
+@*<div class="titulo rojo">
+    <div class="centro">
+        <h1>Edit Profile</h1>
+    </div>
+</div>*@
+
+
+<!--================================================-->
+<!--================================================-->
+<!--================================================-->
+<!--================================================-->
+<div class="container" id="titulo_general">
+    <div class="centro">
+        <!--================================================-->
+        @*<a class="logo" target="_self"><img src="@Url.Content("~/images/logo.png")" width="300" height="84" alt=""></a>*@
+        <!--<h1>Software Update General Form</h1>-->
+
+
+
+
+
+
+
+        <h1 class="titulo">
+            <span class="texto">@TranslatorHelper.TranslateTextByIdentifier("edit_profile_text")</span>
+
+        </h1>
+
+
+    </div>
+
+
+</div>
+<!--================================= HEADER ======================================-->
+
+
+<!--================================= TITULO ======================================-->
+<!--================================= PAGINA ======================================-->
+<div id="pagina" class="formulario registration">
+    <div class="seccion">
+        <div class="centro">
+            @*<h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam viverra nulla sed ex varius placerat. Duis eget convallis justo, rutrum euismod diam. Donec fermentum, tellus id vestibulum imperdiet, turpis ex consectetur metus, id congue sapien sem efficitur turpis. Praesent diam nulla, auctor vitae libero eu.</h3>*@
+
+            @using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "formulario" })) {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x => x.IdIndustry_Id)
+                @Html.HiddenFor(x => x.UserName)
+                @Html.HiddenFor(x => x.EmailConfirmed)
+                @Html.ValidationSummary("", new { @class = "lista-texto-validacion" })
+                <div>
+                    @if (ViewBag.EditProfileSuccess == true) {
+                        <h2 style="color: #39a70c">@TranslatorHelper.TranslateTextByIdentifier("edit_profile_success_text")</h2>
+                    }
+                </div>
+                @*<hr />*@
+
+                <div class="fila">
+                    <div class="izk tooltip">
+                        @Html.LabelFor(m => m.IsCorporate)
+                        <div class="controls">
+                            <label class="radio">
+                                @Html.RadioButtonFor(m => m.IsCorporate, true)
+                                @TranslatorHelper.TranslateTextByIdentifier("register_radio_corporate")
+                            </label>
+
+                            <label class="radio">
+                                @Html.RadioButtonFor(m => m.IsCorporate, false)
+                                @TranslatorHelper.TranslateTextByIdentifier("register_radio_personal")
+                            </label>
+
+
+
+                        </div>
+
+
+
+                        @Html.ValidationMessageFor(m => m.IsCorporate, "", new { @class = "texto-validacion" })
+
+
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.CompanyName)
+                        @Html.TextBoxFor(m => m.CompanyName)
+                        @Html.ValidationMessageFor(m => m.CompanyName, "", new { @class = "texto-validacion" })
+                    </div>
+                    <div class="der">
+                        @Html.LabelFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email, new { @readonly = true })
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.ContactName)
+                        @Html.TextBoxFor(m => m.ContactName)
+                        @Html.ValidationMessageFor(m => m.ContactName, "", new { @class = "texto-validacion" })
+                    </div>
+                    <div class="der">
+                        @Html.LabelFor(m => m.ContactLastName)
+                        @Html.TextBoxFor(m => m.ContactLastName)
+                        @Html.ValidationMessageFor(m => m.ContactLastName, "", new { @class = "texto-validacion" })
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.JobPosition)
+                        @Html.TextBoxFor(m => m.JobPosition)
+                        @Html.ValidationMessageFor(m => m.JobPosition, "", new { @class = "texto-validacion" })
+                    </div>
+                    <div class="der">
+                        @Html.LabelFor(m => m.Phone)
+                        @Html.TextBoxFor(m => m.Phone)
+                        @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "texto-validacion" })
+                    </div>
+                </div>
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.NumberOfEmployees)
+                        @Html.TextBoxFor(m => m.NumberOfEmployees, new { @type = "number" })
+                        @Html.ValidationMessageFor(m => m.NumberOfEmployees, "", new { @class = "texto-validacion" })
+                    </div>
+                    <div class="der">
+                        @Html.LabelFor(m => m.NumberOfDevices)
+                        @Html.TextBoxFor(m => m.NumberOfDevices, new { @type = "number" })
+                        @Html.ValidationMessageFor(m => m.NumberOfDevices, "", new { @class = "texto-validacion" })
+                    </div>
+                </div>
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.CountryName)
+                        @Html.TextBoxFor(m => m.CountryName, new { @readonly = true })
+                        @Html.ValidationMessageFor(m => m.CountryName, "", new { @class = "texto-validacion" })
+                    </div>
+                    <div class="der">
+                        @Html.LabelFor(m => m.StateName)
+                        @Html.TextBoxFor(m => m.StateName, new { @readonly = true })
+                        @Html.ValidationMessageFor(m => m.StateName, "", new { @class = "texto-validacion" })
+                    </div>
+                </div>
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.City)
+                        @Html.TextBoxFor(m => m.City)
+                        @Html.ValidationMessageFor(m => m.City, "", new { @class = "texto-validacion" })
+                    </div>
+                    <div class="der">
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk">
+
+                    </div>
+                </div>
+                <hr class="normal" />
+
+
+
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.Linkedin)
+                        @Html.TextBoxFor(m => m.Linkedin)
+                        @Html.ValidationMessageFor(m => m.Linkedin, "", new { @class = "texto-validacion" })
+                    </div>
+
+                    <div class="der">
+                        @Html.LabelFor(m => m.Facebook)
+                        @Html.TextBoxFor(m => m.Facebook)
+                        @Html.ValidationMessageFor(m => m.Facebook, "", new { @class = "texto-validacion" })
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.Instagram)
+                        @Html.TextBoxFor(m => m.Instagram)
+                        @Html.ValidationMessageFor(m => m.Instagram, "", new { @class = "texto-validacion" })
+                    </div>
+
+                    <div class="der">
+                        @Html.LabelFor(m => m.Youtube)
+                        @Html.TextBoxFor(m => m.Youtube)
+                        @Html.ValidationMessageFor(m => m.Youtube, "", new { @class = "texto-validacion" })
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.Twitter)
+                        @Html.TextBoxFor(m => m.Twitter)
+                        @Html.ValidationMessageFor(m => m.Twitter, "", new { @class = "texto-validacion" })
+                    </div>
+
+                    <div class="der">
+                        @*@Html.LabelFor(m => m.Google)
+                    @Html.TextBoxFor(m => m.Google)
+                    @Html.ValidationMessageFor(m => m.Google, "", new { @class = "texto-validacion" })*@
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.PersonalMail1)
+                        @Html.TextBoxFor(m => m.PersonalMail1)
+                        @Html.ValidationMessageFor(m => m.PersonalMail1, "", new { @class = "texto-validacion" })
+                    </div>
+
+                    <div class="der">
+                        @Html.LabelFor(m => m.PersonalMail2)
+                        @Html.TextBoxFor(m => m.PersonalMail2)
+                        @Html.ValidationMessageFor(m => m.PersonalMail2, "", new { @class = "texto-validacion" })
+                    </div>
+                </div>
+
+                <div class="fila">
+                    <div class="izk">
+                        @Html.LabelFor(m => m.PersonalMail3)
+                        @Html.TextBoxFor(m => m.PersonalMail3)
+                        @Html.ValidationMessageFor(m => m.PersonalMail3, "", new { @class = "texto-validacion" })
+                    </div>
+
+                    <div class="der">
+                    </div>
+                </div>
+                <hr class="normal" />
+                <div class="fila centrada">
+                    <input style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor;color: @_user.TenantSkin.TenantStyleTertiaryFontColor;" name="boton" type="submit" class="boton" value="@TranslatorHelper.TranslateTextByIdentifier("save_text")">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!--================================= PAGINA ======================================-->
+

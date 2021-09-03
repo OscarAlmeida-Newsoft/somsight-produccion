@@ -1,0 +1,164 @@
+﻿@using SOMSight.Utils
+@using SOMSight.Utils.Extensions
+
+@model SOMSight.Models.AssessmentPackageVM
+
+@{
+    var _user = Session.GetCurrentUser();
+}
+
+<div id="modal-warning-advanced-assessment" class="modal alerta red">
+    <div class="titulo" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor;">
+        <h1 style="color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Warning")</h1>
+    </div>
+    <div class="contenido">
+        <h2>@TranslatorHelper.TranslateTextByIdentifier("Modal_Warning_Advanced_Assessment_Title")</h2>
+        <p>
+            @TranslatorHelper.TranslateTextByIdentifier("Modal_Warning_Advanced_Assessment_Body")
+        </p>
+        <a href="#" target="_self" class="button" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_OK")</a>
+    </div>
+</div>
+
+<div id="modal-assessment-advanced" class="modal alerta blue">
+    <div class="titulo" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor;">
+        <h1 style="color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Excellent")</h1>
+    </div>
+    <div class="contenido">
+        <h2>@TranslatorHelper.TranslateTextByIdentifier("Modal_Advanced_Assessment_Title")</h2>
+        <p>
+            @TranslatorHelper.TranslateTextByIdentifier("Modal_Advanced_Assessment_Body")
+        </p>
+        <a href="#" target="_self" class="button" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_OK")</a>
+    </div>
+</div>
+
+<div id="modal-assessment-advanced-recommendations" class="modal alerta blue">
+    <div class="titulo" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor;">
+        <h1 style="color: @_user.TenantSkin.TenantStylePrimaryFontColor;">
+            @TranslatorHelper.TranslateTextByIdentifier("Modal_General_Excellent")
+        </h1>
+    </div>
+    <div class="contenido">
+        <h2>@TranslatorHelper.TranslateTextByIdentifier("Modal_Advanced_Assessment_Recomm_Title")</h2>
+        <p>
+            @TranslatorHelper.TranslateTextByIdentifier("Modal_Advanced_Assessment_Recomm_Body")
+        </p>
+        <a href="#" target="_self" class="button" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_OK")</a>
+    </div>
+</div>
+
+
+
+
+@if (Model.AdvancedAssessmentMode.Assessment != null)
+{
+    @*SIEMPRE QUE SE ABRA ESTE MODAL SERA PARA CREAR UNA NUEVA VERSIÓN DEL ASSESSMENT*@
+    <div id="modal-assessment-version-advanced-question" class="modal modal-version">
+        <div class="titulo" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor;">
+            <h1 style="color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_Version_Basic_Title")</h1>
+        </div>
+        <div class="contenido">
+            <h2>@TranslatorHelper.TranslateTextByIdentifier("Modal_Version_Basic_Content_Title")</h2>
+
+            <div class="button-container">
+                <a href="#" target="_self" class="btn_go_for_it answers standard_margin version_advanced_open_modal">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_View_Answers")<span style="background-image: url('../../images/icono_go_for_it-negro.png');"></span></a>
+
+                @*HAY QUE CHEQUEAR SI HAY ASSESSMENT EN PROGRESO O SI HAY QUE CREAR UNO NUEVO*@
+                @if (Model.AdvancedAssessmentMode.Assessment.AssessmentVersion <= 5)
+                {
+                    if (Model.AdvancedAssessmentMode.Assessment.DownloadPDF && Model.AdvancedAssessmentMode.Assessment.AssessmentVersion < 5)
+                    {
+                        if (Model.BasicAssessmentMode.Assessment.ResponseStartDate == null || Model.BasicAssessmentMode.Assessment.ResponseEndDate != null)
+                        {
+                            <a onclick="gAnalytics.throwRedirectEvent('Click Start', 'Advanced Assestments', '@TranslatorHelper.TranslateTextByIdentifier(@Model.TranslatorAdministratorTI)','@Url.Action("AssessmentQuestionsAdvanced", "AssessmentBoard", new { @pAssessmentTypeId = Model.AssessmentTypeId, @pAssessmentVersion = Model.AdvancedAssessmentMode.Assessment.AssessmentVersion+1})')" href="#" class="btn_go_for_it standard_margin">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Do_It_Again")<span style="background-image: url('../../images/icono_go_for_it-negro.png');"></span></a>
+                        }
+                        else
+                        {
+                            <a href="#" class="btn_go_for_it standard_margin warning_advanced_assessment_open_modal">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Do_It_Again")<span style="background-image: url('../../images/icono_go_for_it-negro.png');"></span></a>
+                        }
+                    }
+                    else
+                    {
+                        if (Model.BasicAssessmentMode.Assessment.ResponseStartDate == null || Model.BasicAssessmentMode.Assessment.ResponseEndDate != null)
+                        {
+                            <a onclick="gAnalytics.throwRedirectEvent('Click Start', 'Advanced Assestments', '@TranslatorHelper.TranslateTextByIdentifier(@Model.TranslatorAdministratorTI)','@Url.Action("AssessmentQuestionsAdvanced", "AssessmentBoard", new { @pAssessmentTypeId = Model.AssessmentTypeId, @pAssessmentVersion = Model.AdvancedAssessmentMode.Assessment.AssessmentVersion})')" href="#" class="btn_go_for_it standard_margin">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Do_It_Again")<span style="background-image: url('../../images/icono_go_for_it-negro.png');"></span></a>
+                        }
+                        else
+                        {
+                            <a href="#" class="btn_go_for_it standard_margin warning_advanced_assessment_open_modal">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Do_It_Again")<span style="background-image: url('../../images/icono_go_for_it-negro.png');"></span></a>
+                        }
+                    }
+
+                }
+            </div>
+
+
+            <a href="#" target="_self" class="button" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Close")</a>
+        </div>
+    </div>
+
+    <div id="modal-assessment-version-advanced" class="modal modal-version">
+        <div class="titulo" style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor;">
+            <h1 style="color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier(Model.TranslatorAdministratorTI) @TranslatorHelper.TranslateTextByIdentifier("Nivel_Racionalizado")</h1>
+        </div>
+        <div class="contenido">
+            <h2>@TranslatorHelper.TranslateTextByIdentifier("Modal_Version_Basic_Assessment_Version")</h2>
+            <table id="versions" border="1">
+                <thead>
+                    <tr>
+                        <th style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_Version_Basic_Assessment_Version")</th>
+                        <th style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_Version_Basic_Related_Basic_Version")</th>
+                        <th style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_View")</th>
+                        <th style="background-color: @_user.TenantSkin.TenantStylePrimaryBackgroundColor; color: @_user.TenantSkin.TenantStylePrimaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Download")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.AdvancedAssessmentMode.Assessment.AssessmentVersionsList != null && Model.AdvancedAssessmentMode.Assessment.AssessmentVersionsList.Count > 0)
+                {
+                    foreach (var currentVersion in Model.AdvancedAssessmentMode.Assessment.AssessmentVersionsList)
+                    {
+                        if (currentVersion.IsInProgress || currentVersion.DownloadPDF)
+                        {
+                                <tr>
+                                    <td>V @currentVersion.AssessmentVersion.0</td>
+                                    <td>V @currentVersion.RelatedBasicVersion.0</td>
+                                    @if (currentVersion.DownloadPDF)
+                                    {
+                                        <td>
+                                            <a href="@Url.Action("AssessmentQuestionsAdvanced","AssessmentBoard", new { @pAssessmentTypeId = currentVersion.AssessmentTypeId, @pAssessmentVersion = currentVersion.AssessmentVersion })" class="modal-button-view" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_View")</a>
+                                        </td>
+                                        <td>
+                                            @if (currentVersion.HasAdvancedRecommendations) {
+                                                @*<a onclick="gAnalytics.throwRedirectEvent('Click Download', 'Advanced Assestments', '@TranslatorHelper.TranslateTextByIdentifier(@Model.TranslatorAdministratorTI)','@Url.Action("GetAssessmentAdvancedRecommendations", "AssessmentQuestions", new { @pAssessmentTypeId = currentVersion.AssessmentTypeId, @pAssessmentVersion= currentVersion.AssessmentVersion})')" href="#" class="modal-button-download" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Download")</a>*@
+                                                <a onclick="gAnalytics.throwRedirectEvent('Click Download', 'Advanced Assestments', '@TranslatorHelper.TranslateTextByIdentifier(@Model.TranslatorAdministratorTI)','@Url.Action("ViewAssessmentAdvancedRecommendations", "AssessmentQuestions", new { @pAssessmentTypeId = currentVersion.AssessmentTypeId, @pAssessmentVersion= currentVersion.AssessmentVersion})')" href="#" class="modal-button-download" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Download")</a>
+                                            } else {
+                                                <p class="recommendations-message">
+                                                    @Html.Raw(@TranslatorHelper.TranslateTextByIdentifier("Modal_Version_Adv_Assessment_Version"))
+                                                </p>
+                                            }
+
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @if (currentVersion.IsInProgress)
+                                            {
+                                                <a href="@Url.Action("AssessmentQuestionsAdvanced","AssessmentBoard", new { @pAssessmentTypeId = currentVersion.AssessmentTypeId, @pAssessmentVersion = currentVersion.AssessmentVersion })" class="modal-button-view" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Continue")</a>
+                                            }
+                                        </td>
+                                        <td></td>
+                                    }
+                                </tr>
+                            }
+
+                        }
+                    }
+                </tbody>
+
+            </table>
+            <a href="#" target="_self" class="button" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">@TranslatorHelper.TranslateTextByIdentifier("Modal_General_Close")</a>
+        </div>
+    </div>
+}

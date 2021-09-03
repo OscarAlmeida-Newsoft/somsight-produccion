@@ -1,0 +1,176 @@
+﻿@model SOMSight.Models.Modularity.IndexModularityViewModel
+@using SOMSight.Utils
+
+@{
+    ViewBag.Title = "Manage Modularity";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<label id="NS_SortModuleURL" hidden>@Url.Action("SortModule", "Modularity")</label>
+<label id="NS_UseAsTemplateURL" hidden>@Url.Action("UseModuleAsTemplate", "Modularity")</label>
+
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","AdminHome")">Home</a></li>
+    <li class="active">Manage modularity</li>
+</ol>
+
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Options <i class="glyphicon glyphicon-chevron-down"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <span>
+                    <a id="modyfy-button" class="btn btn-default" onclick="toggleOrder()">Turn on modify order <i class="glyphicon glyphicon-sort"></i></a>
+                </span>
+                @*<span>
+                        <a href="#" id="refreshTable" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-refresh"></i> Refresh</a>
+                    </span>*@
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model.ModuleList.Count != 0)
+{
+    <table id="gridTable" class="hover table-bordered stripe" cellspacing="0" width="100%">
+        <thead class="cell-border" id="TH">
+            <tr class="table-header">
+                <th class="text-center text-uppercase">
+                    <label>Module Name</label>
+                </th>
+
+                <th class="text-center text-uppercase" >
+                    <label> Edit</label>
+                </th>
+                <th class="text-center text-uppercase" >
+                    <label> Edit submodules</label>
+                </th>
+                <th class="text-center text-uppercase">
+                    <label>Use as template</label>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ModuleList)
+            {
+                <tr data-moduleid="@item.Id" class="table-item">
+                    @*<td class="text-center" style="width: 2% !important;">@Html.Label(item.Id.ToString())</td>*@
+                    <td class="text-center" style="width:40% !important;">@Html.Label(TranslatorHelper.TranslateTextByIdentifier(item.TraslatorAdministrator_NameTextIdent))</td>
+                    <td class="text-center">
+                        <a class="btn btn-default" href="@Url.Action("EditModule", new {pModuleID = item.Id })">
+                            Edit
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        @*<a class="btn btn-primary" href="@Url.Action("EditModule", new {pModuleID = item.Id })">
+                                Edit submodule
+                            </a>*@
+                        @if (item.HasSubmodules)
+                        {
+                            <a class="btn btn-default" href="@Url.Action("EditSubModule","Modularity", new { pModuleID = item.Id})">Edit submodules <i class="glyphicon glyphicon-edit"></i></a>
+                        }
+                        else
+                        {
+                            <i class="glyphicon glyphicon-minus-sign not-icon"></i>
+                        }
+                        
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-default useAsTemplate" data-moduleid="@item.Id">
+                            Use as template
+                            <i class="glyphicon glyphicon-list"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-center text-nowrap" style="text-align:center;"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div id="button-div" style="display:none;">
+        <a class="btn btn-primary" onclick="saveOrder()">Save</a>
+        <a class="btn btn-danger" onclick="cancelOption()">Cancel</a>
+    </div>
+}
+else
+{
+    <div class="mensaje_alerta" style="display:block">
+        <p>There are not created modules.</p>
+    </div>
+}
+
+
+
+<div id="useAsTemplate" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><span id="">Assign module constraint to other modules</span></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="campaign">Target module</label>
+                        @Html.DropDownList("ModuleList", Model.SelectList, @TranslatorHelper.TranslateTextByIdentifier("Old_SelectDropDownAdmin"), new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Cancelar")</button>
+                    <button type="button" class="btn btn-primary " onclick="copyConfiguration()">@TranslatorHelper.TranslateTextByIdentifier("Semaforo_Boton_Ok")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @*<script type="text/javascript" src="@Url.Content("~/Scripts/Custom/bootbox.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/Custom/modularity/IndexManageConstraint.js")"></script>
+
+    @Html.Partial("_Semaphore")
+
+    <script>
+        $(document).ready(function () {
+            var ventana_alto = $(window).innerHeight();
+            ventana_alto = (ventana_alto > 900) ? (ventana_alto / 1.8) : (ventana_alto / 3);
+            var table = $('#gridTable').DataTable({
+                "columnDefs": [
+                { "width": "20%", "targets": 0 }
+                ],
+                "scrollY": ventana_alto,
+                "scrollX": true,
+                "info": false,
+                "paging": false,
+                "ordering": false,
+                "filter": false
+            });
+
+            $('#TH').resize(function () {
+
+                table.columns.adjust();
+            })
+
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        });
+    </script>
+}
+
+
+

@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "My Assessments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/Custom/assessment/assessment.js")"></script>
+}
+
+
+<!--================================= MODAL (CONFIRMACION OK) ======================================-->
+<div class="opacidad alerta"></div>
+<div class="modal alerta blue">
+    <div class="titulo">
+        <h1>Excellent!</h1>
+    </div>
+    <div class="contenido">
+        <h2>You have finished the assesment.</h2>
+        <p>Now you can download a document with our recommendations.</p>
+        <a href="#" target="_self" class="button">OK</a>
+    </div>
+</div>
+
+
+<div id="valla" style="background-image:url(@Url.Content("~/Images/valla_participate_assesments.jpg")">
+    <div class="opacity">
+        <h1>Participate in Assesments</h1>
+    </div>
+</div>
+
+<label id="NS_GridUrlActionGridCallBack" hidden>@Url.Action("GridListMyAssessmentCallback")</label>
+
+<div id="pagina" class="gris">
+    <div class="seccion">
+        <div class="centro">
+            <div id="grid-div">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+    var isFinalAssessment = '@ViewBag.IsFinalAssessment';
+
+    $(function () {
+        
+        if (isFinalAssessment == "True") {
+            loadingDiv.show();
+            setTimeout(function () {  ShowModal(); }, 1000);
+        }
+
+        $(document).on("click", '.alerta .button', function () {
+            $(".opacidad.alerta").hide();
+            $(".modal.alerta").hide();
+        });
+    });
+
+    
+</script>
+
+

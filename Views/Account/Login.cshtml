@@ -1,0 +1,106 @@
+﻿@using SOMSight.Models
+@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+
+@model LoginVM
+@{
+    var _user = @Session.GetDataWithOutLogin();
+
+
+    ViewBag.Title = @TranslatorHelper.TranslateTextByIdentifier("login_text").ToString().Substring(0,1).ToUpper() + @TranslatorHelper.TranslateTextByIdentifier("login_text").ToString().Substring(1, @TranslatorHelper.TranslateTextByIdentifier("login_text").ToString().Length -1).ToLower();
+    ViewBag.LogoUrl = Url.Action("Index", "Home");
+}
+
+<!--================================= TITULO ======================================-->
+<div class="titulo azuloscuro small" style="background-color: @_user.TenantSkin.TenantStyleSecondaryBackgroundColor !important;">
+    <div class="centro">
+        <h1 class="mayusculainicial" style="color: @_user.TenantSkin.TenantStyleSecondaryFontColor !important;">@TranslatorHelper.TranslateTextByIdentifier("login_text")</h1>
+    </div>
+</div>
+<!--================================= TITULO ======================================-->
+
+<div id="pagina" class="formulario registration">
+    <div class="seccion">
+        <div class="centro">
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "formulario" }))
+        {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "lista-texto-validacion" })
+
+                <h3 class="menos_margen">E-mail</h3>
+                <div class="reenter">
+                    @Html.TextBoxFor(m => m.Email, new { @id = "enter_email" })
+                    <br/>
+                    <span>
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "texto-validacion"})
+                    </span>
+                    <br />
+                </div>
+
+                <h3 class="menos_margen mayusculainicial">@TranslatorHelper.TranslateTextByIdentifier("password_text")</h3>
+                <div class="reenter">
+                    @Html.PasswordFor(m => m.Password, new { @id = "enter_email" })
+                    <br/>
+                    <span>
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "texto-validacion" })
+                    </span>
+                    
+                    <br />                    
+                </div>
+                <div class="reenter">
+                    <span>
+                        <a href="@Url.Action("ForgotPassword","Account")" target="_self" style="font-size:14px;">@(TranslatorHelper.TranslateTextByIdentifier("forgot_password_text").ToString().Substring(0, 1).ToUpper() + TranslatorHelper.TranslateTextByIdentifier("forgot_password_text").ToString().Substring(1, TranslatorHelper.TranslateTextByIdentifier("forgot_password_text").ToString().Length - 1).ToLower())</a>
+                    </span>
+                    <br />                    
+                </div>
+                <div class="reenter">                    
+                    <br />
+                </div>
+
+                <div class="fila centrada">
+                    <input name="boton" type="submit" class="boton" value="@TranslatorHelper.TranslateTextByIdentifier("login_text")" style="background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor;">
+                </div>
+                <div class="fila centrada">  
+                     &nbsp;
+                     
+                </div>                
+                
+                <div class="fila centrada">
+                    <br /> 
+                    <span>
+                        <a href="@Url.Action("Register","Account")" target="_self" class="btn" style="font-size:14px;">@(TranslatorHelper.TranslateTextByIdentifier("create_new_account_text").ToString().Substring(0, 1).ToUpper() + TranslatorHelper.TranslateTextByIdentifier("create_new_account_text").ToString().Substring(1, TranslatorHelper.TranslateTextByIdentifier("create_new_account_text").ToString().Length - 1).ToLower())</a>
+                    </span>
+                    <br />
+                    <br/>
+                </div>
+                
+        }
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $(document).ready(function () {
+        $(document).on('blur', '#enter_email', function () {
+            var EmailVal = $('#enter_email').val().trim();
+
+            $('#enter_email').val(EmailVal);
+            console.log(EmailVal);
+        })
+
+        var isFirstLogin = '@ViewBag.isFirstLogn';
+        console.log(isFirstLogin);
+        if (isFirstLogin === 'True') {
+            gAnalytics.throwNormalEvent("Ad User Registration", "AdWords", "first-login");
+        }
+    })
+
+
+</script>
+}
+
+

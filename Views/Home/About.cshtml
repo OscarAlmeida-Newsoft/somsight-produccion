@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>Use this area to provide additional information.</p>
+<div id="paypal-button-container"></div>
+
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+<script>
+    paypal.Button.render({
+
+        env: 'sandbox', // sandbox | production
+
+        // Show the buyer a 'Pay Now' button in the checkout flow
+        commit: true,
+
+        // payment() is called when the button is clicked
+        payment: function () {
+
+            //TODO: Change url to WebConfig
+            // Set up a url on your server to create the payment
+            //var CREATE_URL = '/Home/CreatePaymentLightBox/';
+            var CREATE_URL = '/Paypal/CreatePayment/';
+
+            data = {
+                planId: 'P-91280017A3850360XLP7J2HQ'
+            };
+
+            // Make a call to your server to set up the payment
+            return paypal.request.post(CREATE_URL,data)
+                .then(function (data) {
+                    //return data.paymentID;
+                    return data.agreementID;
+                });
+        },
+
+        // onAuthorize() is called when the buyer approves the payment
+        onAuthorize: function (data, actions) {
+            console.log(data);
+            //TODO: Change url to WebConfig
+            // Set up a url on your server to execute the payment
+            //var EXECUTE_URL = '/Home/PaymentExcecute/';
+            var EXECUTE_URL = '/Paypal/PaymentExcecute/';
+
+            // Set up the data you need to pass to your server
+            var data = {
+                //paymentID: data.paymentID,
+                paymentID: data.paymentToken,
+                payerID: data.payerID
+            };
+
+            // Make a call to your server to execute the payment
+            return paypal.request.post(EXECUTE_URL, data)
+                .then(function (res) {
+                    console.log(res);
+                    window.alert('Payment Complete!');
+                });
+        }
+
+    }, '#paypal-button-container');
+</script>

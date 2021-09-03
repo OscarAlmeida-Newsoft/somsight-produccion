@@ -1,0 +1,166 @@
+﻿@using SOMSight.Utils
+
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<!--================================= ROTATOR ======================================-->
+<div class="container" id="rotator" style="background-image:url(@Url.Content("~/images/banner_2018_01.jpg"))">
+    <div class="content">
+        <h1>@TranslatorHelper.TranslateTextByIdentifier("SOMSighMainProductDescription")</h1><ul class="bxslider">
+            <li> <h2>@TranslatorHelper.TranslateTextByIdentifier("MainSliderText1")</h2></li>
+            <li><h2>@TranslatorHelper.TranslateTextByIdentifier("MainSliderText2")</h2></li>
+            <li> <h2>@TranslatorHelper.TranslateTextByIdentifier("MainSliderText3")</h2></li>
+            <li><h2>@TranslatorHelper.TranslateTextByIdentifier("MainSliderText4")</h2></li>
+        </ul>
+    </div>
+
+</div>
+<!--================================= ROTATOR ======================================-->
+<!--================================= OUR SOLUTIONS ======================================-->
+@Html.Partial("_OurSolutions", 0)
+<!--================================= OUR SOLUTIONS ======================================-->
+<!--================================= OUR PRODUCTS ======================================-->
+@*@Html.Partial("_OurProducts")*@
+<!--================================= OUR PRODUCTS ======================================-->
+<!--================================= PLANS ======================================-->
+@*@Html.Partial("_OurPlans", Model)*@
+
+<div class="container trial">
+    <div class="content">
+        <h2>@TranslatorHelper.TranslateTextByIdentifier("Start_With_A_Free_Trial_Text")</h2>
+        <h3>@TranslatorHelper.TranslateTextByIdentifier("Start_With_A_Free_Trial_Text_Desc")</h3>
+    </div>
+</div>
+@*<div id="plans-div">
+</div>*@
+
+<!--================================= PLANS ======================================-->
+<!--================================= ABOUT US ======================================-->
+@Html.Partial("_AboutUs")
+<!--================================= ABOUT US ======================================-->
+
+@{ 
+
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('.bxslider').bxSlider({
+                auto: true,
+                pause: 10000,
+                speed: 700,
+                autoHover: false,
+                pager: true,
+                controls: false,
+                nextText: 'slidenext',
+                prevText: 'slideprev',
+                adaptiveHeight: true
+            });
+
+        });
+
+        var _selectedRange = 1;
+        var _somsightPlanId = undefined;
+        var _paymentTypeCycle = undefined;
+        var _paymentCycle = 1;
+
+        $(document).ready(function () {
+            LoadPrice(_paymentCycle, _selectedRange);
+            //_somsightPlanId = $('input[name=item]:checked').data("somsightplanid");
+            //_paymentTypeCycle = $('input[name=item]:checked').data("paymenttypecycle");
+
+            //LoadPrice(_somsightPlanId, _paymentTypeCycle, _selectedRange);
+
+            //$(document).on('change', 'input[name=item]', function () {
+            //    _somsightPlanId = $('input[name=item]:checked').data("somsightplanid");
+            //    _paymentTypeCycle = $('input[name=item]:checked').data("paymenttypecycle");
+
+            //    loadingDiv.show();
+            //    LoadPrice(_somsightPlanId, _paymentTypeCycle, _selectedRange);
+            //});
+
+            $(document).on('change', '#PlanRange', function () {
+                _selectedRange = $('option:selected').val();
+                loadingDiv.show();
+                LoadPrice(_paymentCycle, _selectedRange);
+            });
+
+
+            $(document).on('click', '.purchase_now', function () {
+                var selectedPlan = 0;
+                selectedPlan = $(this).data('plan-id');
+
+                loadingDiv.show();
+                var redirectUrl = '@Url.Action("Register", "Account")' + "?pSOMSightPlanId=" + selectedPlan + "&pPaymentTimeCycle=" + _paymentCycle + "&pPlanRange=" + _selectedRange;
+                //alert(redirectUrl);
+                gAnalytics.throwRedirectEvent("Click Paypal button home", "Paypal", redirectUrl);
+            });
+        });
+
+        function onChangePlanSelection(paymentCycle) {
+            _paymentCycle = paymentCycle;
+            loadingDiv.show();
+            LoadPrice(_paymentCycle, _selectedRange);
+        }
+
+        function LoadPrice(pPaymentTimeCycle, pPlanRange) {
+
+        $.ajax({
+                url: "@Url.Action("LoadPlanInfo", "Plan")" + "?paymentTimeCicle=" + pPaymentTimeCycle + "&planRange=" + pPlanRange,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8'
+            })
+        .done(function (data) {
+            var owl_01 = $(".owl-carousel");
+            owl_01.trigger('destroy.owl.carousel');
+            owl_01.find('.owl-stage-outer').children().unwrap();
+            owl_01.removeClass("owl-center owl-loaded owl-text-select-on");
+            //console.log(data);
+            $('#plans-div').html(data);
+
+            // check the year/month selection
+            if (pPaymentTimeCycle == 1) {
+                $('#month').prop('checked', true);
+                $('#year').prop('checked', false);
+            } else {
+                $('#month').prop('checked', false);
+                $('#year').prop('checked', true);
+            }
+
+            //Se the selected Opcion
+            $('#PlanRange').val(pPlanRange)
+
+            owl_01 = $(".owl-carousel");
+            owl_01.owlCarousel({
+                margin: 8,
+                autoHeight: true,
+                responsiveClass: true,
+                loop: false,
+                pagination: true,
+                nav: true,
+                responsive: {
+                    0: {
+                        items: 1,
+                    },
+                    760: {
+                        items: 3,
+                    }
+                },
+
+            });
+            return false;
+
+        })
+        .fail(function (jqXHR, exception) {
+            console.log(exception);
+        })
+        .always(function () {
+            loadingDiv.hide();
+        });
+        }
+    </script>
+}
+

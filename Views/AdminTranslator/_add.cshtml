@@ -1,0 +1,239 @@
+﻿@model SOMSight.Models.Translator.CreateTranslatorVM
+
+<div class="modal-header">
+    <h4 class="modal-title">Create</h4>
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TextIdentifier, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        @Html.TextBoxFor(model => model.TextIdentifier, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TextIdentifier, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DefaultText, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        @Html.TextAreaFor(m => m.DefaultText, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.DefaultText, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Classification, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        @Html.DropDownListFor(model => model.Classification, Model.ClassificationList, "--Select--", new { @class = "form-control" })
+                                                
+                        @Html.ValidationMessageFor(model => model.Classification, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+
+            @Html.HiddenFor(m => m.languagesJson, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.languagesJson, "", new { @class = "text-danger" })
+            @Html.Hidden("UrlLanguagesItems", Url.Action("getAllLanguagesItems","AdminTranslator"))
+
+            <div class="row">
+                <!--Kendo===================================================================================================================-->
+                <div id="example">
+                    <div id="grid"></div>
+
+                    <script>
+                        $.validator.setDefaults({ ignore: '' });
+
+                        /*Load languages for grid=====================================*/
+
+                        var defaultLanguage;
+
+                        var dropdownValues = [
+                            { Name: "Spanish", ID: "es-ES" },
+                            { Name: "English", ID: "en-US" }
+                        ];
+
+                        callApiRestData($("#UrlLanguagesItems").val())
+                            .done(function (data, status) {
+                                if (status == "success" && data && data.length > 0) {
+                                    dropdownValues = [];
+                                    defaultLanguage = '';
+                                    $.each(data, function (index, item) {
+                                        if (defaultLanguage == '')
+                                            defaultLanguage = item.LanguageCode;
+                                        dropdownValues.push({ Name: item.TranslationText, ID: item.LanguageCode });
+                                    });
+                                }
+                            })
+                            .fail(function (qXHR, exception) {
+                                console.log(JSON.stringify(error));
+                                swal('Error', JSON.stringify(error), 'error');
+                            })
+                            .always(function () {
+                                loadingDiv.hide();
+                            });
+
+                        /*End Load languages for grid======================================*/
+
+                        var tempSavedRecords = null;
+                        data = [];
+                        counter = data.length;
+
+                        var dataSource = new kendo.data.DataSource({
+                            transport: {
+                                read: function (o) {
+                                    //pass the date
+                                    o.success(data);
+                                },
+                                create: function (o) {
+                                    var item = o.data;
+                                    //assign a unique ID and return the record
+                                    counter++;
+                                    item.Id = counter;
+                                    o.success(item);
+                                },
+                                update: function (o) {
+                                    o.success();
+                                },
+                                destroy: function (o) {
+                                    o.success();
+                                }
+                            },
+                            schema: {
+                                model: {
+                                    id: "LanguageCode",
+                                    fields: {
+                                        LanguageCode: { type: "string", defaultValue: defaultLanguage, nullable: false },
+                                        TranslationText: { type: "string", validation: { required: true } },
+                                    }
+                                }
+                            }
+                        });
+
+                        var statusName = function (statusID) {
+                            for (var i = 0; i < dropdownValues.length; i++) {
+                                if (dropdownValues[i].ID == statusID) {
+                                    return dropdownValues[i].Name;
+                                }
+                            }
+                            return "Unknown Status ID (" + statusID + ")";
+                        }
+
+                        $(document).ready(function () {
+                            $("#grid").kendoGrid({
+                                dataSource: dataSource,
+                                //height: 300,
+                                //sortable: true,
+                                //pageable: false,
+                                columns: [
+                                    {
+                                        field: "LanguageCode", title: "Language", width: "10%",
+                                        template: "#= statusName(LanguageCode)#",
+                                        editor: statusDropdownEditorTemplate
+                                    },
+                                    {
+                                        field: "TranslationText",
+                                        title: "Translation",
+                                        width: "55%",
+                                        editor: zipCodesEditor
+                                    },
+                                    { command: ["edit", "destroy"], title: "&nbsp;", width: "20%" }],
+                                toolbar: ["create"],
+                                editable: {
+                                    mode: "popup", window: {
+                                        width: "500px",
+                                        height: "300px",
+                                    }},
+                                save: function (e) {
+                                    updateTempRecords();
+                                },
+                                cancel: function (e) {
+                                    if (tempSavedRecords != null) {
+                                        $('#grid').data('kendoGrid').dataSource.data(tempSavedRecords);
+                                    }
+                                    else {
+                                        $('#grid').data('kendoGrid').dataSource.cancelChanges();
+                                    }
+                                },
+                                remove: function (e) {
+                                    $('#grid').data('kendoGrid').dataSource.remove(e.model)
+                                    updateTempRecords();
+                                }
+                            });
+
+                            function updateTempRecords() {
+                                tempSavedRecords = $('#grid').data('kendoGrid').dataSource.data();
+                                tempSavedRecords = tempSavedRecords.toJSON();
+                                if (tempSavedRecords.length > 0) {
+                                    $("#languagesJson").val("true");
+                                    tempSavedRecords = JSON.parse(JSON.stringify(tempSavedRecords).replace(/\\n/g, ''));
+                                }
+                                else
+                                    $("#languagesJson").val("");
+                            }
+
+                        });
+
+                        function statusDropdownEditorTemplate(container, options) {
+                            $('<input style="100px" name="status" data-bind="value:' + options.field + '"/>').appendTo(container)
+                                .kendoDropDownList({
+                                    dataSource: dropdownValues,
+                                    dataTextField: "Name",
+                                    dataValueField: "ID",
+                                    valuePrimitive: true, // if valuePrimitive isn't true, the status value ends up getting replaced by the whole object - we want to bind just the ID
+                                    value: defaultLanguage,
+                                });
+                        }
+
+                        var zipCodesEditor = function (container, options) {
+                            $('<textarea style="width:300px;" rows="5" class="k-textbox" required="required" data-bind="value: ' + options.field + '"></textarea>').appendTo(container);
+                        };
+
+
+                    </script>
+                </div>
+                <!--===================================================================================================================-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="button" id="CloseAddTranslation" class="btn btn-default modalTclose">Cancel</button>
+        <input type="submit" value="Create" id="btnSavetranslation" name="cmd" class="btn btn-success" />
+        @Html.Hidden("UrlSavetranslation", Url.Action("Add","AdminTranslator"))
+    </div>
+</div>

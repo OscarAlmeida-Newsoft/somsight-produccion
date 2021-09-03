@@ -1,0 +1,64 @@
+﻿@using SOMSight.Utils
+
+@{
+    ViewBag.Title = "Register Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.LogoUrl = Url.Action("Index", "Home");
+}
+
+<style>
+    .texto {
+        font-size: 14px;
+        width: 100%;
+    }
+
+
+
+    .contenedor {
+        width: 100%;
+        float: left;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+</style>
+
+<div class="contenedor">
+    <h1 class="texto" style="font-weight:bold; margin-bottom:10px; text-align: center;">@TranslatorHelper.TranslateTextByIdentifier("register_confirmation_text")</h1>
+    <h4 class="texto" style="text-align: center;">
+        @TranslatorHelper.TranslateTextByIdentifier("register_confirmation_detail_text")
+    </h4>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+    $(document).ready(function () {
+        var _userId = getUrlParameter("userId");
+        console.log(_userId);
+        if (_userId && _userId != "00000000-0000-0000-0000-000000000000") {
+
+            $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("SyncronizeUserCRM")' + '?pUserId=' + _userId,
+                })
+                .done(function(data) { console.log('Success!!'); })
+                .fail(function (jqXHR, exception) {
+                    console.log('Error!!');
+                    var jsonValue = jQuery.parseJSON(jqXHR.responseText );
+                    console.log(jsonValue.Message);
+                })
+                .always(function () { console.log('Always!!'); });
+        }
+    });
+
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    </script>
+}
+
+

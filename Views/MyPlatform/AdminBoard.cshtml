@@ -1,0 +1,47 @@
+﻿@using SOMSight.Utils
+@using SOMSightModels.Shared
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var SAM360Id = (int)MeasureMyPlatformClients.SAM360;
+    SAM360Provider _sam360Provider = new SAM360Provider();
+
+    string clientName = ((MeasureMyPlatformClients) ViewBag.MyPlatformSubmodule).ToString();
+    ViewBag.Title = "Admin Board - " + clientName;
+}
+
+@section Scripts{
+    @*//TODO: Convertir en vista parcial*@
+    <script>
+        var IsSAM360On = false;
+        var SAM360Url = '';
+
+        if ('@ViewBag.MyPlatformSubmodule' == '@SAM360Id')
+        {
+            IsSAM360On = true;
+            SAM360Url = '@_sam360Provider.GetSAM360Url()';
+        }
+
+
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/my_platform/MyPlatformScript.js")"></script>
+}
+
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","AdminHome")">Home</a></li>
+    <li><a href="@Url.Action("Index", "AdminCompany")">Search company</a></li>
+    <li class="active">Admin Board - @clientName</li>
+</ol>
+
+
+<!--================================= AVISO ======================================-->
+<!--================================= PAGINA ======================================-->
+<div id="pagina" class="embed_iframe">
+
+
+    <iframe src="@ViewBag.MeasureMyPlatformUrl" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+</div>
+<!--================================= PAGINA ======================================-->

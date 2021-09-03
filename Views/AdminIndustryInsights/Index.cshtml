@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Industry Insights Admin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/IndustryInsights/Admin.js")"></script>
+}
+
+<label id="GridListCallBack" class="hidden">@Url.Action("GridListCallBack")</label>
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","AdminHome")">Home</a></li>
+    <li class="active">Industry Insights</li>
+</ol>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Options <i class="glyphicon glyphicon-chevron-down"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+
+                <span>
+                    <a href="#" id="refreshTable" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-refresh"></i> Refresh</a>
+                </span>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="grid-div">
+</div>
+
+

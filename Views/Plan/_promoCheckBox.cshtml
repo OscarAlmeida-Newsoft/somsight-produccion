@@ -1,0 +1,34 @@
+﻿@using SOMSight.Utils.Extensions
+@using SOMSight.Utils
+
+@{
+    var _user = @Session.GetCurrentUser();
+}
+
+<table width="600" border="0" cellspacing="0" cellpadding="0" class="sin_margen_arriba">
+    <thead>
+        <tr class="to_purchase">
+            <td>
+                <div class="purchase_now promotional">
+                    @*<a href="@Url.Action("Error","Plan")" target="_self" class="purchase_now"><span>Purchase Now</span></a>*@
+                    <div class="promotional_check" id="" style="cursor: pointer; background-color: @_user.TenantSkin.TenantStyleTertiaryBackgroundColor; color: @_user.TenantSkin.TenantStyleTertiaryFontColor !important;">
+                        <label>
+                            <input type="checkbox" id="promotionalCodeCheck" />
+                            @TranslatorHelper.TranslateTextByIdentifier("i_have_a_promotional_code_text")
+                        </label>
+
+
+                    </div>
+
+
+                </div>
+
+                
+
+            </td>
+        </tr>
+    </thead>
+</table>
+
+
+

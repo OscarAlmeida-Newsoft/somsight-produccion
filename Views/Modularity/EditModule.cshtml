@@ -1,0 +1,264 @@
+﻿@model SOMSight.Models.Modularity.EditModularityViewModel
+@using SOMSight.Utils
+@using SOMSightModels
+@using SOMSightModels.Users
+@{
+
+    ViewBag.Title = "Edit Modularity";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Scripts{
+    @*<script type="text/javascript" src="@Url.Content("~/Scripts/Custom/bootbox.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/Custom/modularity/ManageModularity.js")"></script>
+
+}
+
+@*<link href='@Url.Content("~/Content/admin/acordeon.css")' rel="stylesheet" />*@
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","AdminHome")">Home</a></li>
+    <li><a href="@Url.Action("Index","Modularity")">Manage modularity</a></li>
+    <li class="active">Editing @TranslatorHelper.TranslateTextByIdentifier(Model.ModuleName) Module</li>
+</ol>
+
+<label id="NS_ModuleID" hidden>@Model.ModuleID</label>
+<label id="NS_HomeContraintURL" hidden>@Url.Action("Index", "Modularity")</label>
+
+@if (Model.HasSubmodules)
+            {
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Options <i class="glyphicon glyphicon-chevron-down"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <span>
+
+                        <a class="btn btn-default" href="@Url.Action("EditSubModule","Modularity", new { pModuleID = Model.ModuleID})">Edit submodules <i class="glyphicon glyphicon-edit"></i></a>
+                    
+                </span>
+                @*<span>
+                        <a href="#" id="refreshTable" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-refresh"></i> Refresh</a>
+                    </span>*@
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+<div class="pagina">
+    <div class="acordeon-container">
+        <div style="color: #555555;;" class="title-container">
+            <label class="acordeon-titulo">@TranslatorHelper.TranslateTextByIdentifier(Model.ModuleName) Module</label>
+
+        </div>
+        <hr />
+        <div class="zones-container">
+            <!-- PLANES-->
+            <div class="zone-container">
+                <div class="head-container">
+                    <label for="region-checkbox">Plan</label>
+                </div>
+                
+                <div id="body-plan-container" class="body-container">
+                    <div>
+                        <h4>Non-Allowed Plans</h4>
+                        <select multiple>
+                            @foreach (PlanDTO aux in Model.NonAllowedPlanList)
+                            {
+                                <option value="@aux.Id">@aux.Descripcion</option>
+                            }
+                        </select>
+                        <span class="remove-selected btn btn-default" data-orientation="center">Remove selected &#187;</span>
+                        <span class="remove-all btn btn-default" data-orientation="center">Remove all &#187;</span>
+                    </div>
+
+                    <div class="center-div">
+                        <h4>Available Plans</h4>
+                        <select multiple>
+                            @foreach (PlanDTO aux in Model.AvailablePlanList)
+                            {
+                                <option value="@aux.Id">@aux.Descripcion</option>
+                            }
+                        </select>
+                        <span class="add-selected btn btn-default" data-orientation="left">&#171; Add selected </span>
+                        <span class="add-all btn btn-default" data-orientation="left">&#171; Add all </span>
+                        <span class="add-all btn btn-default" data-orientation="right">Add all &#187;</span>
+                        <span class="add-selected btn btn-default" data-orientation="right">Add selected &#187;</span>
+
+                    </div>
+
+                    <div>
+                        <h4>Allowed Plans</h4>
+                        <select multiple>
+                            @foreach (PlanDTO aux in Model.AllowedPlanList)
+                            {
+                                <option value="@aux.Id">@aux.Descripcion</option>
+                            }
+                        </select>
+                        <span class="remove-selected btn btn-default" data-orientation="center">&#171; Remove selected</span>
+                        <span class="remove-all btn btn-default" data-orientation="center">&#171; Remove all</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAISES-->
+            <div class="zone-container">
+                <div class="head-container">
+                    <label for="region-checkbox">Country</label>
+                </div>
+                <div id="body-country-container" class="body-container">
+                    <div>
+                        <h4>Non-Allowed Countries</h4>
+                        <select multiple>
+                            @foreach (CountryDTO aux in Model.NonAllowedCountryList)
+                            {
+                                <option value="@aux.Id">@aux.CountryName</option>
+                            }
+                        </select>
+                        <span class="remove-selected btn btn-default" data-orientation="center">Remove selected &#187;</span>
+                        <span class="remove-all btn btn-default" data-orientation="center">Remove all &#187;</span>
+                    </div>
+
+                    <div class="center-div">
+                        <h4>Available Countries</h4>
+                        <select multiple>
+                            @foreach (CountryDTO aux in Model.AvailableCountryList)
+                            {
+                                <option value="@aux.Id">@aux.CountryName</option>
+                            }
+                        </select>
+                        <span class="add-selected btn btn-default" data-orientation="left">&#171; Add selected </span>
+                        <span class="add-all btn btn-default" data-orientation="left">&#171; Add all </span>
+                        <span class="add-all btn btn-default" data-orientation="right">Add all &#187;</span>
+                        <span class="add-selected btn btn-default" data-orientation="right">Add selected &#187;</span>
+
+                    </div>
+
+                    <div>
+                        <h4>Allowed Countries</h4>
+                        <select multiple>
+                            @foreach (CountryDTO aux in Model.AllowedCountryList)
+                            {
+                                <option value="@aux.Id">@aux.CountryName</option>
+                            }
+                        </select>
+                        <span class="remove-selected btn btn-default" data-orientation="center">&#171; Remove selected</span>
+                        <span class="remove-all btn btn-default" data-orientation="center">&#171; Remove all</span>
+                    </div>
+
+                </div>
+            </div>
+
+           <!-- CAMPAIGNS-->
+            <div class="zone-container">
+                <div class="head-container">
+                    <label for="region-checkbox">Campaign</label>
+                </div>
+                <div id="body-campaign-container" class="body-container">
+                    <div>
+                        <h4>Non-Allowed Campaigns</h4>
+                        <select multiple>
+                            @foreach (CampaignDTO aux in Model.NonAllowedCampaignList)
+                            {
+                                <option value="@aux.Id">@aux.Name</option>
+                            }
+                        </select>
+                        <span class="remove-selected btn btn-default" data-orientation="center">Remove selected &#187;</span>
+                        <span class="remove-all btn btn-default" data-orientation="center">Remove all &#187;</span>
+                    </div>
+
+                    <div class="center-div">
+                        <h4>Available Campaigns</h4>
+                        <select multiple>
+                            @foreach (CampaignDTO aux in Model.AvailableCampaignList)
+                            {
+                                <option value="@aux.Id">@aux.Name</option>
+                            }
+                        </select>
+                        <span class="add-selected btn btn-default" data-orientation="left">&#171; Add selected </span>
+                        <span class="add-all btn btn-default" data-orientation="left">&#171; Add all </span>
+                        <span class="add-all btn btn-default" data-orientation="right">Add all &#187;</span>
+                        <span class="add-selected btn btn-default" data-orientation="right">Add selected &#187;</span>
+
+                    </div>
+
+                    <div>
+                        <h4>Allowed Campaigns</h4>
+                        <select multiple>
+                            @foreach (CampaignDTO aux in Model.AllowedCampaignList)
+                            {
+                                <option value="@aux.Id">@aux.Name</option>
+                            }
+                        </select>
+                        <span class="remove-selected btn btn-default" data-orientation="center">&#171; Remove selected</span>
+                        <span class="remove-all btn btn-default" data-orientation="center">&#171; Remove all</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- USERS -->
+            <div class="zone-container">
+                <div class="head-container">
+                    <label for="region-checkbox">User</label>
+                </div>
+                <div id="body-user-container" class="body-container">
+                    <div>
+                        <h4>Non-Allowed Users</h4>
+                        <select multiple>
+                            @foreach (User aux in Model.NonAllowedUserList)
+                            {
+                                <option value="@aux.Id">@aux.Email</option>
+                            }
+                        </select>
+                        <span class="remove-selected btn btn-default" data-orientation="center">Remove selected &#187;</span>
+                        <span class="remove-all btn btn-default" data-orientation="center">Remove all &#187;</span>
+                    </div>
+
+                    <div class="center-div">
+                        <h4>Available Users</h4>
+                        <select multiple>
+                            @foreach (User aux in Model.AvailableUserList)
+                            {
+                                <option value="@aux.Id">@aux.Email</option>
+                            }
+                        </select>
+                        <span class="add-selected btn btn-default" data-orientation="left">&#171; Add selected </span>
+                        <span class="add-all btn btn-default" data-orientation="left">&#171; Add all </span>
+                        <span class="add-all btn btn-default" data-orientation="right">Add all &#187;</span>
+                        <span class="add-selected btn btn-default" data-orientation="right">Add selected &#187;</span>
+
+                    </div>
+
+                    <div>
+                        <h4>Allowed Users</h4>
+                        <select multiple>
+                            @foreach (User aux in Model.AllowedUserList)
+                            {
+                                <option value="@aux.Id">@aux.Email</option>
+                            }
+                        </select>
+                        <span class="remove-selected btn btn-default" data-orientation="center">&#171; Remove selected</span>
+                        <span class="remove-all btn btn-default" data-orientation="center">&#171; Remove all</span>
+                    </div>
+
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+    <hr />
+    <a class="btn btn-primary" onclick="saveForm()">Save</a>
+    <a class="btn btn-danger" onclick="cancelForm()">Cancel</a>
+</div>
+
+@Html.Partial("_Semaphore")

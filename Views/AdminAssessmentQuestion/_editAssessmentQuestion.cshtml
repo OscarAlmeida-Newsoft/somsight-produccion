@@ -1,0 +1,139 @@
+﻿@model SOMSightModels.DTOs.AssessmentQuestionDTO
+<div class="modal-header">
+
+    <h4 class="modal-title">Edit</h4>
+
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="row">
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <input type="hidden" id="txtAssessmentTypeIdEdit" readonly name="name" value="@Model.Id" />
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Translator Text Identifier*</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" value="@Model.TranslatorAdministratorText" data-menssagerequired="The Text Identifier field is required" id="txtTextIdentifierQuestionEdit" class="form-control required" readonly />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <a href="#" data-textidentifier="txtTextIdentifierQuestionEdit" class="btn btn-sm btn-default ModalTextIdentifier"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <a title="View Translations" href="#" data-textidentifier="txtTextIdentifierQuestionEdit" class="btn btn-sm btn-default ViewTextIdentifier"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        <a href="#" data-textidentifier="txtTextIdentifierQuestionEdit" class="btn btn-sm btn-default ClearModalTextIdentifier"><i class="glyphicon glyphicon-erase"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Display Order</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="number" value="@Model.DisplayOrder" data-menssagerequired="The Display order field is required" maxlength="3" class="form-control required" id="txtDisplayOrderEdit" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Image Url</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" value="@Model.QuestionImage" maxlength="2000" class="form-control" id="txtQuestionImageEdit" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Status</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.CheckBoxFor(model => model.Status, htmlAttributes: new { id = "StatusEdit", @class = "checksize" })
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="title-container">
+                <h2 class="title">Options</h2>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="#" id="addNewOption" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-paperclip"></i> <label class="control-label"> Add </label> </a>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <table data-menssagerequired="The question must have almost one option" id="optionsTableEdit" class="table">
+                    <tr class="k-header">
+                        <td>Maturity Level</td>
+                        <td>Text Identifier</td>
+                        <td>Description</td>
+                        <td>Advanced Question</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    @foreach (var Option in Model.AssessmentQuestionOptions)
+                    {
+                        <tr data-maturityleveltr="@Option.MaturityLevelId">
+                            <td>
+                                @Option.MaturityLevelId
+
+                            </td>
+                            <td>
+                                @Option.TranslatorAdministratorText
+
+                            </td>
+                            <td>
+                                @Option.Description
+
+                            </td>
+                            <td>
+                                @Option.TranslatorAdministratorAdvancedQuestion
+                            </td>
+                            <td>
+                                <a href="#" data-maturitylevel="@Option.MaturityLevelId"
+                                   data-translationadministrationtext="@Option.TranslatorAdministratorText"
+                                   data-description="@Option.Description"
+                                   data-translatoradministratoradvancedquestion="@Option.TranslatorAdministratorAdvancedQuestion" onclick="editOption(this)" class="btn btn-sm btn-default edit"><i class="glyphicon glyphicon-edit"></i></a>
+                            </td>
+                            <td>
+                                <a href="#" data-textidentifier="@Option.MaturityLevelId" onclick="deleteOption(this)" class="btn btn-sm btn-default delete"><i class="glyphicon glyphicon-remove"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-12 divmessageerror alert-danger">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="button" class="btn btn-default" id="closemodaledit" data-dismiss="modal">Cancel</button>
+        <input type="button" value="Edit" id="btnUpdateAssessmentQuestion" name="cmd" class="btn btn-success" />
+    </div>
+</div>

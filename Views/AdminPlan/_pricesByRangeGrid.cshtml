@@ -1,0 +1,68 @@
+﻿@model IEnumerable<SOMSight.Models.Plans.SOMSightPlanPricesByRangeVM>
+
+
+
+<div class="modal-header">
+    <h4 class="modal-title">Prices by Range</h4>
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="table-responsive">
+                @Html.Hidden("UrlSavePrices", Url.Action("SavePricesByRange"))
+                <table id="gridTableBasic" class="hover table-bordered stripe" cellspacing="0" width="100%">
+                    <thead class="cell-border" id="THB">
+                        <tr class="table-header">
+                            <th class="text-center text-uppercase">
+                                <label>Plan</label>
+                            </th>
+                            <th class="text-center text-uppercase">
+                                <label>Range</label>
+                            </th>
+                            
+                            <th class="text-center text-uppercase">
+                                <label>Price Montly</label>
+                            </th>
+                            <th class="text-center text-uppercase">
+                                <label>Price Annualy</label>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        @foreach (var item in Model)
+                        {
+                            
+                            <tr data-itemid="@item.RangeId" data-itemplanid="@item.SOMSightPlanId" class="">
+                                <td class="text-center">
+                                    @item.PlanName
+                                </td>
+                                <td class="text-center">
+                                    @item.MinDevices - @item.MaxDevices
+                                </td>
+                                
+                                <td class="text-center">
+                                    @Html.TextBox("ValueMontly" + item.RangeId, item.ValueMontly, new { @class = "form-control", disabled="disabled" })
+                                    
+                                </td>
+                                <td class="text-center">
+                                    @Html.TextBox("ValueAnual" + item.RangeId, item.ValueAnual, new { @class = "form-control", disabled = "disabled" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr></tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <input type="submit" value="Save" id="btnSave" name="cmd" class="btn btn-success" />
+    </div>
+</div>

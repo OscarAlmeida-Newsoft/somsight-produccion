@@ -1,0 +1,58 @@
+﻿@model SOMSight.Models.Plans.FilterSOMSightPlanVM
+
+<div class="modal-header">
+
+    <h4 class="modal-title">Filter Users</h4>
+
+</div>
+<div class="modal-body">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.PlanName)
+                        @Html.TextBoxFor(m => m.PlanName, new { @class = "form-control", @id = "filterName" })
+                        @Html.ValidationMessageFor(m => m.PlanName, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                @*<div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.CreatedBy)
+                        @Html.TextBoxFor(m => m.CreatedBy, new { @class = "form-control", @id = "filterCreatedBy" })
+                        @Html.ValidationMessageFor(m => m.CreatedBy, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.AllTenant, new { @style = "display: block;" })
+                        @Html.CheckBoxFor(m => m.AllTenant, new { @class = "", @readonly = "true", @id = "filterAllTenant" })
+                        @Html.ValidationMessageFor(m => m.AllTenant, "", new { @class = "text-danger" })
+
+                        @*@Html.LabelFor(m => m.CreatedBy)
+                            @Html.TextBoxFor(m => m.CreatedBy, new { @class = "form-control", @id = "filterCreatedBy" })
+                            @Html.ValidationMessageFor(m => m.CreatedBy, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @*@Html.LabelFor(m => m.UpdatedBy)
+                            @Html.TextBoxFor(m => m.UpdatedBy, new { @class = "form-control", @id = "filterUpdatedBy" })
+                            @Html.ValidationMessageFor(m => m.UpdatedBy, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <input type="button" value="Clear Filter" id="btnClearFilter" name="cmd" class="btn btn-primary" data-dismiss="modal" />
+        <input type="button" value="Filter" id="btnFilter" name="cmd" class="btn btn-success" data-dismiss="modal" />
+    </div>
+</div>
